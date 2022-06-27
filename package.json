@@ -34,7 +34,7 @@
     "trailingComma": "es5"
   },
   "name": "@metacell/meta-diagram",
-  "author": "metacell",
+  "author": "MetaCell",
   "module": "dist/meta-diagram.esm.js",
   "size-limit": [
     {
