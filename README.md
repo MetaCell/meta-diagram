@@ -1,9 +1,39 @@
 # meta-diagram
 
+Simple diagramming workspace library
 
-## Commands
+## Screenshot
 
-TSDX scaffolds your new library inside `/src`, and also sets up a [Parcel-based](https://parceljs.org) playground for it inside `/example`.
+![img.png](img.png)
+
+
+## Install 
+
+```
+npm i @metacell/meta-diagram
+
+// or if using yarn
+yarn add @metacell/meta-diagram
+```
+
+## Usage
+
+TBD
+
+## Props
+
+| name          | type                                                                                  | required | description                                                                                    |
+|---------------|---------------------------------------------------------------------------------------|----------|------------------------------------------------------------------------------------------------|
+| metaDiagrams  | MetaDiagram[]                                                                         | true     | array of MetaDiagram instances to be render                                                    |
+| metaLinks     | MetaLink[]                                                                            | true     | array of MetaLink instances to be render                                                       |
+| componentsMap | { nodes: [key: string]: React.elementType,  links: [key: string]: React.elementType } | true     | dictionary to connect application specific types with React elements to render for those types |
+
+
+## Development
+
+### Commands
+
+TSDX scaffolds the library inside `/src`, and also sets up a [Parcel-based](https://parceljs.org) playground for it inside `/example`.
 
 The recommended workflow is to run TSDX in one terminal:
 
@@ -27,37 +57,6 @@ To do a one-off build, use `npm run build` or `yarn build`.
 
 To run tests, use `npm test` or `yarn test`.
 
-## Configuration
-
-Code quality is set up for you with `prettier`, `husky`, and `lint-staged`. Adjust the respective fields in `package.json` accordingly.
-
-### Jest
-
-Jest tests are set up to run with `npm test` or `yarn test`.
-
-### Bundle analysis
-
-Calculates the real cost of your library using [size-limit](https://github.com/ai/size-limit) with `npm run size` and visulize it with `npm run analyze`.
-
-#### Setup Files
-
-This is the folder structure we set up for you:
-
-```txt
-/example
-  index.html
-  index.tsx       # test your component here in a demo app
-  package.json
-  tsconfig.json
-/src
-  index.tsx       # EDIT THIS
-/test
-  blah.test.tsx   # EDIT THIS
-.gitignore
-package.json
-README.md         # EDIT THIS
-tsconfig.json
-```
 
 ## Continuous Integration
 
@@ -69,25 +68,6 @@ Two actions are added by default:
 - `size` which comments cost comparison of your library on every pull request using [`size-limit`](https://github.com/ai/size-limit)
 
 
-## Deploying the Example Playground
+### Publishing to NPM
 
-The Playground is just a simple [Parcel](https://parceljs.org) app, you can deploy it anywhere you would normally deploy that. Here are some guidelines for **manually** deploying with the Netlify CLI (`npm i -g netlify-cli`):
-
-```bash
-cd example # if not already in the example folder
-npm run build # builds to dist
-netlify deploy # deploy the dist folder
-```
-
-Alternatively, if you already have a git repo connected, you can set up continuous deployment with Netlify:
-
-```bash
-netlify init
-# build command: yarn build && cd example && yarn && yarn build
-# directory to deploy: example/dist
-# pick yes for netlify.toml
-```
-
-## Publishing to NPM
-
-We recommend using [np](https://github.com/sindresorhus/np).
+TBD [np](https://github.com/sindresorhus/np).
