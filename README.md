@@ -1,10 +1,10 @@
 # meta-diagram
 
-Simple diagramming workspace library
+A simple diagramming workspace library
 
 ## Screenshot
 
-![img.png](img.png)
+![image](https://user-images.githubusercontent.com/19196034/176732655-1c07fb93-33ef-435e-9626-816f24be99fa.png)
 
 
 ## Install 
@@ -12,19 +12,34 @@ Simple diagramming workspace library
 ```
 npm i @metacell/meta-diagram
 
-// or if using yarn
+// or if you are using yarn
+
 yarn add @metacell/meta-diagram
 ```
 
 ## Usage
 
-TBD
+```javascript
+const App = () => {
+    const metaNodes = []
+    const metaLinks = []
+    const componentMap = {
+        nodes: {},
+        links: {}
+    }
+    return (
+        <div>
+            <MetaDiagram metaNodes={metaNodes} metaLinks={metaLinks} componentMap={componentMap}/>
+        </div>
+    )
+}
+```
 
 ## Props
 
 | name          | type                                                                                  | required | description                                                                                    |
 |---------------|---------------------------------------------------------------------------------------|----------|------------------------------------------------------------------------------------------------|
-| metaDiagrams  | MetaDiagram[]                                                                         | true     | array of MetaDiagram instances to be render                                                    |
+| metaNodes  | MetaNode[]                                                                         | true     | array of MetaNode instances to be render                                                    |
 | metaLinks     | MetaLink[]                                                                            | true     | array of MetaLink instances to be render                                                       |
 | componentsMap | { nodes: [key: string]: React.elementType,  links: [key: string]: React.elementType } | true     | dictionary to connect application specific types with React elements to render for those types |
 
@@ -70,4 +85,8 @@ Two actions are added by default:
 
 ### Publishing to NPM
 
-TBD [np](https://github.com/sindresorhus/np).
+Run `np` without arguments to launch the interactive UI that guides you through publishing a new version
+
+## Built With
+
+[react-diagrams](https://github.com/projectstorm/react-diagrams)
