@@ -4,7 +4,7 @@ A simple diagramming workspace library
 
 ## Screenshot
 
-![image](https://user-images.githubusercontent.com/19196034/176732655-1c07fb93-33ef-435e-9626-816f24be99fa.png)
+![image](https://user-images.githubusercontent.com/19196034/176734658-6019f1f7-b268-4361-9bdc-2129e1078e16.png)
 
 
 ## Install 
