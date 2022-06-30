@@ -85,7 +85,7 @@ Two actions are added by default:
 
 ### Publishing to NPM
 
-Run `np` without arguments to launch the interactive UI that guides you through publishing a new version
+Run `npm publish --access=public`
 
 ## Built With
 
