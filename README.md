@@ -85,7 +85,9 @@ Two actions are added by default:
 
 ### Publishing to NPM
 
-Run `npm publish --access=public`
+1 - Run `npm run build`
+2 - Change package version on [package.json](https://github.com/MetaCell/meta-diagram/blob/develop/package.json#L2) to the semantically adequated new value
+3 - Run `npm publish --access=public`
 
 ## Built With
 
