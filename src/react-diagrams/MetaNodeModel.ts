@@ -1,4 +1,5 @@
 import {DefaultPortModel, NodeModel} from "@projectstorm/react-diagrams";
+import { ReactDiagramMetaTypes } from "../constants";
 
 export class MetaNodeModel extends NodeModel {
     constructor(options = {}) {

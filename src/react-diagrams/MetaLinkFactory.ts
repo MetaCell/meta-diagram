@@ -2,6 +2,7 @@
 import { AbstractReactFactory } from '@projectstorm/react-canvas-core';
 import {MetaLinkModel} from "./MetaLinkModel";
 import {UnknownTypeWidget} from "../components/UnknownTypeWidget";
+import { ReactDiagramMetaTypes } from '../constants';
 
 export class MetaLinkFactory extends AbstractReactFactory {
     componentsMap: Map<string, JSX.Element>
