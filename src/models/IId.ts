@@ -1,3 +1,3 @@
 export interface IId {
-    getId: () => string
+  getId: () => string;
 }

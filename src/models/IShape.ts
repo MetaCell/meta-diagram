@@ -1,3 +1,3 @@
 export interface IShape {
-    getShape: () => string
+  getShape: () => string;
 }

@@ -1,6 +1,5 @@
-import React from "react";
+import React from 'react';
 
 export const UnknownTypeWidget = () => {
-
-    return <div>Unknown Type</div>;
+  return <div>Unknown Type</div>;
 };
