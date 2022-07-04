@@ -8,7 +8,19 @@ import {MetaLinkFactory} from "./react-diagrams/MetaLinkFactory";
 import {CanvasWidget} from '@projectstorm/react-canvas-core';
 import {MetaNodeModel} from "./react-diagrams/MetaNodeModel";
 import {getLinkModel} from "./helpers/linksHelper";
+import {makeStyles} from "@material-ui/core";
 
+const useStyles = makeStyles(_ => ({
+    container: {
+        height: '100%',
+        width: '100%',
+    },
+    canvasContainer: {
+        height: '100%',
+        width: '100%',
+        background: '#333333'
+    },
+}))
 
 interface MetaDiagramProps {
     metaNodes: MetaNode[],
@@ -19,6 +31,7 @@ interface MetaDiagramProps {
 
 }
 
+
 const MetaDiagram = ({
                                 metaNodes,
                                 metaLinks,
@@ -27,8 +40,9 @@ const MetaDiagram = ({
                                 canvasClassName
                             }: MetaDiagramProps) => {
 
-    // set up the diagram engine
+    const classes = useStyles();
 
+    // set up the diagram engine
     const engine = createEngine()
     // @ts-ignore
     engine.getNodeFactories().registerFactory(new MetaNodeFactory(componentsMap.nodes));
@@ -46,8 +60,8 @@ const MetaDiagram = ({
     // load model into engine
     engine.setModel(model);
 
-    const containerClassName = wrapperClassName ? wrapperClassName : ''
-    const diagramClassName = canvasClassName ? canvasClassName : ''
+    const containerClassName = wrapperClassName ? wrapperClassName : classes.container
+    const diagramClassName = canvasClassName ? canvasClassName : classes.canvasContainer
     return (
         <div className={containerClassName}>
             <CanvasWidget className={diagramClassName} engine={engine}/>
