@@ -24,6 +24,6 @@ export class MetaNodeFactory extends AbstractReactFactory {
             return <ReactComponentType engine={this.engine} node={event.model}/>
         }
         // TODO: Generate default node instead
-        return UnknownTypeWidget()
+        return <UnknownTypeWidget/>
     }
 }

@@ -1,6 +1,7 @@
 import * as React from "react";
 import {DiagramEngine, PortWidget} from "@projectstorm/react-diagrams";
 import {MetaNodeModel} from "../../../.";
+import {Typography} from "@material-ui/core";
 
 export interface CustomNodeWidgetProps {
     node: MetaNodeModel;
@@ -12,14 +13,18 @@ export class CustomNodeWidget extends React.Component<CustomNodeWidgetProps> {
     render() {
         // @ts-ignore
         const customNodeStyle = {
-            zIndex: 999999999, border: "solid 2px gray",
+            zIndex: 999999999,
+            border: "solid 2px gray",
             borderRadius: "5px",
             width: "250px",
             height: "200px",
             display: "flex",
             alignItems: "flex-start",
             justifyContent: "space-between",
-            position: "relative"
+            position: "relative",
+            background: this.props.node.getOptions()['color'] || "darkgray",
+            top: this.props.node.getOptions()['position']?.y || 0,
+            left: this.props.node.getOptions()['position']?.x || 0
         }
 
         const circlePortStyle = {
@@ -48,6 +53,7 @@ export class CustomNodeWidget extends React.Component<CustomNodeWidgetProps> {
                     >
                         <div style={circlePortStyle}/>
                     </PortWidget>
+                    <Typography>{this.props.node.getOptions()['name']}</Typography>
                 </div>
             </>
         );

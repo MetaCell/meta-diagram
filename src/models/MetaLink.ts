@@ -8,7 +8,7 @@ export class MetaLink implements ILink{
     targetPortId: string;
     options: MetaOptions;
 
-    constructor(id: string, shape: string,
+    constructor(id: string, name: string, shape: string,
                 sourceId: string, sourcePortId: string,
                 targetId: string, targetPortId: string,
                 options: Map<string, any>) {
@@ -16,7 +16,7 @@ export class MetaLink implements ILink{
         this.sourcePortId = sourcePortId
         this.targetId = targetId
         this.targetPortId = targetPortId
-        this.options = new MetaOptions(id, shape, options)
+        this.options = new MetaOptions(id, name, shape, options)
     }
 
     getSourceId(): string {
