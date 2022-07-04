@@ -23,12 +23,13 @@ export class MetaLinkFactory extends DefaultLinkFactory {
   ): JSX.Element {
     // @ts-ignore
     if (this.componentsMap.has(model.getOptions()?.shape)) {
-      // @ts-ignore
       const ReactComponentType = this.componentsMap.get(
+        // @ts-ignore
         model.getOptions().shape
       );
-      // @ts-ignore
+
       return (
+        // @ts-ignore
         <ReactComponentType model={model} path={path} selected={selected} />
       );
     }

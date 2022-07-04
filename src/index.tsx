@@ -44,10 +44,12 @@ const MetaDiagram = ({
 
   engine
     .getNodeFactories()
+    // @ts-ignore
     .registerFactory(new MetaNodeFactory(componentsMap.nodes));
 
   engine
     .getLinkFactories()
+    // @ts-ignore
     .registerFactory(new MetaLinkFactory(componentsMap.links));
 
   // set up the diagram model
