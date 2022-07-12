@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.12.4",
+    "@projectstorm/react-diagrams": "^6.7.4",
     "react-app-polyfill": "^1.0.0"
   },
   "alias": {
@@ -19,7 +20,7 @@
   "devDependencies": {
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.8.4",
-    "parcel": "^1.12.3",
+    "parcel": "1.12.3",
     "typescript": "^3.4.5"
   },
   "resolutions": {
