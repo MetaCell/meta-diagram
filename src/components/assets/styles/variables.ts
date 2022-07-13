@@ -17,7 +17,8 @@ const vars = {
 
   listItemActiveBg: '#007AFF',
   listSelectedTextColor: '#3C3C43',
-  listBoxShadow: '0 0.1875rem 0.5rem rgba(0, 0, 0, 0.12), 0 0.1875rem 0.0625rem rgba(0, 0, 0, 0.04)',
+  listBoxShadow:
+    '0 0.1875rem 0.5rem rgba(0, 0, 0, 0.12), 0 0.1875rem 0.0625rem rgba(0, 0, 0, 0.04)',
   listBorderColor: 'rgba(0, 0, 0, 0.04)',
 
   dividerColor: 'rgba(118, 120, 125, 0.12)',
@@ -31,7 +32,8 @@ const vars = {
   progressBar: '#017AFF',
   progressShadow: 'inset 0 0 0.0625rem #E3E3E3',
 
-  switchShadow: '0 0.1875rem 0.5rem rgba(0, 0, 0, 0.15), 0 0.1875rem 0.0625rem rgba(0, 0, 0, 0.06)'
+  switchShadow:
+    '0 0.1875rem 0.5rem rgba(0, 0, 0, 0.15), 0 0.1875rem 0.0625rem rgba(0, 0, 0, 0.06)',
 };
 
 export default vars;
