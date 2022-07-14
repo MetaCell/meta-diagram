@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from '@mui/system';
 import { makeStyles } from '@mui/styles';
-import vars from "./assets/styles/variables";
+import vars from './assets/styles/variables';
 import { Divider, List, ListItemButton, ListItemIcon } from '@mui/material';
 import Move from './assets/svg/move.svg';
 import Icon from './assets/svg/icon.svg';
@@ -16,7 +16,8 @@ const useStyles = makeStyles(() => ({
     zIndex: '5',
     width: '4rem',
     background: textWhite,
-    boxShadow: '0 0 3.75rem rgba(0, 0, 0, 0.1), 0 0.5rem 2.5rem -0.625rem rgba(0, 0, 0, 0.1)',
+    boxShadow:
+      '0 0 3.75rem rgba(0, 0, 0, 0.1), 0 0.5rem 2.5rem -0.625rem rgba(0, 0, 0, 0.1)',
     borderRadius: '2rem',
     position: 'fixed',
     left: '1rem',
@@ -40,7 +41,7 @@ const useStyles = makeStyles(() => ({
       width: 'calc(100% - 1.5rem)',
       margin: '0 auto',
       border: 'none',
-      borderTop: '0.0625rem solid'
+      borderTop: '0.0625rem solid',
     },
 
     '& img': {
@@ -57,38 +58,63 @@ const Sidebar = () => {
       <List disablePadding component="nav">
         <ListItemButton selected>
           <ListItemIcon>
-            <img src={`data:image/svg+xml;base64,${new Buffer(Cursor).toString('base64')}`} alt="icon" />
+            <img
+              src={`data:image/svg+xml;base64,${new Buffer(Cursor).toString(
+                'base64'
+              )}`}
+              alt="icon"
+            />
           </ListItemIcon>
         </ListItemButton>
 
         <ListItemButton>
           <ListItemIcon>
-            <img src={`data:image/svg+xml;base64,${new Buffer(Move).toString('base64')}`} alt="move" />
+            <img
+              src={`data:image/svg+xml;base64,${new Buffer(Move).toString(
+                'base64'
+              )}`}
+              alt="move"
+            />
           </ListItemIcon>
         </ListItemButton>
       </List>
 
       <Box className={classes.node}>
         <Divider />
-        <img src={`data:image/svg+xml;base64,${new Buffer(Node).toString('base64')}`} alt="node" />
+        <img
+          src={`data:image/svg+xml;base64,${new Buffer(Node).toString(
+            'base64'
+          )}`}
+          alt="node"
+        />
         <Divider />
       </Box>
 
       <List disablePadding component="nav">
         <ListItemButton disabled>
           <ListItemIcon>
-            <img src={`data:image/svg+xml;base64,${new Buffer(Icon).toString('base64')}`} alt="icon" />
+            <img
+              src={`data:image/svg+xml;base64,${new Buffer(Icon).toString(
+                'base64'
+              )}`}
+              alt="icon"
+            />
           </ListItemIcon>
         </ListItemButton>
 
         <ListItemButton>
           <ListItemIcon>
-            <img src={`data:image/svg+xml;base64,${new Buffer(Fullscreen).toString('base64')}`} alt="fullscreen" />
+            <img
+              src={`data:image/svg+xml;base64,${new Buffer(Fullscreen).toString(
+                'base64'
+              )}`}
+              alt="fullscreen"
+            />
           </ListItemIcon>
         </ListItemButton>
       </List>
     </Box>
-  )
+  );
 };
 
 export default Sidebar;
