@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.12.4",
-    "@projectstorm/react-diagrams": "^6.7.4",
     "react-app-polyfill": "^1.0.0",
     "react-is": "^18.2.0"
   },
