@@ -9,6 +9,7 @@ import { CanvasWidget } from '@projectstorm/react-canvas-core';
 import { MetaNodeModel } from './react-diagrams/MetaNodeModel';
 import { getLinkModel } from './helpers/linksHelper';
 import { makeStyles } from '@material-ui/core';
+import Sidebar from './components/Sidebar';
 
 const useStyles = makeStyles(_ => ({
   container: {
@@ -75,6 +76,7 @@ const MetaDiagram = ({
     : classes.canvasContainer;
   return (
     <div className={containerClassName}>
+      <Sidebar />
       <CanvasWidget className={diagramClassName} engine={engine} />
     </div>
   );
