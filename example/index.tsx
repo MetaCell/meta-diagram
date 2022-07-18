@@ -17,11 +17,14 @@ const useStyles = makeStyles(_ => ({
 const App = () => {
     const classes = useStyles();
 
-    const node1 = new MetaNode('1', 'node1', 'default', new Position(250, 100),
+    const node1 = new MetaNode('1', 'node1', 'default', new Position(250, 100), [],
         new Map(Object.entries({color: 'rgb(0,192,255)'})))
 
-    const node2 = new MetaNode('2', 'node2', 'default', new Position(500, 100),
+    const node2 = new MetaNode('2', 'node2', 'default', new Position(500, 100), [],
         new Map(Object.entries({color: 'rgb(255,192,0)'})))
+
+    const groupNode1 = new MetaNode('group', 'group', 'default', new Position(100, 100),
+        [node1, node2], new Map(Object.entries({color: 'rgb(255,0,0)'})))
 
     const link3 = new MetaLink('3', 'link3', 'default', '1', 'out', '2', 'in',
         new Map(Object.entries({color: 'rgb(255,192,0)'})))
@@ -33,7 +36,7 @@ const App = () => {
 
     return (
         <div className={classes.main}>
-            <MetaDiagram metaNodes={[node1, node2]} metaLinks={[link3]} componentsMap={componentsMap} />
+            <MetaDiagram metaNodes={[node1, node2, groupNode1]} metaLinks={[link3]} componentsMap={componentsMap}/>
         </div>
     );
 };

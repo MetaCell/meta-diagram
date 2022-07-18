@@ -33,8 +33,8 @@ class MetaOptions {
 }
 
 class MetaNode {
-  constructor(id, name, shape, position, options) {
-    this.children = [];
+  constructor(id, name, shape, position, children = [], options) {
+    options.set('children', children);
     options.set('position', position);
     this.options = new MetaOptions(id, name, shape, options);
   }

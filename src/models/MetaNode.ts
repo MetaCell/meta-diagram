@@ -2,7 +2,6 @@ import { MetaOptions } from './MetaOptions';
 import { Position } from './Position';
 
 export class MetaNode {
-  children: MetaNode[];
   options: MetaOptions;
 
   constructor(
@@ -10,9 +9,10 @@ export class MetaNode {
     name: string,
     shape: string,
     position: Position,
+    children: MetaNode[] = [],
     options: Map<string, any>
   ) {
-    this.children = [];
+    options.set('children', children);
     options.set('position', position);
     this.options = new MetaOptions(id, name, shape, options);
   }
