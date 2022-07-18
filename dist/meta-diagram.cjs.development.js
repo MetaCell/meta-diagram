@@ -121,7 +121,7 @@ class MetaNodeFactory extends reactCanvasCore.AbstractReactFactory {
 
       return React__default.createElement(ReactComponentType, {
         engine: this.engine,
-        node: event.model
+        model: event.model
       });
     } // TODO: Generate default node instead
 
@@ -159,6 +159,7 @@ class MetaLinkFactory extends createEngine.DefaultLinkFactory {
       model.getOptions().shape);
       return (// @ts-ignore
         React__default.createElement(ReactComponentType, {
+          engine: this.engine,
           model: model,
           path: path,
           selected: selected
