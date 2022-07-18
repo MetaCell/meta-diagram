@@ -4,7 +4,7 @@ import {MetaNodeModel} from "../../../.";
 import {Typography} from "@material-ui/core";
 
 export interface CustomNodeWidgetProps {
-    node: MetaNodeModel;
+    model: MetaNodeModel;
     engine: DiagramEngine;
 }
 
@@ -22,9 +22,9 @@ export class CustomNodeWidget extends React.Component<CustomNodeWidgetProps> {
             alignItems: "flex-start",
             justifyContent: "space-between",
             position: "relative",
-            background: this.props.node.getOptions()['color'] || "darkgray",
-            top: this.props.node.getOptions()['position']?.y || 0,
-            left: this.props.node.getOptions()['position']?.x || 0
+            background: this.props.model.getOptions()['color'] || "darkgray",
+            top: this.props.model.getOptions()['position']?.y || 0,
+            left: this.props.model.getOptions()['position']?.x || 0
         }
 
         const circlePortStyle = {
@@ -42,18 +42,18 @@ export class CustomNodeWidget extends React.Component<CustomNodeWidgetProps> {
                     <PortWidget
                         style={{position: 'absolute', top: '0px', left: '0px'}}
                         engine={this.props.engine}
-                        port={this.props.node.getPort("in")}
+                        port={this.props.model.getPort("in")}
                     >
                         <div style={circlePortStyle}/>
                     </PortWidget>
                     <PortWidget
                         style={{position: 'absolute', top: '0px', right: '0px'}}
                         engine={this.props.engine}
-                        port={this.props.node.getPort("out")}
+                        port={this.props.model.getPort("out")}
                     >
                         <div style={circlePortStyle}/>
                     </PortWidget>
-                    <Typography>{this.props.node.getOptions()['name']}</Typography>
+                    <Typography>{this.props.model.getOptions()['name']}</Typography>
                 </div>
             </>
         );
