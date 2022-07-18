@@ -151,8 +151,8 @@ class MetaLinkFactory extends DefaultLinkFactory {
       model.getOptions().shape);
       return (// @ts-ignore
         React__default.createElement(ReactComponentType, {
-          engine: this.engine,
-          model: model,
+          diagramEngine: this.engine,
+          link: model,
           path: path,
           selected: selected
         })
