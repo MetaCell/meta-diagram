@@ -11,9 +11,16 @@ export function getNode(
 export function processNodes(metaNodes: MetaNode[]) : MetaNodeModel[] {
   const metaNodeModels = []
   for(const mn of metaNodes){
+    // TODO: serialize children (bottom up or memoization)
     const metaNodeModel = new MetaNodeModel(Object.fromEntries(mn.options.options))
-    metaNodeModel.registerListener({positionChanged: () => { console.log("positionChanged") }})
+    // @ts-ignore
+    metaNodeModel.registerListener({positionChanged: (event => handlePositionChanged(event))})
     metaNodeModels.push(metaNodeModel)
   }
   return metaNodeModels
+}
+
+function handlePositionChanged(e: any){
+  // todo: calculate e.entity.position offset apply the same to e.entity.children
+  console.log(e)
 }

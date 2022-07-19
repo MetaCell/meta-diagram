@@ -176,6 +176,26 @@ class MetaLinkFactory extends createEngine.DefaultLinkFactory {
 function getNode(id, nodes) {
   return nodes.find(n => n.getOptions().id === id);
 }
+function processNodes(metaNodes) {
+  const metaNodeModels = [];
+
+  for (const mn of metaNodes) {
+    // TODO: serialize children (bottom up or memoization)
+    const metaNodeModel = new MetaNodeModel(Object.fromEntries(mn.options.options)); // @ts-ignore
+
+    metaNodeModel.registerListener({
+      positionChanged: event => handlePositionChanged(event)
+    });
+    metaNodeModels.push(metaNodeModel);
+  }
+
+  return metaNodeModels;
+}
+
+function handlePositionChanged(e) {
+  // todo: calculate e.entity.position offset apply the same to e.entity.children
+  console.log(e);
+}
 
 function getLinkModel(metaLink, nodes) {
   const link = new MetaLinkModel(Object.fromEntries(metaLink.options.options));
@@ -337,7 +357,7 @@ const MetaDiagram = ({
   .registerFactory(new MetaLinkFactory(componentsMap.links)); // set up the diagram model
 
   const model = new createEngine.DiagramModel();
-  const nodes = metaNodes.map(mn => new MetaNodeModel(Object.fromEntries(mn.options.options)));
+  const nodes = processNodes(metaNodes);
   const links = metaLinks.map(ml => getLinkModel(ml, nodes)).filter(mlm => mlm !== undefined); // @ts-ignore
 
   model.addAll(...nodes, ...links); // load model into engine
