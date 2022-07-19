@@ -1,5 +1,6 @@
 import React__default, { createElement } from 'react';
 import createEngine, { NodeModel, DefaultPortModel, DefaultLinkModel, DefaultLinkFactory, DiagramModel } from '@projectstorm/react-diagrams';
+export { DefaultLinkWidget } from '@projectstorm/react-diagrams';
 import { AbstractReactFactory, CanvasWidget } from '@projectstorm/react-canvas-core';
 import { makeStyles as makeStyles$1 } from '@material-ui/core';
 import { Box } from '@mui/system';

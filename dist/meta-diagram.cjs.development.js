@@ -353,6 +353,12 @@ const MetaDiagram = ({
   }));
 };
 
+Object.defineProperty(exports, 'DefaultLinkWidget', {
+  enumerable: true,
+  get: function () {
+    return createEngine.DefaultLinkWidget;
+  }
+});
 exports.ComponentsMap = ComponentsMap;
 exports.MetaLink = MetaLink;
 exports.MetaLinkModel = MetaLinkModel;
