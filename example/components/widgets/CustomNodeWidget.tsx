@@ -13,7 +13,6 @@ export class CustomNodeWidget extends React.Component<CustomNodeWidgetProps> {
     render() {
         const width = 250
         const height = 200
-        console.log(this.props.model.getOptions())
         // @ts-ignore
         const customNodeStyle = {
             zIndex: 999999999,

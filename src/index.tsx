@@ -10,6 +10,7 @@ import { MetaNodeModel } from './react-diagrams/MetaNodeModel';
 import { getLinkModel } from './helpers/linksHelper';
 import { makeStyles } from '@material-ui/core';
 import Sidebar from './components/Sidebar';
+import {processNodes} from "./helpers/nodesHelper";
 
 const useStyles = makeStyles(_ => ({
   container: {
@@ -56,9 +57,7 @@ const MetaDiagram = ({
   // set up the diagram model
 
   const model = new DiagramModel();
-  const nodes = metaNodes.map(
-    mn => new MetaNodeModel(Object.fromEntries(mn.options.options))
-  );
+  const nodes = processNodes(metaNodes)
   const links = metaLinks
     .map(ml => getLinkModel(ml, nodes))
     .filter(mlm => mlm !== undefined);
