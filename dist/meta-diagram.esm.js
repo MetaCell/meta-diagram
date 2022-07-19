@@ -6,6 +6,7 @@ import { makeStyles as makeStyles$1 } from '@material-ui/core';
 import { Box } from '@mui/system';
 import { makeStyles } from '@mui/styles';
 import { List, ListItemButton, ListItemIcon, Divider } from '@mui/material';
+export { LinkWidget } from '@projectstorm/react-diagrams-core';
 
 class MetaOptions {
   constructor(id, name, shape, options) {
