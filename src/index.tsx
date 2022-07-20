@@ -8,7 +8,7 @@ import { MetaLinkFactory } from './react-diagrams/MetaLinkFactory';
 import { CanvasWidget } from '@projectstorm/react-canvas-core';
 import { MetaNodeModel } from './react-diagrams/MetaNodeModel';
 import { getLinkModel } from './helpers/linksHelper';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 import Sidebar from './components/Sidebar';
 
 const useStyles = makeStyles(_ => ({
