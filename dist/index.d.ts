@@ -1,3 +1,4 @@
+/// <reference types="react" />
 import { MetaNode } from './models/MetaNode';
 import { MetaLink } from './models/MetaLink';
 import { ComponentsMap } from './models/ComponentsMap';

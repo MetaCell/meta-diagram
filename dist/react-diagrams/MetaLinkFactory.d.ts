@@ -1,3 +1,4 @@
+/// <reference types="react" />
 import { MetaLinkModel } from './MetaLinkModel';
 import { DefaultLinkFactory } from '@projectstorm/react-diagrams';
 export declare class MetaLinkFactory extends DefaultLinkFactory {

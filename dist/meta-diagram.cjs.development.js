@@ -9,9 +9,8 @@ var React__default = _interopDefault(React);
 var createEngine = require('@projectstorm/react-diagrams');
 var createEngine__default = _interopDefault(createEngine);
 var reactCanvasCore = require('@projectstorm/react-canvas-core');
-var core = require('@material-ui/core');
-var system = require('@mui/system');
 var styles = require('@mui/styles');
+var system = require('@mui/system');
 var material = require('@mui/material');
 
 class MetaOptions {
@@ -309,7 +308,7 @@ class Position {
 
 }
 
-const useStyles$1 = /*#__PURE__*/core.makeStyles(_ => ({
+const useStyles$1 = /*#__PURE__*/styles.makeStyles(_ => ({
   container: {
     height: '100%',
     width: '100%'
