@@ -1,9 +1,8 @@
 import React__default, { createElement } from 'react';
 import createEngine, { NodeModel, DefaultPortModel, DefaultLinkModel, DefaultLinkFactory, DiagramModel } from '@projectstorm/react-diagrams';
 import { AbstractReactFactory, CanvasWidget } from '@projectstorm/react-canvas-core';
-import { makeStyles as makeStyles$1 } from '@material-ui/core';
-import { Box } from '@mui/system';
 import { makeStyles } from '@mui/styles';
+import { Box } from '@mui/system';
 import { List, ListItemButton, ListItemIcon, Divider } from '@mui/material';
 
 class MetaOptions {
@@ -301,7 +300,7 @@ class Position {
 
 }
 
-const useStyles$1 = /*#__PURE__*/makeStyles$1(_ => ({
+const useStyles$1 = /*#__PURE__*/makeStyles(_ => ({
   container: {
     height: '100%',
     width: '100%'
