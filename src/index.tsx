@@ -10,7 +10,7 @@ import { MetaNodeModel } from './react-diagrams/MetaNodeModel';
 import { getLinkModel } from './helpers/linksHelper';
 import { makeStyles } from '@mui/styles';
 import Sidebar from './components/Sidebar';
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from "./theme";
 import { Box } from '@mui/material';
@@ -33,6 +33,7 @@ interface MetaDiagramProps {
   componentsMap: ComponentsMap;
   wrapperClassName?: string;
   canvasClassName?: string;
+  customThemeVariables: object;
 }
 
 const MetaDiagram = ({
@@ -41,6 +42,7 @@ const MetaDiagram = ({
   componentsMap,
   wrapperClassName,
   canvasClassName,
+  customThemeVariables,
 }: MetaDiagramProps) => {
   const classes = useStyles();
 
@@ -78,8 +80,9 @@ const MetaDiagram = ({
   const diagramClassName = canvasClassName
     ? canvasClassName
     : classes.canvasContainer;
+
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={createTheme(theme(customThemeVariables))}>
       <CssBaseline />
       <Box className={containerClassName}>
         <Sidebar />
