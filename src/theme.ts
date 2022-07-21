@@ -14,7 +14,7 @@ const applicationTheme = (params: ThemeVars) => {
     listItemActiveBg,
     listSelectedTextColor,
     listBoxShadow,
-    listBorderColor
+    listBorderColor,
   } = params;
   return {
     components: {
@@ -31,7 +31,6 @@ const applicationTheme = (params: ThemeVars) => {
           }
         `,
       },
-  
       MuiList: {
         styleOverrides: {
           root: {
@@ -40,7 +39,6 @@ const applicationTheme = (params: ThemeVars) => {
               background: chipTextColor,
               borderRadius: '0.5rem',
               display: 'flex',
-  
               '& .MuiListItemButton-root': {
                 padding: '0.25rem 0.75rem',
                 borderRadius: '0.4375rem',
@@ -48,51 +46,43 @@ const applicationTheme = (params: ThemeVars) => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-  
                 '&:not(:last-child)': {
                   marginBottom: '0',
                 },
-  
                 '&.Mui-disabled': {
                   opacity: 1,
                 },
-  
                 '&.Mui-selected': {
                   background: textWhite,
                   boxShadow: listBoxShadow,
                   border: `0.03125rem solid ${listBorderColor}`,
-  
                   '& .MuiTypography-root': {
-                    color: listSelectedTextColor
+                    color: listSelectedTextColor,
                   },
                 },
               },
-  
               '& .MuiChip-root': {
-                marginLeft: '0.25rem'
+                marginLeft: '0.25rem',
               },
-  
               '& .MuiTypography-root': {
                 fontWeight: 500,
                 fontSize: '0.8125rem',
                 lineHeight: '1.25rem',
                 letterSpacing: '-0.005rem',
                 color: chipBgColor,
-                margin: 0
+                margin: 0,
               },
             },
-          }
-        }
+          },
+        },
       },
-  
       MuiListItemIcon: {
         styleOverrides: {
           root: {
-            minWidth: 'inherit'
+            minWidth: 'inherit',
           },
-        }
+        },
       },
-  
       MuiListItemButton: {
         styleOverrides: {
           root: {
@@ -114,15 +104,18 @@ const applicationTheme = (params: ThemeVars) => {
                 backgroundColor: listItemActiveBg,
               },
             },
-  
             '&.Mui-disabled': {
               opacity: 0.8,
             },
           },
-        }
+        },
       },
     },
   };
 };
 
-export default (customVariables: ThemeVars) => applicationTheme({ ...vars, ...customVariables });
+export default (customVariables: ThemeVars) =>
+  applicationTheme({
+    ...vars,
+    ...customVariables,
+  });

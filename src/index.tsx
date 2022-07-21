@@ -12,7 +12,7 @@ import { makeStyles } from '@mui/styles';
 import Sidebar from './components/Sidebar';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import theme from "./theme";
+import theme from './theme';
 import { Box } from '@mui/material';
 
 const useStyles = makeStyles(_ => ({
@@ -83,7 +83,10 @@ const MetaDiagram = ({
       <CssBaseline />
       <Box className={containerClassName}>
         <Sidebar />
-        <CanvasWidget className={`${classes.canvasContainer} ${canvasClassName}`} engine={engine} />
+        <CanvasWidget
+          className={`${classes.canvasContainer} ${canvasClassName}`}
+          engine={engine}
+        />
       </Box>
     </ThemeProvider>
   );
