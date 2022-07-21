@@ -23,7 +23,7 @@ const useStyles = makeStyles(_ => ({
   canvasContainer: {
     height: '100%',
     width: '100%',
-    background: '#333333',
+    background: '#fffff',
   },
 }));
 
@@ -77,16 +77,13 @@ const MetaDiagram = ({
   const containerClassName = wrapperClassName
     ? wrapperClassName
     : classes.container;
-  const diagramClassName = canvasClassName
-    ? canvasClassName
-    : classes.canvasContainer;
 
   return (
     <ThemeProvider theme={createTheme(theme(customThemeVariables))}>
       <CssBaseline />
       <Box className={containerClassName}>
         <Sidebar />
-        <CanvasWidget className={diagramClassName} engine={engine} />
+        <CanvasWidget className={`${classes.canvasContainer} ${canvasClassName}`} engine={engine} />
       </Box>
     </ThemeProvider>
   );
