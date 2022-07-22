@@ -86,7 +86,7 @@ const MetaDiagram = ({
       <Box className={containerClassName}>
         <Sidebar />
         <CanvasWidget
-          className={`${classes.canvasContainer} ${metaTheme?.canvasClassName}`}
+          className={`canvas-widget ${metaTheme?.canvasClassName}`}
           engine={engine}
         />
       </Box>
