@@ -33,7 +33,10 @@ interface MetaDiagramProps {
   componentsMap: ComponentsMap;
   wrapperClassName?: string;
   canvasClassName?: string;
-  customThemeVariables: object;
+  metaTheme: {
+    customThemeVariables: {};
+    canvasClassName: string;
+  };
 }
 
 const MetaDiagram = ({
@@ -41,8 +44,7 @@ const MetaDiagram = ({
   metaLinks,
   componentsMap,
   wrapperClassName,
-  canvasClassName,
-  customThemeVariables,
+  metaTheme,
 }: MetaDiagramProps) => {
   const classes = useStyles();
 
@@ -79,12 +81,12 @@ const MetaDiagram = ({
     : classes.container;
 
   return (
-    <ThemeProvider theme={createTheme(theme(customThemeVariables))}>
+    <ThemeProvider theme={createTheme(theme(metaTheme?.customThemeVariables))}>
       <CssBaseline />
       <Box className={containerClassName}>
         <Sidebar />
         <CanvasWidget
-          className={`${classes.canvasContainer} ${canvasClassName}`}
+          className={`${classes.canvasContainer} ${metaTheme?.canvasClassName}`}
           engine={engine}
         />
       </Box>

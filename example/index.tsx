@@ -37,7 +37,12 @@ const App = () => {
 
     return (
         <div className={classes.main}>
-            <MetaDiagram metaNodes={[node1, node2]} metaLinks={[link3]} componentsMap={componentsMap} customThemeVariables={{}} canvasClassName={classes.canvasBG}/>
+            <MetaDiagram metaNodes={[node1, node2]} metaLinks={[link3]} componentsMap={componentsMap}
+                metaTheme={{
+                    customThemeVariables: {},
+                    canvasClassName: classes.canvasBG,
+                }}
+            />
         </div>
     );
 };
