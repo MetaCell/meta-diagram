@@ -23,5 +23,7 @@ declare const vars: {
     progressBar: string;
     progressShadow: string;
     switchShadow: string;
+    sidebarBg: string;
+    sidebarShadow: string;
 };
 export default vars;

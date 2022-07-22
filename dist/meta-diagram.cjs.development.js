@@ -12,6 +12,8 @@ var reactCanvasCore = require('@projectstorm/react-canvas-core');
 var styles = require('@mui/styles');
 var system = require('@mui/system');
 var material = require('@mui/material');
+var styles$1 = require('@mui/material/styles');
+var CssBaseline = _interopDefault(require('@mui/material/CssBaseline'));
 
 class MetaOptions {
   constructor(id, name, shape, options) {
@@ -214,7 +216,10 @@ const vars = {
   progressBg: '#E5E5E5',
   progressBar: '#017AFF',
   progressShadow: 'inset 0 0 0.0625rem #E3E3E3',
-  switchShadow: '0 0.1875rem 0.5rem rgba(0, 0, 0, 0.15), 0 0.1875rem 0.0625rem rgba(0, 0, 0, 0.06)'
+  switchShadow: '0 0.1875rem 0.5rem rgba(0, 0, 0, 0.15), 0 0.1875rem 0.0625rem rgba(0, 0, 0, 0.06)',
+  sidebarBg: '#ffffff',
+  sidebarShadow: `0 0 3.75rem rgba(0, 0, 0, 0.1),
+  0 0.5rem 2.5rem -0.625rem rgba(0, 0, 0, 0.1)`
 };
 
 var Move = "<svg width=\"20\" height=\"19\" viewBox=\"0 0 20 19\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M1.25 9.91406L3.75 12.2812C3.92708 12.4479 4.10938 12.5234 4.29688 12.5078C4.48438 12.4922 4.64323 12.4115 4.77344 12.2656C4.90365 12.1198 4.96875 11.9349 4.96875 11.7109V10.0547H9.30469V14.4062H7.64062C7.41667 14.4062 7.23177 14.4714 7.08594 14.6016C6.9401 14.7266 6.85938 14.8828 6.84375 15.0703C6.82812 15.263 6.90365 15.4453 7.07031 15.6172L9.4375 18.1172C9.60417 18.2943 9.79427 18.3802 10.0078 18.375C10.2214 18.3698 10.4089 18.2812 10.5703 18.1094L12.9297 15.6172C13.0964 15.4453 13.1719 15.263 13.1562 15.0703C13.1458 14.8828 13.0651 14.7266 12.9141 14.6016C12.7682 14.4714 12.5833 14.4062 12.3594 14.4062H10.7031V10.0547H15.0312V11.7109C15.0312 11.9349 15.0964 12.1198 15.2266 12.2656C15.3568 12.4115 15.5156 12.4922 15.7031 12.5078C15.8906 12.5234 16.0729 12.4479 16.25 12.2812L18.7422 9.92188C18.9089 9.76042 18.9948 9.57292 19 9.35938C19.0052 9.14583 18.9219 8.95573 18.75 8.78906L16.25 6.42188C16.0729 6.25521 15.8906 6.17969 15.7031 6.19531C15.5156 6.21094 15.3568 6.29167 15.2266 6.4375C15.0964 6.58333 15.0312 6.76823 15.0312 6.99219V8.65625H10.7031V4.29688H12.3594C12.5833 4.29688 12.7682 4.23177 12.9141 4.10156C13.0651 3.97135 13.1458 3.8125 13.1562 3.625C13.1719 3.4375 13.0964 3.25781 12.9297 3.08594L10.5625 0.585938C10.3958 0.408854 10.2057 0.322917 9.99219 0.328125C9.78385 0.333333 9.59635 0.421875 9.42969 0.59375L7.07031 3.08594C6.90365 3.25781 6.82812 3.4375 6.84375 3.625C6.85938 3.8125 6.9401 3.97135 7.08594 4.10156C7.23177 4.23177 7.41667 4.29688 7.64062 4.29688H9.30469V8.65625H4.96875V6.99219C4.96875 6.76823 4.90365 6.58333 4.77344 6.4375C4.64323 6.29167 4.48438 6.21094 4.29688 6.19531C4.10938 6.17969 3.92708 6.25521 3.75 6.42188L1.25781 8.78125C1.09115 8.94271 1.00521 9.13021 1 9.34375C0.994792 9.55729 1.07812 9.7474 1.25 9.91406Z\" fill=\"#3C3C43\" fill-opacity=\"0.6\"/>\n</svg>";
@@ -300,6 +305,235 @@ const Sidebar = () => {
   })))));
 };
 
+const applicationTheme = params => {
+  const {
+    primaryBg,
+    fontFamily,
+    chipTextColor,
+    chipBgColor,
+    textWhite,
+    listItemActiveBg,
+    listSelectedTextColor,
+    listBoxShadow,
+    listBorderColor,
+    sidebarBg,
+    sidebarShadow
+  } = params;
+  return {
+    components: {
+      MuiCssBaseline: {
+        styleOverrides: `
+          html {
+            background: ${primaryBg};
+            font-family: ${fontFamily};
+          }
+          body {
+            background-color:${primaryBg};
+            font-family: ${fontFamily};
+            font-size: 1rem;
+          }
+          .sidebar {
+            z-index: 5;
+            width: 4rem;
+            background: ${sidebarBg};
+            box-shadow: ${sidebarShadow};
+            border-radius: 2rem;
+            position: fixed;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+
+          .sidebar.right {
+            left: auto;
+            right: 1rem;
+          }
+
+          .sidebar .MuiList-root {
+            padding: 0.75rem
+          }
+
+          .canvas-widget {
+            height: 100%;
+            width: 100%;
+            background-color: #fff;
+          }
+
+          .node {
+            border: solid 0.0625rem;
+            border-radius: 50%;
+            width: 10rem;
+            height: 10rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            position: relative;
+          }
+
+          .node img {
+            margin-bottom: 0.25rem
+          }
+
+          .node p {
+            font-weight: 500;
+            font-size: 0.8125rem;
+            line-height: 1.25rem;
+            letter-spacing: -0.005rem;
+            margin: 0;
+          }
+
+          .node-button.MuiButton-root {
+            background-color: #161A1E;
+            border-radius: 1.125rem;
+            font-weight: 600;
+            font-size: 0.8125rem;
+            display: flex;
+            line-height: 1rem;
+            letter-spacing: -0.025625rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0 !important;
+            width: 9.625rem;
+            padding: 0;
+            height: 2.25rem;
+            position: absolute;
+            top: -2.625rem;
+            font-family: ${fontFamily};
+            text-transform: none;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+
+          .node-button.MuiButton-root:hover {
+            background-color: #161A1E;
+          }
+
+          .node-button .icon {
+            width: 1rem;
+            border: solid 0.0625rem;
+            height: 1rem;
+            border-radius: 50%;
+            margin-right: 1.25rem;
+            position: relative;
+          }
+
+          .node-button .icon:after {
+            content: "";
+            height: 1.75rem;
+            width: 0.0625rem;
+            display: block;
+            position: absolute;
+            right: -0.625rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.2);
+          }
+
+          .nodes {
+            width: 10rem;
+            height: 10rem;
+            border: 0.09375rem solid #18A0FB;
+            z-index: 99999;
+            position: absolute;
+          }
+
+          .node .pointer {
+            width: 0.625rem;
+            height: 0.625rem;
+            background: #FFFFFF;
+            border: 0.09375rem solid #18A0FB;
+            border-radius: 0.125rem;
+            position: absolute;
+          }
+        `
+      },
+      MuiList: {
+        styleOverrides: {
+          root: {
+            '&.customSwitch': {
+              padding: '0.125rem',
+              background: chipTextColor,
+              borderRadius: '0.5rem',
+              display: 'flex',
+              '& .MuiListItemButton-root': {
+                padding: '0.25rem 0.75rem',
+                borderRadius: '0.4375rem',
+                width: '10.59375rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                '&:not(:last-child)': {
+                  marginBottom: '0'
+                },
+                '&.Mui-disabled': {
+                  opacity: 1
+                },
+                '&.Mui-selected': {
+                  background: textWhite,
+                  boxShadow: listBoxShadow,
+                  border: `0.03125rem solid ${listBorderColor}`,
+                  '& .MuiTypography-root': {
+                    color: listSelectedTextColor
+                  }
+                }
+              },
+              '& .MuiChip-root': {
+                marginLeft: '0.25rem'
+              },
+              '& .MuiTypography-root': {
+                fontWeight: 500,
+                fontSize: '0.8125rem',
+                lineHeight: '1.25rem',
+                letterSpacing: '-0.005rem',
+                color: chipBgColor,
+                margin: 0
+              }
+            }
+          }
+        }
+      },
+      MuiListItemIcon: {
+        styleOverrides: {
+          root: {
+            minWidth: 'inherit'
+          }
+        }
+      },
+      MuiListItemButton: {
+        styleOverrides: {
+          root: {
+            padding: 0,
+            width: '2.5rem',
+            height: '2.5rem',
+            borderRadius: '50%',
+            justifyContent: 'center',
+            backgroundColor: chipTextColor,
+            '&:hover': {
+              backgroundColor: chipTextColor
+            },
+            '&:not(:last-child)': {
+              marginBottom: '0.75rem'
+            },
+            '&.Mui-selected': {
+              backgroundColor: listItemActiveBg,
+              '&:hover': {
+                backgroundColor: listItemActiveBg
+              }
+            },
+            '&.Mui-disabled': {
+              opacity: 0.8
+            }
+          }
+        }
+      }
+    }
+  };
+};
+
+var theme = (customVariables => applicationTheme({ ...vars,
+  ...customVariables
+}));
+
 class Position {
   constructor(x, y) {
     this.x = x;
@@ -316,7 +550,7 @@ const useStyles$1 = /*#__PURE__*/styles.makeStyles(_ => ({
   canvasContainer: {
     height: '100%',
     width: '100%',
-    background: '#333333'
+    background: '#fffff'
   }
 }));
 
@@ -325,7 +559,7 @@ const MetaDiagram = ({
   metaLinks,
   componentsMap,
   wrapperClassName,
-  canvasClassName
+  metaTheme
 }) => {
   const classes = useStyles$1(); // set up the diagram engine
 
@@ -343,13 +577,14 @@ const MetaDiagram = ({
 
   engine.setModel(model);
   const containerClassName = wrapperClassName ? wrapperClassName : classes.container;
-  const diagramClassName = canvasClassName ? canvasClassName : classes.canvasContainer;
-  return React.createElement("div", {
+  return React.createElement(styles$1.ThemeProvider, {
+    theme: styles$1.createTheme(theme(metaTheme == null ? void 0 : metaTheme.customThemeVariables))
+  }, React.createElement(CssBaseline, null), React.createElement(material.Box, {
     className: containerClassName
   }, React.createElement(Sidebar, null), React.createElement(reactCanvasCore.CanvasWidget, {
-    className: diagramClassName,
+    className: `canvas-widget ${metaTheme == null ? void 0 : metaTheme.canvasClassName}`,
     engine: engine
-  }));
+  })));
 };
 
 exports.ComponentsMap = ComponentsMap;
