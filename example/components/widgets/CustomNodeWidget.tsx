@@ -1,7 +1,7 @@
 import * as React from "react";
 import {DiagramEngine, PortWidget} from "@projectstorm/react-diagrams";
 import {MetaNodeModel} from "../../../.";
-import {Typography} from "@material-ui/core";
+import {Box, Button, Typography} from "@material-ui/core";
 
 export interface CustomNodeWidgetProps {
     model: MetaNodeModel;
@@ -9,53 +9,64 @@ export interface CustomNodeWidgetProps {
 }
 
 export class CustomNodeWidget extends React.Component<CustomNodeWidgetProps> {
-
     render() {
-        // @ts-ignore
-        const customNodeStyle = {
-            zIndex: 999999999,
-            border: "solid 2px gray",
-            borderRadius: "5px",
-            width: "250px",
-            height: "200px",
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
-            position: "relative",
-            background: this.props.model.getOptions()['color'] || "darkgray",
-            top: this.props.model.getOptions()['position']?.y || 0,
-            left: this.props.model.getOptions()['position']?.x || 0
-        }
-
-        const circlePortStyle = {
-            width: "12px",
-            height: "12px",
-            margin: "2px",
-            borderRadius: "4px",
-            background: "darkgray",
-            cursor: "pointer",
-        }
-
+        const customNodeStyles = {
+          background: this.props.model.getOptions()['backgroundColor'],
+          borderColor: this.props.model.getOptions()['borderColor'],
+          boxShadow: this.props.model.getOptions()['backgrounboxShadowdColor'],
+        };
         return (
-            <>
-                <div style={customNodeStyle}>
-                    <PortWidget
-                        style={{position: 'absolute', top: '0px', left: '0px'}}
-                        engine={this.props.engine}
-                        port={this.props.model.getPort("in")}
-                    >
-                        <div style={circlePortStyle}/>
-                    </PortWidget>
-                    <PortWidget
-                        style={{position: 'absolute', top: '0px', right: '0px'}}
-                        engine={this.props.engine}
-                        port={this.props.model.getPort("out")}
-                    >
-                        <div style={circlePortStyle}/>
-                    </PortWidget>
-                    <Typography>{this.props.model.getOptions()['name']}</Typography>
-                </div>
-            </>
+          <Box position='relative'>
+            {this.props.model.getOptions()['selected'] && (
+              <>
+                <Button className="node-button">
+                  <Box
+                    className="icon"
+                    style={customNodeStyles}
+                  />
+                  Show properties
+                </Button>
+
+                <Box className="nodes">
+                  <PortWidget
+                    engine={this.props.engine}
+                    port={this.props.model.getPort("in")}
+                  >
+                    <Box style={{ left: '-0.375rem', top: '-0.375rem' }} className="pointer" />
+                  </PortWidget>
+                  <PortWidget
+                    engine={this.props.engine}
+                    port={this.props.model.getPort("out")}
+                  >
+                    <Box style={{ right: '-0.375rem', top: '-0.375rem' }} className="pointer" />
+                  </PortWidget>
+
+                  <PortWidget
+                    engine={this.props.engine}
+                    port={this.props.model.getPort("in")}
+                  >
+                    <Box style={{ left: '-0.375rem', bottom: '-0.375rem' }} className="pointer" />
+                  </PortWidget>
+                  <PortWidget
+                    engine={this.props.engine}
+                    port={this.props.model.getPort("out")}
+                  >
+                    <Box style={{ bottom: '-0.375rem', right: '-0.375rem' }} className="pointer" />
+                  </PortWidget>
+                </Box>
+              </>
+            )}
+
+            <Box
+              className="node"
+              style={customNodeStyles}
+            >
+              <img src={this.props.model.getOptions()['icon']} alt={this.props.model.getOptions()['name']} />
+              <Typography component="p" style={{ color: this.props.model.getOptions()['textColor'] }}>
+                {this.props.model.getOptions()['name']}
+              </Typography>
+            </Box>
+          </Box>
         );
     }
 }
