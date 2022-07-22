@@ -25,5 +25,11 @@ declare const vars: {
     switchShadow: string;
     sidebarBg: string;
     sidebarShadow: string;
+    canvasBg: string;
+    showPropertiesButtonBg: string;
+    nodeBorderColor: string;
+    nodePointerBg: string;
+    nodeButtonTextColor: string;
+    nodeButtonLineColor: string;
 };
 export default vars;
