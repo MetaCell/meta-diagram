@@ -4,36 +4,18 @@ import { makeStyles } from '@mui/styles';
 import vars from './assets/styles/variables';
 import { Divider, List, ListItemButton, ListItemIcon } from '@mui/material';
 import Move from './assets/svg/move.svg';
+import MoveActive from './assets/svg/move-active.svg';
 import Icon from './assets/svg/icon.svg';
+import IconActive from './assets/svg/icon-active.svg';
 import Node from './assets/svg/node.svg';
 import Cursor from './assets/svg/cursor.svg';
+import CursorActive from './assets/svg/cursor-active.svg';
 import Fullscreen from './assets/svg/fullscreen.svg';
+import FullscreenActive from './assets/svg/fullscreen-active.svg';
 
-const { textWhite, dividerColor } = vars;
+const { dividerColor } = vars;
 
 const useStyles = makeStyles(() => ({
-  root: {
-    zIndex: '5',
-    width: '4rem',
-    background: textWhite,
-    boxShadow:
-      '0 0 3.75rem rgba(0, 0, 0, 0.1), 0 0.5rem 2.5rem -0.625rem rgba(0, 0, 0, 0.1)',
-    borderRadius: '2rem',
-    position: 'fixed',
-    left: '1rem',
-    top: '50%',
-    transform: 'translateY(-50%)',
-
-    '&.right': {
-      left: 'auto',
-      right: '1rem',
-    },
-
-    '& .MuiList-root': {
-      padding: '0.75rem',
-    },
-  },
-
   node: {
     margin: '0.25rem 0',
     '& .MuiDivider-root': {
@@ -53,28 +35,41 @@ const useStyles = makeStyles(() => ({
 
 const Sidebar = () => {
   const classes = useStyles();
+  const [selected, setSelected] = React.useState("1");
+
   return (
-    <Box className={`${classes.root} left`}>
+    <Box className="sidebar">
       <List disablePadding component="nav">
-        <ListItemButton selected>
+        <ListItemButton selected={selected === "1"} onClick={() => setSelected("1")}>
           <ListItemIcon>
-            <img
+            {selected === "1" ? <img
+              src={`data:image/svg+xml;base64,${new Buffer(CursorActive).toString(
+                'base64'
+              )}`}
+              alt="icon"
+            /> : <img
               src={`data:image/svg+xml;base64,${new Buffer(Cursor).toString(
                 'base64'
               )}`}
               alt="icon"
-            />
+            />}
           </ListItemIcon>
         </ListItemButton>
 
-        <ListItemButton>
+        <ListItemButton selected={selected === "2"} onClick={() => setSelected("2")}>
           <ListItemIcon>
-            <img
+            {selected === "2" ? <img
+              src={`data:image/svg+xml;base64,${new Buffer(MoveActive).toString(
+                'base64'
+              )}`}
+              alt="move"
+            /> : <img
               src={`data:image/svg+xml;base64,${new Buffer(Move).toString(
                 'base64'
               )}`}
               alt="move"
-            />
+            />}
+
           </ListItemIcon>
         </ListItemButton>
       </List>
@@ -91,25 +86,35 @@ const Sidebar = () => {
       </Box>
 
       <List disablePadding component="nav">
-        <ListItemButton disabled>
+        <ListItemButton selected={selected === "3"} onClick={() => setSelected("3")}>
           <ListItemIcon>
-            <img
+            {selected === "3" ? <img
+              src={`data:image/svg+xml;base64,${new Buffer(IconActive).toString(
+                'base64'
+              )}`}
+              alt="icon"
+            /> : <img
               src={`data:image/svg+xml;base64,${new Buffer(Icon).toString(
                 'base64'
               )}`}
               alt="icon"
-            />
+            />}
           </ListItemIcon>
         </ListItemButton>
 
-        <ListItemButton>
+        <ListItemButton selected={selected === "4"} onClick={() => setSelected("4")}>
           <ListItemIcon>
-            <img
+            {selected === "4" ? <img
+              src={`data:image/svg+xml;base64,${new Buffer(FullscreenActive).toString(
+                'base64'
+              )}`}
+              alt="fullscreen"
+            /> : <img
               src={`data:image/svg+xml;base64,${new Buffer(Fullscreen).toString(
                 'base64'
               )}`}
               alt="fullscreen"
-            />
+            />}
           </ListItemIcon>
         </ListItemButton>
       </List>
