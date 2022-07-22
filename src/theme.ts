@@ -16,7 +16,7 @@ const applicationTheme = (params: ThemeVars) => {
     listBoxShadow,
     listBorderColor,
     sidebarBg,
-    sidebarShadow
+    sidebarShadow,
   } = params;
   return {
     components: {

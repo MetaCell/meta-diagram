@@ -36,7 +36,8 @@ const vars = {
     '0 0.1875rem 0.5rem rgba(0, 0, 0, 0.15), 0 0.1875rem 0.0625rem rgba(0, 0, 0, 0.06)',
 
   sidebarBg: '#ffffff',
-  sidebarShadow: "0 0 3.75rem rgba(0, 0, 0, 0.1), 0 0.5rem 2.5rem -0.625rem rgba(0, 0, 0, 0.1)"
+  sidebarShadow: `0 0 3.75rem rgba(0, 0, 0, 0.1),
+  0 0.5rem 2.5rem -0.625rem rgba(0, 0, 0, 0.1)`,
 };
 
 export default vars;
