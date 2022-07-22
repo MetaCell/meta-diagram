@@ -38,6 +38,12 @@ const vars = {
   sidebarBg: '#ffffff',
   sidebarShadow: `0 0 3.75rem rgba(0, 0, 0, 0.1),
   0 0.5rem 2.5rem -0.625rem rgba(0, 0, 0, 0.1)`,
+  canvasBg: '#fff',
+  showPropertiesButtonBg: '#161A1E',
+  nodeBorderColor: '#18A0FB',
+  nodePointerBg: '#fff',
+  nodeButtonTextColor: 'rgba(255, 255, 255, 0.8)',
+  nodeButtonLineColor: 'rgba(255, 255, 255, 0.2)'
 };
 
 export default vars;

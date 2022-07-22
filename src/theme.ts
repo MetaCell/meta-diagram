@@ -17,6 +17,12 @@ const applicationTheme = (params: ThemeVars) => {
     listBorderColor,
     sidebarBg,
     sidebarShadow,
+    canvasBg,
+    showPropertiesButtonBg,
+    nodeBorderColor,
+    nodePointerBg,
+    nodeButtonTextColor,
+    nodeButtonLineColor,
   } = params;
   return {
     components: {
@@ -55,7 +61,7 @@ const applicationTheme = (params: ThemeVars) => {
           .canvas-widget {
             height: 100%;
             width: 100%;
-            background-color: #fff;
+            background-color: ${canvasBg};
           }
 
           .node {
@@ -83,14 +89,14 @@ const applicationTheme = (params: ThemeVars) => {
           }
 
           .node-button.MuiButton-root {
-            background-color: #161A1E;
+            background-color: ${showPropertiesButtonBg};
             border-radius: 1.125rem;
             font-weight: 600;
             font-size: 0.8125rem;
             display: flex;
             line-height: 1rem;
             letter-spacing: -0.025625rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: ${nodeButtonTextColor};
             margin: 0 !important;
             width: 9.625rem;
             padding: 0;
@@ -104,7 +110,7 @@ const applicationTheme = (params: ThemeVars) => {
           }
 
           .node-button.MuiButton-root:hover {
-            background-color: #161A1E;
+            background-color: ${showPropertiesButtonBg};
           }
 
           .node-button .icon {
@@ -125,13 +131,13 @@ const applicationTheme = (params: ThemeVars) => {
             right: -0.625rem;
             top: 50%;
             transform: translateY(-50%);
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: ${nodeButtonLineColor};
           }
 
           .nodes {
             width: 10rem;
             height: 10rem;
-            border: 0.09375rem solid #18A0FB;
+            border: 0.09375rem solid ${nodeBorderColor};
             z-index: 99999;
             position: absolute;
           }
@@ -139,8 +145,8 @@ const applicationTheme = (params: ThemeVars) => {
           .node .pointer {
             width: 0.625rem;
             height: 0.625rem;
-            background: #FFFFFF;
-            border: 0.09375rem solid #18A0FB;
+            background: ${nodePointerBg};
+            border: 0.09375rem solid ${nodeBorderColor};
             border-radius: 0.125rem;
             position: absolute;
           }
