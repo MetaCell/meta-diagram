@@ -10,6 +10,10 @@ import { MetaNodeModel } from './react-diagrams/MetaNodeModel';
 import { getLinkModel } from './helpers/linksHelper';
 import { makeStyles } from '@mui/styles';
 import Sidebar from './components/Sidebar';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import theme from './theme';
+import { Box } from '@mui/material';
 
 const useStyles = makeStyles(_ => ({
   container: {
@@ -19,7 +23,7 @@ const useStyles = makeStyles(_ => ({
   canvasContainer: {
     height: '100%',
     width: '100%',
-    background: '#333333',
+    background: '#fffff',
   },
 }));
 
@@ -29,6 +33,10 @@ interface MetaDiagramProps {
   componentsMap: ComponentsMap;
   wrapperClassName?: string;
   canvasClassName?: string;
+  metaTheme: {
+    customThemeVariables: {};
+    canvasClassName: string;
+  };
 }
 
 const MetaDiagram = ({
@@ -36,7 +44,7 @@ const MetaDiagram = ({
   metaLinks,
   componentsMap,
   wrapperClassName,
-  canvasClassName,
+  metaTheme,
 }: MetaDiagramProps) => {
   const classes = useStyles();
 
@@ -71,14 +79,18 @@ const MetaDiagram = ({
   const containerClassName = wrapperClassName
     ? wrapperClassName
     : classes.container;
-  const diagramClassName = canvasClassName
-    ? canvasClassName
-    : classes.canvasContainer;
+
   return (
-    <div className={containerClassName}>
-      <Sidebar />
-      <CanvasWidget className={diagramClassName} engine={engine} />
-    </div>
+    <ThemeProvider theme={createTheme(theme(metaTheme?.customThemeVariables))}>
+      <CssBaseline />
+      <Box className={containerClassName}>
+        <Sidebar />
+        <CanvasWidget
+          className={`${classes.canvasContainer} ${metaTheme?.canvasClassName}`}
+          engine={engine}
+        />
+      </Box>
+    </ThemeProvider>
   );
 };
 

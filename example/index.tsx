@@ -5,6 +5,7 @@ import MetaDiagram, {MetaNode, Position, ComponentsMap, MetaLink} from "./..";
 import {CustomNodeWidget} from "./components/widgets/CustomNodeWidget";
 import {makeStyles} from "@material-ui/core";
 import CustomLinkWidget from "./components/widgets/CustomLinkWidget";
+import BG from "./components/assets/svg/bg-dotted.svg";
 
 const useStyles = makeStyles(_ => ({
     main: {
@@ -12,6 +13,9 @@ const useStyles = makeStyles(_ => ({
         height: '100%',
         width: '100%',
     },
+    canvasBG: {
+        backgroundImage: `url(${BG})`
+    }
 }))
 
 const App = () => {
@@ -33,7 +37,12 @@ const App = () => {
 
     return (
         <div className={classes.main}>
-            <MetaDiagram metaNodes={[node1, node2]} metaLinks={[link3]} componentsMap={componentsMap} />
+            <MetaDiagram metaNodes={[node1, node2]} metaLinks={[link3]} componentsMap={componentsMap}
+                metaTheme={{
+                    customThemeVariables: {},
+                    canvasClassName: classes.canvasBG,
+                }}
+            />
         </div>
     );
 };
