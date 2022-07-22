@@ -6,7 +6,7 @@ import {CustomNodeWidget} from "./components/widgets/CustomNodeWidget";
 import {makeStyles} from "@material-ui/core";
 import CustomLinkWidget from "./components/widgets/CustomLinkWidget";
 import BG from "./components/assets/svg/bg-dotted.svg";
-import { colorGreen, colorOrange } from "./components/assets/styles/constants";
+import { colorGreen, colorRed } from "./components/assets/styles/constants";
 
 const useStyles = makeStyles(_ => ({
   main: {
@@ -26,7 +26,7 @@ const App = () => {
         new Map(Object.entries(colorGreen)))
 
     const node2 = new MetaNode('2', 'Node 2', 'default', new Position(500, 100),
-        new Map(Object.entries(colorOrange)))
+        new Map(Object.entries(colorRed)))
 
     const link3 = new MetaLink('3', 'link3', 'default', '1', 'out', '2', 'in',
         new Map(Object.entries({color: 'rgb(255,192,0)'})))

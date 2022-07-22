@@ -1,5 +1,5 @@
 import iconGreen from "../svg/icon-green.svg";
-import iconOrange from "../svg/icon-orange.svg";
+import iconRed from "../svg/icon-red.svg";
 
 export const colorGreen = {
   backgroundColor: '#D4F4D4',
@@ -10,13 +10,13 @@ export const colorGreen = {
   icon: iconGreen,
 };
 
-export const colorOrange = {
-  backgroundColor: '#F4E9D4',
-  textColor: '#9D8B66',
+export const colorRed = {
+  backgroundColor: '#F4D4D4',
+  textColor: '#9D6666',
   borderColor: 'rgba(157, 139, 102, 0.2)',
   boxShadow: '0 0.25rem 0.625rem -0.25rem rgba(157, 139, 102, 0.3)',
-  bulletColor: '#9D8B66',
-  icon: iconOrange,
+  bulletColor: '#9D6666',
+  icon: iconRed,
 };
 
 export const colorBlue = {
