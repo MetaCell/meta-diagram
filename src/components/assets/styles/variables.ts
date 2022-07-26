@@ -43,7 +43,7 @@ const vars = {
   nodeBorderColor: '#18A0FB',
   nodePointerBg: '#fff',
   nodeButtonTextColor: 'rgba(255, 255, 255, 0.8)',
-  nodeButtonLineColor: 'rgba(255, 255, 255, 0.2)'
+  nodeButtonLineColor: 'rgba(255, 255, 255, 0.2)',
 };
 
 export default vars;
