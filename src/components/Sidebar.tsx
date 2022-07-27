@@ -33,117 +33,72 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+type sidebarItemProps = {
+  image: string;
+  name: string;
+  selectedImage: string;
+  selection: string;
+};
+
 const Sidebar = () => {
   const classes = useStyles();
   const [selected, setSelected] = React.useState('1');
+  const svgImg = (img: string) =>
+    `data:image/svg+xml;base64,${new Buffer(img).toString('base64')}`;
+  const SidebarItem = (props: sidebarItemProps) => {
+    const { image, name, selectedImage, selection } = props;
+    return (
+      <ListItemButton
+        selected={selected === selection}
+        onClick={() => setSelected(selection)}
+      >
+        <ListItemIcon>
+          {selected === selection ? (
+            <img src={svgImg(image)} alt={name} />
+          ) : (
+            <img src={svgImg(selectedImage)} alt={name} />
+          )}
+        </ListItemIcon>
+      </ListItemButton>
+    );
+  };
 
   return (
     <Box className="sidebar">
       <List disablePadding component="nav">
-        <ListItemButton
-          selected={selected === '1'}
-          onClick={() => setSelected('1')}
-        >
-          <ListItemIcon>
-            {selected === '1' ? (
-              <img
-                src={`data:image/svg+xml;base64,${new Buffer(
-                  CursorActive
-                ).toString('base64')}`}
-                alt="icon"
-              />
-            ) : (
-              <img
-                src={`data:image/svg+xml;base64,${new Buffer(Cursor).toString(
-                  'base64'
-                )}`}
-                alt="icon"
-              />
-            )}
-          </ListItemIcon>
-        </ListItemButton>
-
-        <ListItemButton
-          selected={selected === '2'}
-          onClick={() => setSelected('2')}
-        >
-          <ListItemIcon>
-            {selected === '2' ? (
-              <img
-                src={`data:image/svg+xml;base64,${new Buffer(
-                  MoveActive
-                ).toString('base64')}`}
-                alt="move"
-              />
-            ) : (
-              <img
-                src={`data:image/svg+xml;base64,${new Buffer(Move).toString(
-                  'base64'
-                )}`}
-                alt="move"
-              />
-            )}
-          </ListItemIcon>
-        </ListItemButton>
+        <SidebarItem
+          image={CursorActive}
+          selectedImage={Cursor}
+          name="cursor"
+          selection="1"
+        />
+        <SidebarItem
+          image={MoveActive}
+          selectedImage={Move}
+          name="move"
+          selection="2"
+        />
       </List>
 
       <Box className={classes.node}>
         <Divider />
-        <img
-          src={`data:image/svg+xml;base64,${new Buffer(Node).toString(
-            'base64'
-          )}`}
-          alt="node"
-        />
+        <img src={svgImg(Node)} alt="Node" />
         <Divider />
       </Box>
 
       <List disablePadding component="nav">
-        <ListItemButton
-          selected={selected === '3'}
-          onClick={() => setSelected('3')}
-        >
-          <ListItemIcon>
-            {selected === '3' ? (
-              <img
-                src={`data:image/svg+xml;base64,${new Buffer(
-                  IconActive
-                ).toString('base64')}`}
-                alt="icon"
-              />
-            ) : (
-              <img
-                src={`data:image/svg+xml;base64,${new Buffer(Icon).toString(
-                  'base64'
-                )}`}
-                alt="icon"
-              />
-            )}
-          </ListItemIcon>
-        </ListItemButton>
-
-        <ListItemButton
-          selected={selected === '4'}
-          onClick={() => setSelected('4')}
-        >
-          <ListItemIcon>
-            {selected === '4' ? (
-              <img
-                src={`data:image/svg+xml;base64,${new Buffer(
-                  FullscreenActive
-                ).toString('base64')}`}
-                alt="fullscreen"
-              />
-            ) : (
-              <img
-                src={`data:image/svg+xml;base64,${new Buffer(
-                  Fullscreen
-                ).toString('base64')}`}
-                alt="fullscreen"
-              />
-            )}
-          </ListItemIcon>
-        </ListItemButton>
+        <SidebarItem
+          image={IconActive}
+          selectedImage={Icon}
+          name="draw"
+          selection="3"
+        />
+        <SidebarItem
+          image={FullscreenActive}
+          selectedImage={Fullscreen}
+          name="fullscreen"
+          selection="4"
+        />
       </List>
     </Box>
   );
