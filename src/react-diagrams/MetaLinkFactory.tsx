@@ -30,7 +30,13 @@ export class MetaLinkFactory extends DefaultLinkFactory {
 
       return (
         // @ts-ignore
-        <ReactComponentType diagramEngine={this.engine} link={model} path={path} selected={selected} />
+        <ReactComponentType
+          key={`link-factory-${model.getOptions().id}`}
+          diagramEngine={this.engine}
+          link={model}
+          path={path}
+          selected={selected}
+        />
       );
     }
     // TODO: Generate default link instead
