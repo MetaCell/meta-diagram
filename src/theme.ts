@@ -1,5 +1,5 @@
 import vars from './components/assets/styles/variables';
-import MI from "./components/assets/svg/mechanism-yellow.svg";
+import MI from './components/assets/svg/mechanism-yellow.svg';
 
 type ThemeVars = {
   [key: string]: any;
@@ -97,7 +97,9 @@ const applicationTheme = (params: ThemeVars) => {
           }
 
           .primary-node .primary-node_header img {
-            background: "url(data:image/svg+xml;base64,${new Buffer(MI).toString('base64')})";
+            background: "url(data:image/svg+xml;base64,${new Buffer(
+              MI
+            ).toString('base64')})";
           }
 
           .primary-node p {

@@ -5,7 +5,6 @@ const nodeGreen = {
   nodeGreenBoxShadow: '0 0.25rem 0.625rem -0.25rem rgba(102, 157, 102, 0.3)',
 };
 
-
 const vars = {
   fontFamily: 'Inter, sans-serif',
   primaryBg: '#f1f1f1',
