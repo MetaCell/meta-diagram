@@ -192,6 +192,12 @@ function getLinkModel(metaLink, nodes) {
   return undefined;
 }
 
+const nodeGreen = {
+  nodeGreenBackgroundColor: '#D4F4D4',
+  nodeGreenTextColor: '#669D66',
+  nodeGreenBorderColor: 'rgba(102, 157, 102, 0.2)',
+  nodeGreenBoxShadow: '0 0.25rem 0.625rem -0.25rem rgba(102, 157, 102, 0.3)'
+};
 const vars = {
   fontFamily: 'Inter, sans-serif',
   primaryBg: '#f1f1f1',
@@ -225,7 +231,9 @@ const vars = {
   nodeBorderColor: '#18A0FB',
   nodePointerBg: '#fff',
   nodeButtonTextColor: 'rgba(255, 255, 255, 0.8)',
-  nodeButtonLineColor: 'rgba(255, 255, 255, 0.2)'
+  nodeButtonLineColor: 'rgba(255, 255, 255, 0.2)',
+  nodeTextColor: '#3C3C43',
+  ...nodeGreen
 };
 
 var Move = "<svg width=\"20\" height=\"19\" viewBox=\"0 0 20 19\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M1.25 9.91406L3.75 12.2812C3.92708 12.4479 4.10938 12.5234 4.29688 12.5078C4.48438 12.4922 4.64323 12.4115 4.77344 12.2656C4.90365 12.1198 4.96875 11.9349 4.96875 11.7109V10.0547H9.30469V14.4062H7.64062C7.41667 14.4062 7.23177 14.4714 7.08594 14.6016C6.9401 14.7266 6.85938 14.8828 6.84375 15.0703C6.82812 15.263 6.90365 15.4453 7.07031 15.6172L9.4375 18.1172C9.60417 18.2943 9.79427 18.3802 10.0078 18.375C10.2214 18.3698 10.4089 18.2812 10.5703 18.1094L12.9297 15.6172C13.0964 15.4453 13.1719 15.263 13.1562 15.0703C13.1458 14.8828 13.0651 14.7266 12.9141 14.6016C12.7682 14.4714 12.5833 14.4062 12.3594 14.4062H10.7031V10.0547H15.0312V11.7109C15.0312 11.9349 15.0964 12.1198 15.2266 12.2656C15.3568 12.4115 15.5156 12.4922 15.7031 12.5078C15.8906 12.5234 16.0729 12.4479 16.25 12.2812L18.7422 9.92188C18.9089 9.76042 18.9948 9.57292 19 9.35938C19.0052 9.14583 18.9219 8.95573 18.75 8.78906L16.25 6.42188C16.0729 6.25521 15.8906 6.17969 15.7031 6.19531C15.5156 6.21094 15.3568 6.29167 15.2266 6.4375C15.0964 6.58333 15.0312 6.76823 15.0312 6.99219V8.65625H10.7031V4.29688H12.3594C12.5833 4.29688 12.7682 4.23177 12.9141 4.10156C13.0651 3.97135 13.1458 3.8125 13.1562 3.625C13.1719 3.4375 13.0964 3.25781 12.9297 3.08594L10.5625 0.585938C10.3958 0.408854 10.2057 0.322917 9.99219 0.328125C9.78385 0.333333 9.59635 0.421875 9.42969 0.59375L7.07031 3.08594C6.90365 3.25781 6.82812 3.4375 6.84375 3.625C6.85938 3.8125 6.9401 3.97135 7.08594 4.10156C7.23177 4.23177 7.41667 4.29688 7.64062 4.29688H9.30469V8.65625H4.96875V6.99219C4.96875 6.76823 4.90365 6.58333 4.77344 6.4375C4.64323 6.29167 4.48438 6.21094 4.29688 6.19531C4.10938 6.17969 3.92708 6.25521 3.75 6.42188L1.25781 8.78125C1.09115 8.94271 1.00521 9.13021 1 9.34375C0.994792 9.55729 1.07812 9.7474 1.25 9.91406Z\" fill=\"#3C3C43\" fill-opacity=\"0.6\"/>\n</svg>";
@@ -268,58 +276,66 @@ const useStyles = /*#__PURE__*/styles.makeStyles(() => ({
 
 const Sidebar = () => {
   const classes = useStyles();
-  const [selected, setSelected] = React__default.useState("1");
+  const [selected, setSelected] = React__default.useState('1');
+
+  const svgImg = img => `data:image/svg+xml;base64,${new Buffer(img).toString('base64')}`;
+
+  const SidebarItem = props => {
+    const {
+      image,
+      name,
+      selectedImage,
+      selection
+    } = props;
+    return React__default.createElement(material.ListItemButton, {
+      selected: selected === selection,
+      onClick: () => setSelected(selection)
+    }, React__default.createElement(material.ListItemIcon, null, selected === selection ? React__default.createElement("img", {
+      src: svgImg(image),
+      alt: name
+    }) : React__default.createElement("img", {
+      src: svgImg(selectedImage),
+      alt: name
+    })));
+  };
+
   return React__default.createElement(system.Box, {
     className: "sidebar"
   }, React__default.createElement(material.List, {
     disablePadding: true,
     component: "nav"
-  }, React__default.createElement(material.ListItemButton, {
-    selected: selected === "1",
-    onClick: () => setSelected("1")
-  }, React__default.createElement(material.ListItemIcon, null, selected === "1" ? React__default.createElement("img", {
-    src: `data:image/svg+xml;base64,${new Buffer(CursorActive).toString('base64')}`,
-    alt: "icon"
-  }) : React__default.createElement("img", {
-    src: `data:image/svg+xml;base64,${new Buffer(Cursor).toString('base64')}`,
-    alt: "icon"
-  }))), React__default.createElement(material.ListItemButton, {
-    selected: selected === "2",
-    onClick: () => setSelected("2")
-  }, React__default.createElement(material.ListItemIcon, null, selected === "2" ? React__default.createElement("img", {
-    src: `data:image/svg+xml;base64,${new Buffer(MoveActive).toString('base64')}`,
-    alt: "move"
-  }) : React__default.createElement("img", {
-    src: `data:image/svg+xml;base64,${new Buffer(Move).toString('base64')}`,
-    alt: "move"
-  })))), React__default.createElement(system.Box, {
+  }, React__default.createElement(SidebarItem, {
+    image: CursorActive,
+    selectedImage: Cursor,
+    name: "cursor",
+    selection: "1"
+  }), React__default.createElement(SidebarItem, {
+    image: MoveActive,
+    selectedImage: Move,
+    name: "move",
+    selection: "2"
+  })), React__default.createElement(system.Box, {
     className: classes.node
   }, React__default.createElement(material.Divider, null), React__default.createElement("img", {
-    src: `data:image/svg+xml;base64,${new Buffer(Node).toString('base64')}`,
-    alt: "node"
+    src: svgImg(Node),
+    alt: "Node"
   }), React__default.createElement(material.Divider, null)), React__default.createElement(material.List, {
     disablePadding: true,
     component: "nav"
-  }, React__default.createElement(material.ListItemButton, {
-    selected: selected === "3",
-    onClick: () => setSelected("3")
-  }, React__default.createElement(material.ListItemIcon, null, selected === "3" ? React__default.createElement("img", {
-    src: `data:image/svg+xml;base64,${new Buffer(IconActive).toString('base64')}`,
-    alt: "icon"
-  }) : React__default.createElement("img", {
-    src: `data:image/svg+xml;base64,${new Buffer(Icon).toString('base64')}`,
-    alt: "icon"
-  }))), React__default.createElement(material.ListItemButton, {
-    selected: selected === "4",
-    onClick: () => setSelected("4")
-  }, React__default.createElement(material.ListItemIcon, null, selected === "4" ? React__default.createElement("img", {
-    src: `data:image/svg+xml;base64,${new Buffer(FullscreenActive).toString('base64')}`,
-    alt: "fullscreen"
-  }) : React__default.createElement("img", {
-    src: `data:image/svg+xml;base64,${new Buffer(Fullscreen).toString('base64')}`,
-    alt: "fullscreen"
-  })))));
+  }, React__default.createElement(SidebarItem, {
+    image: IconActive,
+    selectedImage: Icon,
+    name: "draw",
+    selection: "3"
+  }), React__default.createElement(SidebarItem, {
+    image: FullscreenActive,
+    selectedImage: Fullscreen,
+    name: "fullscreen",
+    selection: "4"
+  })));
 };
+
+var MI = "<svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M10 15.3125C10.6771 15.3125 11.3151 15.1823 11.9141 14.9219C12.513 14.6615 13.0391 14.3047 13.4922 13.8516C13.9505 13.3932 14.3073 12.8672 14.5625 12.2734C14.8229 11.6745 14.9531 11.0365 14.9531 10.3594C14.9531 9.68229 14.8229 9.04427 14.5625 8.44531C14.3021 7.84635 13.9427 7.32031 13.4844 6.86719C13.0312 6.40885 12.5052 6.04948 11.9062 5.78906C11.3125 5.52865 10.6771 5.39844 10 5.39844C9.32292 5.39844 8.6849 5.52865 8.08594 5.78906C7.48698 6.04948 6.95833 6.40885 6.5 6.86719C6.04688 7.32031 5.6901 7.84635 5.42969 8.44531C5.17448 9.04427 5.04688 9.68229 5.04688 10.3594C5.04688 11.0365 5.17708 11.6745 5.4375 12.2734C5.69792 12.8672 6.05469 13.3932 6.50781 13.8516C6.96615 14.3047 7.49219 14.6615 8.08594 14.9219C8.6849 15.1823 9.32292 15.3125 10 15.3125ZM10 14.0547C9.5 14.0547 9.02604 13.9583 8.57812 13.7656C8.13542 13.5677 7.74219 13.2995 7.39844 12.9609C7.0599 12.6172 6.79167 12.224 6.59375 11.7812C6.40104 11.3333 6.30469 10.8594 6.30469 10.3594C6.30469 9.85417 6.40104 9.3776 6.59375 8.92969C6.78646 8.48177 7.05208 8.08854 7.39062 7.75C7.73438 7.40625 8.1276 7.13802 8.57031 6.94531C9.01823 6.7526 9.49479 6.65625 10 6.65625C10.5 6.65625 10.9714 6.75521 11.4141 6.95312C11.862 7.14583 12.2552 7.41406 12.5938 7.75781C12.9375 8.09635 13.2057 8.48958 13.3984 8.9375C13.5964 9.38021 13.6953 9.85417 13.6953 10.3594C13.6953 10.8646 13.599 11.3411 13.4062 11.7891C13.2135 12.2318 12.9453 12.625 12.6016 12.9688C12.263 13.3073 11.8698 13.5729 11.4219 13.7656C10.9792 13.9583 10.5052 14.0547 10 14.0547ZM10.0078 12.3828C10.3776 12.3828 10.7161 12.2917 11.0234 12.1094C11.3307 11.9271 11.5755 11.6823 11.7578 11.375C11.9401 11.0677 12.0312 10.7266 12.0312 10.3516C12.0312 9.98177 11.9401 9.64583 11.7578 9.34375C11.5755 9.03646 11.3307 8.79167 11.0234 8.60938C10.7161 8.42708 10.3776 8.33594 10.0078 8.33594C9.63281 8.33594 9.29167 8.42708 8.98438 8.60938C8.67708 8.79167 8.43229 9.03646 8.25 9.34375C8.06771 9.64583 7.97656 9.98177 7.97656 10.3516C7.97656 10.7266 8.06771 11.0677 8.25 11.375C8.43229 11.6823 8.67708 11.9271 8.98438 12.1094C9.29688 12.2917 9.63802 12.3828 10.0078 12.3828ZM10 18.3281C11.0885 18.3281 12.112 18.1198 13.0703 17.7031C14.0339 17.2865 14.8828 16.7109 15.6172 15.9766C16.3516 15.2422 16.9271 14.3958 17.3438 13.4375C17.7604 12.474 17.9688 11.4479 17.9688 10.3594C17.9688 9.27083 17.7604 8.2474 17.3438 7.28906C16.9271 6.32552 16.3516 5.47656 15.6172 4.74219C14.8828 4.00781 14.0339 3.43229 13.0703 3.01562C12.1068 2.59896 11.0807 2.39062 9.99219 2.39062C8.90365 2.39062 7.8776 2.59896 6.91406 3.01562C5.95573 3.43229 5.10938 4.00781 4.375 4.74219C3.64583 5.47656 3.07292 6.32552 2.65625 7.28906C2.23958 8.2474 2.03125 9.27083 2.03125 10.3594C2.03125 11.4479 2.23958 12.474 2.65625 13.4375C3.07292 14.3958 3.64844 15.2422 4.38281 15.9766C5.11719 16.7109 5.96354 17.2865 6.92188 17.7031C7.88542 18.1198 8.91146 18.3281 10 18.3281ZM10 17C9.07812 17 8.21615 16.8281 7.41406 16.4844C6.61198 16.1406 5.90625 15.6667 5.29688 15.0625C4.69271 14.4531 4.21875 13.7474 3.875 12.9453C3.53646 12.1432 3.36719 11.2812 3.36719 10.3594C3.36719 9.4375 3.53646 8.57552 3.875 7.77344C4.21875 6.97135 4.69271 6.26562 5.29688 5.65625C5.90104 5.04688 6.60417 4.57292 7.40625 4.23438C8.20833 3.89062 9.07031 3.71875 9.99219 3.71875C10.9141 3.71875 11.776 3.89062 12.5781 4.23438C13.3802 4.57292 14.0859 5.04688 14.6953 5.65625C15.3047 6.26562 15.7812 6.97135 16.125 7.77344C16.4688 8.57552 16.6406 9.4375 16.6406 10.3594C16.6406 11.2812 16.4688 12.1432 16.125 12.9453C15.7865 13.7474 15.3125 14.4531 14.7031 15.0625C14.099 15.6667 13.3932 16.1406 12.5859 16.4844C11.7839 16.8281 10.9219 17 10 17Z\" fill=\"#9D8B66\"/>\n</svg>";
 
 const applicationTheme = params => {
   const {
@@ -339,7 +355,12 @@ const applicationTheme = params => {
     nodeBorderColor,
     nodePointerBg,
     nodeButtonTextColor,
-    nodeButtonLineColor
+    nodeButtonLineColor,
+    nodeGreenBackgroundColor,
+    nodeGreenTextColor,
+    nodeGreenBorderColor,
+    nodeGreenBoxShadow,
+    nodeTextColor
   } = params;
   return {
     components: {
@@ -381,24 +402,39 @@ const applicationTheme = params => {
             background-color: ${canvasBg};
           }
 
-          .node {
-            border: solid 0.0625rem;
+          .primary-node {
+            border: solid 0.0625rem ${nodeGreenBorderColor};
             border-radius: 50%;
+            box-shadow: ${nodeGreenBoxShadow};
+            background: ${nodeGreenBackgroundColor};
+            position: relative;
             width: 10rem;
             height: 10rem;
+          }
+
+          .primary-node .primary-node_header {
             display: flex;
             align-items: center;
             justify-content: center;
+            height: 100%;
             flex-direction: column;
-            position: relative;
           }
 
-          .node img {
+          .primary-node img {
             margin-bottom: 0.25rem
           }
 
-          .node p {
+          .primary-node .primary-node_header p {
+            color: ${nodeGreenTextColor};
+          }
+
+          .primary-node .primary-node_header img {
+            background: "url(data:image/svg+xml;base64,${new Buffer(MI).toString('base64')})";
+          }
+
+          .primary-node p {
             font-weight: 500;
+            color: ${nodeTextColor};
             font-size: 0.8125rem;
             line-height: 1.25rem;
             letter-spacing: -0.005rem;
@@ -451,6 +487,11 @@ const applicationTheme = params => {
             background-color: ${nodeButtonLineColor};
           }
 
+          .primary-node .node-button .icon {
+            background: ${nodeGreenBackgroundColor};
+            border-color: ${nodeGreenBorderColor}
+          }
+
           .nodes {
             width: 10rem;
             height: 10rem;
@@ -467,6 +508,7 @@ const applicationTheme = params => {
             border-radius: 0.125rem;
             position: absolute;
           }
+
         `
       },
       MuiList: {

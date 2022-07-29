@@ -1,4 +1,8 @@
 declare const vars: {
+    nodeGreenBackgroundColor: string;
+    nodeGreenTextColor: string;
+    nodeGreenBorderColor: string;
+    nodeGreenBoxShadow: string;
     fontFamily: string;
     primaryBg: string;
     textWhite: string;
@@ -31,5 +35,6 @@ declare const vars: {
     nodePointerBg: string;
     nodeButtonTextColor: string;
     nodeButtonLineColor: string;
+    nodeTextColor: string;
 };
 export default vars;
