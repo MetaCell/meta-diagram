@@ -6,7 +6,10 @@ import {CustomNodeWidget} from "./components/widgets/CustomNodeWidget";
 import {makeStyles} from "@material-ui/core";
 import CustomLinkWidget from "./components/widgets/CustomLinkWidget";
 import BG from "./components/assets/svg/bg-dotted.svg";
-import { colorGreen, colorRed } from "./components/assets/styles/constants";
+import { nodeIcons } from "./components/assets/styles/constants";
+import { ThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import theme from './theme';
 
 const useStyles = makeStyles(_ => ({
   main: {
@@ -23,10 +26,10 @@ const App = () => {
     const classes = useStyles();
 
     const node1 = new MetaNode('1', 'Node 1', 'default', new Position(250, 100),
-        new Map(Object.entries(colorGreen)))
+        new Map(Object.entries({'variant': 'node-red'})))
 
     const node2 = new MetaNode('2', 'Node 2', 'default', new Position(500, 100),
-        new Map(Object.entries(colorRed)))
+        new Map(Object.entries({'variant': 'node-blue'})))
 
     const link3 = new MetaLink('3', 'link3', 'default', '1', 'out', '2', 'in',
         new Map(Object.entries({color: 'rgb(255,192,0)'})))
@@ -35,8 +38,10 @@ const App = () => {
         new Map(Object.entries({'default': CustomNodeWidget})),
         new Map(Object.entries({'default': CustomLinkWidget}))
     )
-
+      console.log(theme)
     return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
         <div className={classes.main}>
           <MetaDiagram metaNodes={[node1, node2]} metaLinks={[link3]} componentsMap={componentsMap}
             metaTheme={{
@@ -45,6 +50,8 @@ const App = () => {
             }}
           />
         </div>
+      </ThemeProvider>
+
     );
 };
 
