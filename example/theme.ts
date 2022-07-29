@@ -1,5 +1,5 @@
 import vars from './components/assets/styles/variables';
-import { createTheme } from '@material-ui/core/styles';
+import { createTheme } from '@mui/material/styles';
 
 const {
   nodeRedBackgroundColor,
@@ -15,7 +15,7 @@ const {
   nodeGrayBorderColor,
   nodeGrayTextColor,
 } = vars;
-declare module '@material-ui/core/styles' {
+declare module '@mui/styles' {
   interface Theme {
     components: {
       MuiCssBaseline: any;

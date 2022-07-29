@@ -1,4 +1,4 @@
-import { Box, Button } from "@material-ui/core";
+import { Box, Button } from "@mui/material";
 import { DiagramEngine, PortWidget } from "@projectstorm/react-diagrams";
 import * as React from "react";
 import PortWigetComp from "./PortWidgetComp";

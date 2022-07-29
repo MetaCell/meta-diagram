@@ -1,7 +1,7 @@
 import * as React from "react";
 import {DiagramEngine} from "@projectstorm/react-diagrams";
 import {MetaNodeModel} from "../../../.";
-import {Box, Typography} from "@material-ui/core";
+import {Box, Typography} from "@mui/material";
 import NodeSelection from "./NodeSelection";
 
 export interface CustomNodeWidgetProps {

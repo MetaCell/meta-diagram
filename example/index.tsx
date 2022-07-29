@@ -3,12 +3,11 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import MetaDiagram, {MetaNode, Position, ComponentsMap, MetaLink} from "./..";
 import {CustomNodeWidget} from "./components/widgets/CustomNodeWidget";
-import {makeStyles} from "@material-ui/core";
+import { makeStyles } from "@mui/styles";
 import CustomLinkWidget from "./components/widgets/CustomLinkWidget";
 import BG from "./components/assets/svg/bg-dotted.svg";
-import { nodeIcons } from "./components/assets/styles/constants";
-import { ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
 
 const useStyles = makeStyles(_ => ({
@@ -38,7 +37,7 @@ const App = () => {
         new Map(Object.entries({'default': CustomNodeWidget})),
         new Map(Object.entries({'default': CustomLinkWidget}))
     )
-      console.log(theme)
+
     return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
