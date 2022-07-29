@@ -1,4 +1,5 @@
 import vars from './components/assets/styles/variables';
+import MI from "./components/assets/svg/mechanism-yellow.svg";
 
 type ThemeVars = {
   [key: string]: any;
@@ -23,6 +24,11 @@ const applicationTheme = (params: ThemeVars) => {
     nodePointerBg,
     nodeButtonTextColor,
     nodeButtonLineColor,
+    nodeGreenBackgroundColor,
+    nodeGreenTextColor,
+    nodeGreenBorderColor,
+    nodeGreenBoxShadow,
+    nodeTextColor,
   } = params;
   return {
     components: {
@@ -64,24 +70,39 @@ const applicationTheme = (params: ThemeVars) => {
             background-color: ${canvasBg};
           }
 
-          .node {
-            border: solid 0.0625rem;
+          .primary-node {
+            border: solid 0.0625rem ${nodeGreenBorderColor};
             border-radius: 50%;
+            box-shadow: ${nodeGreenBoxShadow};
+            background: ${nodeGreenBackgroundColor};
+            position: relative;
             width: 10rem;
             height: 10rem;
+          }
+
+          .primary-node .primary-node_header {
             display: flex;
             align-items: center;
             justify-content: center;
+            height: 100%;
             flex-direction: column;
-            position: relative;
           }
 
-          .node img {
+          .primary-node img {
             margin-bottom: 0.25rem
           }
 
-          .node p {
+          .primary-node .primary-node_header p {
+            color: ${nodeGreenTextColor};
+          }
+
+          .primary-node .primary-node_header img {
+            background: "url(data:image/svg+xml;base64,${new Buffer(MI).toString('base64')})";
+          }
+
+          .primary-node p {
             font-weight: 500;
+            color: ${nodeTextColor};
             font-size: 0.8125rem;
             line-height: 1.25rem;
             letter-spacing: -0.005rem;
@@ -134,6 +155,11 @@ const applicationTheme = (params: ThemeVars) => {
             background-color: ${nodeButtonLineColor};
           }
 
+          .primary-node .node-button .icon {
+            background: ${nodeGreenBackgroundColor};
+            border-color: ${nodeGreenBorderColor}
+          }
+
           .nodes {
             width: 10rem;
             height: 10rem;
@@ -150,6 +176,7 @@ const applicationTheme = (params: ThemeVars) => {
             border-radius: 0.125rem;
             position: absolute;
           }
+
         `,
       },
       MuiList: {

@@ -1,3 +1,11 @@
+const nodeGreen = {
+  nodeGreenBackgroundColor: '#D4F4D4',
+  nodeGreenTextColor: '#669D66',
+  nodeGreenBorderColor: 'rgba(102, 157, 102, 0.2)',
+  nodeGreenBoxShadow: '0 0.25rem 0.625rem -0.25rem rgba(102, 157, 102, 0.3)',
+};
+
+
 const vars = {
   fontFamily: 'Inter, sans-serif',
   primaryBg: '#f1f1f1',
@@ -44,6 +52,8 @@ const vars = {
   nodePointerBg: '#fff',
   nodeButtonTextColor: 'rgba(255, 255, 255, 0.8)',
   nodeButtonLineColor: 'rgba(255, 255, 255, 0.2)',
+  nodeTextColor: '#3C3C43',
+  ...nodeGreen,
 };
 
 export default vars;
