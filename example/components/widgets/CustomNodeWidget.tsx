@@ -11,23 +11,16 @@ export interface CustomNodeWidgetProps {
 
 export class CustomNodeWidget extends React.Component<CustomNodeWidgetProps> {
     render() {
-        const customNodeStyles = {
-          background: this.props.model.getOptions()['backgroundColor'],
-          borderColor: this.props.model.getOptions()['borderColor'],
-          boxShadow: this.props.model.getOptions()['backgrounboxShadowdColor'],
-        };
         return (
-          <Box position='relative'>
+          <Box className={`primary-node ${this.props.model.getOptions()['variant']}`}>
             {this.props.model.getOptions()['selected'] && (
-              <NodeSelection style={customNodeStyles} engine={this.props.engine} port={this.props.model} />
+              <NodeSelection engine={this.props.engine} port={this.props.model} />
             )}
 
-            <Box
-              className="node"
-              style={customNodeStyles}
-            >
-              <img src={this.props.model.getOptions()['icon']} alt={this.props.model.getOptions()['name']} />
-              <Typography component="p" style={{ color: this.props.model.getOptions()['textColor'] }}>
+            <Box className="primary-node_header">
+              <img src="" alt={this.props.model.getOptions()['name']} />
+
+              <Typography component="p">
                 {this.props.model.getOptions()['name']}
               </Typography>
             </Box>

@@ -3,21 +3,14 @@ import { DiagramEngine, PortWidget } from "@projectstorm/react-diagrams";
 import * as React from "react";
 import PortWigetComp from "./PortWidgetComp";
 
-type styleObject = {
-  background: string;
-  borderColor: string;
-  boxShadow: string;
-}
-
 export interface NodeSelectionProps {
-  style: styleObject;
   engine: DiagramEngine;
   port: any;
 }
 
 class NodeSelection extends React.Component<NodeSelectionProps> {
   render() {
-    const { style, engine, port } = this.props;
+    const { engine, port } = this.props;
     const selectionPoint = '-0.375rem';
     const IN = 'in';
     const OUT = 'out';
@@ -26,7 +19,6 @@ class NodeSelection extends React.Component<NodeSelectionProps> {
         <Button className="node-button">
           <Box
             className="icon"
-            style={style}
           />
           Show properties
         </Button>
