@@ -92,7 +92,9 @@ const applicationTheme = (params: ThemeVars) => {
             width: 20px;
             height: 20px;
             margin: 0 auto 0.25rem;
-            background: url(data:image/svg+xml;base64,${new Buffer(nodeGreen).toString('base64')});
+            background: url(data:image/svg+xml;base64,${new Buffer(
+              nodeGreen
+            ).toString('base64')});
           }
 
           .primary-node .primary-node_header p {

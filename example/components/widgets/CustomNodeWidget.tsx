@@ -18,7 +18,7 @@ export class CustomNodeWidget extends React.Component<CustomNodeWidgetProps> {
             )}
 
             <Box className="primary-node_header">
-              <img src="" alt={this.props.model.getOptions()['name']} />
+              <Box className="icon" />
 
               <Typography component="p">
                 {this.props.model.getOptions()['name']}
