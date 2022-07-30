@@ -1,5 +1,5 @@
 import vars from './components/assets/styles/variables';
-import MI from './components/assets/svg/mechanism-yellow.svg';
+import nodeGreen from './components/assets/svg/node/green.svg';
 
 type ThemeVars = {
   [key: string]: any;
@@ -88,18 +88,15 @@ const applicationTheme = (params: ThemeVars) => {
             flex-direction: column;
           }
 
-          .primary-node img {
-            margin-bottom: 0.25rem
+          .primary-node .icon {
+            width: 20px;
+            height: 20px;
+            margin: 0 auto 0.25rem;
+            background: url(data:image/svg+xml;base64,${new Buffer(nodeGreen).toString('base64')});
           }
 
           .primary-node .primary-node_header p {
             color: ${nodeGreenTextColor};
-          }
-
-          .primary-node .primary-node_header img {
-            background: "url(data:image/svg+xml;base64,${new Buffer(
-              MI
-            ).toString('base64')})";
           }
 
           .primary-node p {
