@@ -11,4 +11,5 @@ export function updateChildrenPosition(nodes: MetaNodeModel[], parent: MetaNodeM
 
 export function updateNodeLocalPosition(nodes: MetaNodeModel[], node: MetaNodeModel): void {
     node.updateLocalPosition(nodes)
+    // TODO: check if it is still inside the parent
 }

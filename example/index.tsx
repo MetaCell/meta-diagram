@@ -6,6 +6,7 @@ import {makeStyles} from "@material-ui/core";
 import CustomLinkWidget from "./components/widgets/CustomLinkWidget";
 import BG from "./components/assets/svg/bg-dotted.svg";
 import {DiamondNodeWidget} from "./components/widgets/DiamondNodeWidget";
+import CustomNodeWidget from "./components/widgets/CustomNodeWidget";
 
 const useStyles = makeStyles(_ => ({
     main: {
@@ -37,7 +38,7 @@ const App = () => {
         new Map(Object.entries({color: 'rgb(255,192,0)'})))
 
     const componentsMap = new ComponentsMap(
-        new Map(Object.entries({'default': DiamondNodeWidget})),
+        new Map(Object.entries({'default': CustomNodeWidget})),
         new Map(Object.entries({'default': CustomLinkWidget}))
     )
 

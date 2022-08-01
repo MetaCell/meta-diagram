@@ -11,6 +11,7 @@ export function getNode(
 }
 
 export function processNodes(metaNodes: MetaNode[], callback: { (event: any): void; (arg0: BaseEntityEvent<NodeModel<NodeModelGenerics>>): void; }) : MetaNodeModel[] {
+  // TODO set z order
   const metaNodeModels = []
   for(const mn of metaNodes){
     const metaNodeModel = mn.toModel()

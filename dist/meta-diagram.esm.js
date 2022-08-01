@@ -38,6 +38,7 @@ function getNode(id, nodes) {
   return nodes.find(n => n.getOptions().id === id);
 }
 function processNodes(metaNodes, callback) {
+  // TODO set z order
   const metaNodeModels = [];
 
   for (const mn of metaNodes) {
@@ -117,10 +118,15 @@ class MetaNode {
     return this.parent ? this.position.add((_this$parent2 = this.parent) == null ? void 0 : _this$parent2.getWorldPosition()) : this.position;
   }
 
+  getDepth() {
+    return this.parent ? this.parent.getDepth() + 1 : 0;
+  }
+
   toModel() {
     const optionsMap = this.options;
     optionsMap.set('parentId', this.getParentId());
     optionsMap.set('position', this.position);
+    optionsMap.set('depth', this.getDepth());
     return new MetaNodeModel(Object.fromEntries(optionsMap));
   }
 
@@ -490,7 +496,9 @@ function updateChildrenPosition(nodes, parent) {
   });
 }
 function updateNodeLocalPosition(nodes, node) {
-  node.updateLocalPosition(nodes);
+  node.updateLocalPosition(nodes); // TODO: check if it is still inside the parent
+
+  console.log(node);
 }
 
 const useStyles$1 = /*#__PURE__*/makeStyles(_ => ({
@@ -525,8 +533,7 @@ const MetaDiagram = ({
     const node = event.entity;
     const nodes = model.getNodes(); // @ts-ignore
 
-    updateChildrenPosition(nodes, node); // TODO: FIx nodes drifting away due to the following line
-    // @ts-ignore
+    updateChildrenPosition(nodes, node); // @ts-ignore
 
     updateNodeLocalPosition(nodes, node);
     engine.repaintCanvas();

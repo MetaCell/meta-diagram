@@ -13,7 +13,7 @@ export class CustomNodeWidget extends React.Component<CustomNodeWidgetProps> {
     render() {
         // @ts-ignore
         const customNodeStyle = {
-            zIndex: 999999999,
+            zIndex: Math.pow(10, this.props.model.getOptions()['depth']),
             border: "solid 2px gray",
             borderRadius: "5px",
             width: "250px",
@@ -23,8 +23,6 @@ export class CustomNodeWidget extends React.Component<CustomNodeWidgetProps> {
             justifyContent: "space-between",
             position: "relative",
             background: this.props.model.getOptions()['color'] || "darkgray",
-            top: this.props.model.getOptions()['position'].y || 0,
-            left: this.props.model.getOptions()['position'].x || 0,
         }
 
         // console.log("Node Render Position: ")

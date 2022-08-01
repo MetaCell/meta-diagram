@@ -8,5 +8,6 @@ export declare class MetaNode {
     getId(): string;
     getParentId(): string | undefined;
     getWorldPosition(): Position;
+    private getDepth;
     toModel(): MetaNodeModel;
 }

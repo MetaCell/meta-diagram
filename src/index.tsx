@@ -70,7 +70,6 @@ const MetaDiagram = ({
     const nodes = model.getNodes()
     // @ts-ignore
     updateChildrenPosition(nodes, node)
-    // TODO: FIx nodes drifting away due to the following line
     // @ts-ignore
     updateNodeLocalPosition(nodes, node)
     engine.repaintCanvas();

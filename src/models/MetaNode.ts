@@ -34,10 +34,15 @@ export class MetaNode {
     return this.parent ? this.position.add(this.parent?.getWorldPosition()) : this.position
   }
 
+  private getDepth() : number {
+    return this.parent ? this.parent.getDepth()+1 : 0
+  }
+
   toModel() : MetaNodeModel {
     const optionsMap = this.options
     optionsMap.set('parentId', this.getParentId())
     optionsMap.set('position', this.position)
+    optionsMap.set('depth', this.getDepth())
     return new MetaNodeModel(Object.fromEntries(optionsMap))
   }
 
