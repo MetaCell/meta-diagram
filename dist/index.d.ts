@@ -8,8 +8,12 @@ interface MetaDiagramProps {
     componentsMap: ComponentsMap;
     wrapperClassName?: string;
     canvasClassName?: string;
+    metaTheme: {
+        customThemeVariables: {};
+        canvasClassName: string;
+    };
 }
-declare const MetaDiagram: ({ metaNodes, metaLinks, componentsMap, wrapperClassName, canvasClassName, }: MetaDiagramProps) => JSX.Element;
+declare const MetaDiagram: ({ metaNodes, metaLinks, componentsMap, wrapperClassName, metaTheme, }: MetaDiagramProps) => JSX.Element;
 export default MetaDiagram;
 export { MetaNode, MetaLink, MetaNodeModel, ComponentsMap };
 export { MetaLinkModel } from './react-diagrams/MetaLinkModel';

@@ -1,10 +1,11 @@
 import React__default, { createElement } from 'react';
 import createEngine, { NodeModel, DefaultPortModel, DefaultLinkModel, DefaultLinkFactory, DiagramModel } from '@projectstorm/react-diagrams';
 import { AbstractReactFactory, CanvasWidget } from '@projectstorm/react-canvas-core';
-import { makeStyles as makeStyles$1 } from '@material-ui/core';
-import { Box } from '@mui/system';
 import { makeStyles } from '@mui/styles';
-import { List, ListItemButton, ListItemIcon, Divider } from '@mui/material';
+import { Box } from '@mui/system';
+import { List, ListItemButton, ListItemIcon, Divider, Box as Box$1 } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 class MetaOptions {
   constructor(id, name, shape, options) {
@@ -296,6 +297,120 @@ const Sidebar = () => {
   })))));
 };
 
+const applicationTheme = params => {
+  const {
+    primaryBg,
+    fontFamily,
+    chipTextColor,
+    chipBgColor,
+    textWhite,
+    listItemActiveBg,
+    listSelectedTextColor,
+    listBoxShadow,
+    listBorderColor
+  } = params;
+  return {
+    components: {
+      MuiCssBaseline: {
+        styleOverrides: `
+          html {
+            background: ${primaryBg};
+            font-family: ${fontFamily};
+          }
+          body {
+            background-color:${primaryBg};
+            font-family: ${fontFamily};
+            font-size: 1rem;
+          }
+        `
+      },
+      MuiList: {
+        styleOverrides: {
+          root: {
+            '&.customSwitch': {
+              padding: '0.125rem',
+              background: chipTextColor,
+              borderRadius: '0.5rem',
+              display: 'flex',
+              '& .MuiListItemButton-root': {
+                padding: '0.25rem 0.75rem',
+                borderRadius: '0.4375rem',
+                width: '10.59375rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                '&:not(:last-child)': {
+                  marginBottom: '0'
+                },
+                '&.Mui-disabled': {
+                  opacity: 1
+                },
+                '&.Mui-selected': {
+                  background: textWhite,
+                  boxShadow: listBoxShadow,
+                  border: `0.03125rem solid ${listBorderColor}`,
+                  '& .MuiTypography-root': {
+                    color: listSelectedTextColor
+                  }
+                }
+              },
+              '& .MuiChip-root': {
+                marginLeft: '0.25rem'
+              },
+              '& .MuiTypography-root': {
+                fontWeight: 500,
+                fontSize: '0.8125rem',
+                lineHeight: '1.25rem',
+                letterSpacing: '-0.005rem',
+                color: chipBgColor,
+                margin: 0
+              }
+            }
+          }
+        }
+      },
+      MuiListItemIcon: {
+        styleOverrides: {
+          root: {
+            minWidth: 'inherit'
+          }
+        }
+      },
+      MuiListItemButton: {
+        styleOverrides: {
+          root: {
+            padding: 0,
+            width: '2.5rem',
+            height: '2.5rem',
+            borderRadius: '50%',
+            justifyContent: 'center',
+            backgroundColor: chipTextColor,
+            '&:hover': {
+              backgroundColor: chipTextColor
+            },
+            '&:not(:last-child)': {
+              marginBottom: '0.75rem'
+            },
+            '&.Mui-selected': {
+              backgroundColor: listItemActiveBg,
+              '&:hover': {
+                backgroundColor: listItemActiveBg
+              }
+            },
+            '&.Mui-disabled': {
+              opacity: 0.8
+            }
+          }
+        }
+      }
+    }
+  };
+};
+
+var theme = (customVariables => applicationTheme({ ...vars,
+  ...customVariables
+}));
+
 class Position {
   constructor(x, y) {
     this.x = x;
@@ -304,7 +419,7 @@ class Position {
 
 }
 
-const useStyles$1 = /*#__PURE__*/makeStyles$1(_ => ({
+const useStyles$1 = /*#__PURE__*/makeStyles(_ => ({
   container: {
     height: '100%',
     width: '100%'
@@ -312,7 +427,7 @@ const useStyles$1 = /*#__PURE__*/makeStyles$1(_ => ({
   canvasContainer: {
     height: '100%',
     width: '100%',
-    background: '#333333'
+    background: '#fffff'
   }
 }));
 
@@ -321,7 +436,7 @@ const MetaDiagram = ({
   metaLinks,
   componentsMap,
   wrapperClassName,
-  canvasClassName
+  metaTheme
 }) => {
   const classes = useStyles$1(); // set up the diagram engine
 
@@ -339,13 +454,14 @@ const MetaDiagram = ({
 
   engine.setModel(model);
   const containerClassName = wrapperClassName ? wrapperClassName : classes.container;
-  const diagramClassName = canvasClassName ? canvasClassName : classes.canvasContainer;
-  return createElement("div", {
+  return createElement(ThemeProvider, {
+    theme: createTheme(theme(metaTheme == null ? void 0 : metaTheme.customThemeVariables))
+  }, createElement(CssBaseline, null), createElement(Box$1, {
     className: containerClassName
   }, createElement(Sidebar, null), createElement(CanvasWidget, {
-    className: diagramClassName,
+    className: `${classes.canvasContainer} ${metaTheme == null ? void 0 : metaTheme.canvasClassName}`,
     engine: engine
-  }));
+  })));
 };
 
 export default MetaDiagram;

@@ -9,10 +9,11 @@ var React__default = _interopDefault(React);
 var createEngine = require('@projectstorm/react-diagrams');
 var createEngine__default = _interopDefault(createEngine);
 var reactCanvasCore = require('@projectstorm/react-canvas-core');
-var core = require('@material-ui/core');
-var system = require('@mui/system');
 var styles = require('@mui/styles');
+var system = require('@mui/system');
 var material = require('@mui/material');
+var styles$1 = require('@mui/material/styles');
+var CssBaseline = _interopDefault(require('@mui/material/CssBaseline'));
 
 class MetaOptions {
   constructor(id, name, shape, options) {
@@ -304,6 +305,120 @@ const Sidebar = () => {
   })))));
 };
 
+const applicationTheme = params => {
+  const {
+    primaryBg,
+    fontFamily,
+    chipTextColor,
+    chipBgColor,
+    textWhite,
+    listItemActiveBg,
+    listSelectedTextColor,
+    listBoxShadow,
+    listBorderColor
+  } = params;
+  return {
+    components: {
+      MuiCssBaseline: {
+        styleOverrides: `
+          html {
+            background: ${primaryBg};
+            font-family: ${fontFamily};
+          }
+          body {
+            background-color:${primaryBg};
+            font-family: ${fontFamily};
+            font-size: 1rem;
+          }
+        `
+      },
+      MuiList: {
+        styleOverrides: {
+          root: {
+            '&.customSwitch': {
+              padding: '0.125rem',
+              background: chipTextColor,
+              borderRadius: '0.5rem',
+              display: 'flex',
+              '& .MuiListItemButton-root': {
+                padding: '0.25rem 0.75rem',
+                borderRadius: '0.4375rem',
+                width: '10.59375rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                '&:not(:last-child)': {
+                  marginBottom: '0'
+                },
+                '&.Mui-disabled': {
+                  opacity: 1
+                },
+                '&.Mui-selected': {
+                  background: textWhite,
+                  boxShadow: listBoxShadow,
+                  border: `0.03125rem solid ${listBorderColor}`,
+                  '& .MuiTypography-root': {
+                    color: listSelectedTextColor
+                  }
+                }
+              },
+              '& .MuiChip-root': {
+                marginLeft: '0.25rem'
+              },
+              '& .MuiTypography-root': {
+                fontWeight: 500,
+                fontSize: '0.8125rem',
+                lineHeight: '1.25rem',
+                letterSpacing: '-0.005rem',
+                color: chipBgColor,
+                margin: 0
+              }
+            }
+          }
+        }
+      },
+      MuiListItemIcon: {
+        styleOverrides: {
+          root: {
+            minWidth: 'inherit'
+          }
+        }
+      },
+      MuiListItemButton: {
+        styleOverrides: {
+          root: {
+            padding: 0,
+            width: '2.5rem',
+            height: '2.5rem',
+            borderRadius: '50%',
+            justifyContent: 'center',
+            backgroundColor: chipTextColor,
+            '&:hover': {
+              backgroundColor: chipTextColor
+            },
+            '&:not(:last-child)': {
+              marginBottom: '0.75rem'
+            },
+            '&.Mui-selected': {
+              backgroundColor: listItemActiveBg,
+              '&:hover': {
+                backgroundColor: listItemActiveBg
+              }
+            },
+            '&.Mui-disabled': {
+              opacity: 0.8
+            }
+          }
+        }
+      }
+    }
+  };
+};
+
+var theme = (customVariables => applicationTheme({ ...vars,
+  ...customVariables
+}));
+
 class Position {
   constructor(x, y) {
     this.x = x;
@@ -312,7 +427,7 @@ class Position {
 
 }
 
-const useStyles$1 = /*#__PURE__*/core.makeStyles(_ => ({
+const useStyles$1 = /*#__PURE__*/styles.makeStyles(_ => ({
   container: {
     height: '100%',
     width: '100%'
@@ -320,7 +435,7 @@ const useStyles$1 = /*#__PURE__*/core.makeStyles(_ => ({
   canvasContainer: {
     height: '100%',
     width: '100%',
-    background: '#333333'
+    background: '#fffff'
   }
 }));
 
@@ -329,7 +444,7 @@ const MetaDiagram = ({
   metaLinks,
   componentsMap,
   wrapperClassName,
-  canvasClassName
+  metaTheme
 }) => {
   const classes = useStyles$1(); // set up the diagram engine
 
@@ -347,13 +462,14 @@ const MetaDiagram = ({
 
   engine.setModel(model);
   const containerClassName = wrapperClassName ? wrapperClassName : classes.container;
-  const diagramClassName = canvasClassName ? canvasClassName : classes.canvasContainer;
-  return React.createElement("div", {
+  return React.createElement(styles$1.ThemeProvider, {
+    theme: styles$1.createTheme(theme(metaTheme == null ? void 0 : metaTheme.customThemeVariables))
+  }, React.createElement(CssBaseline, null), React.createElement(material.Box, {
     className: containerClassName
   }, React.createElement(Sidebar, null), React.createElement(reactCanvasCore.CanvasWidget, {
-    className: diagramClassName,
+    className: `${classes.canvasContainer} ${metaTheme == null ? void 0 : metaTheme.canvasClassName}`,
     engine: engine
-  }));
+  })));
 };
 
 exports.ComponentsMap = ComponentsMap;
