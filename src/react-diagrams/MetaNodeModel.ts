@@ -44,4 +44,5 @@ export class MetaNodeModel extends NodeModel {
         // @ts-ignore
         this.options['position'] = localPosition
     }
+
 }

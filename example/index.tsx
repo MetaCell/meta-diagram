@@ -2,10 +2,10 @@ import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import MetaDiagram, {MetaNode, Position, ComponentsMap, MetaLink} from "./..";
-import {CustomNodeWidget} from "./components/widgets/CustomNodeWidget";
 import {makeStyles} from "@material-ui/core";
 import CustomLinkWidget from "./components/widgets/CustomLinkWidget";
 import BG from "./components/assets/svg/bg-dotted.svg";
+import {DiamondNodeWidget} from "./components/widgets/DiamondNodeWidget";
 
 const useStyles = makeStyles(_ => ({
     main: {
@@ -37,7 +37,7 @@ const App = () => {
         new Map(Object.entries({color: 'rgb(255,192,0)'})))
 
     const componentsMap = new ComponentsMap(
-        new Map(Object.entries({'default': CustomNodeWidget})),
+        new Map(Object.entries({'default': DiamondNodeWidget})),
         new Map(Object.entries({'default': CustomLinkWidget}))
     )
 
