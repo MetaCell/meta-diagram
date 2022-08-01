@@ -16,13 +16,17 @@ export class MetaLink implements ILink {
     sourcePortId: string,
     targetId: string,
     targetPortId: string,
+    variant: string,
     options: Map<string, any>
   ) {
+    if (options == undefined){
+      options = new Map<string, any>()
+    }
     this.sourceId = sourceId;
     this.sourcePortId = sourcePortId;
     this.targetId = targetId;
     this.targetPortId = targetPortId;
-    this.options = new MetaOptions(id, name, shape, options);
+    this.options = new MetaOptions(id, name, shape, variant, options);
   }
 
   getSourceId(): string {

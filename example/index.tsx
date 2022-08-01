@@ -24,13 +24,11 @@ const useStyles = makeStyles(_ => ({
 const App = () => {
     const classes = useStyles();
 
-    const node1 = new MetaNode('1', 'Node 1', 'default', new Position(250, 100),
-        new Map(Object.entries({'variant': 'node-red'})))
+    const node1 = new MetaNode('1', 'Node 1', 'default', new Position(250, 100), 'node-red', undefined)
 
-    const node2 = new MetaNode('2', 'Node 2', 'default', new Position(500, 100),
-        new Map(Object.entries({'variant': 'node-blue'})))
+    const node2 = new MetaNode('2', 'Node 2', 'default', new Position(500, 100), 'node-blue', undefined)
 
-    const link3 = new MetaLink('3', 'link3', 'default', '1', 'out', '2', 'in',
+    const link3 = new MetaLink('3', 'link3', 'default', '1', 'out', '2', 'in', undefined,
         new Map(Object.entries({color: 'rgb(255,192,0)'})))
 
     const componentsMap = new ComponentsMap(

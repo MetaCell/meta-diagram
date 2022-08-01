@@ -16,11 +16,12 @@ var styles$1 = require('@mui/material/styles');
 var CssBaseline = _interopDefault(require('@mui/material/CssBaseline'));
 
 class MetaOptions {
-  constructor(id, name, shape, options) {
+  constructor(id, name, shape, variant, options) {
     this.options = options;
     this.options.set('id', id);
     this.options.set('name', name);
     this.options.set('shape', shape);
+    this.options.set('variant', variant);
   }
 
   getId() {
@@ -34,21 +35,29 @@ class MetaOptions {
 }
 
 class MetaNode {
-  constructor(id, name, shape, position, options) {
+  constructor(id, name, shape, position, variant, options) {
+    if (options == undefined) {
+      options = new Map();
+    }
+
     this.children = [];
     options.set('position', position);
-    this.options = new MetaOptions(id, name, shape, options);
+    this.options = new MetaOptions(id, name, shape, variant, options);
   }
 
 }
 
 class MetaLink {
-  constructor(id, name, shape, sourceId, sourcePortId, targetId, targetPortId, options) {
+  constructor(id, name, shape, sourceId, sourcePortId, targetId, targetPortId, variant, options) {
+    if (options == undefined) {
+      options = new Map();
+    }
+
     this.sourceId = sourceId;
     this.sourcePortId = sourcePortId;
     this.targetId = targetId;
     this.targetPortId = targetPortId;
-    this.options = new MetaOptions(id, name, shape, options);
+    this.options = new MetaOptions(id, name, shape, variant, options);
   }
 
   getSourceId() {
