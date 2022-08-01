@@ -28,7 +28,7 @@ class MetaOptions {
 
 class MetaNode {
   constructor(id, name, shape, position, variant, options) {
-    if (options == undefined) {
+    if (options === undefined) {
       options = new Map();
     }
 
@@ -41,7 +41,7 @@ class MetaNode {
 
 class MetaLink {
   constructor(id, name, shape, sourceId, sourcePortId, targetId, targetPortId, variant, options) {
-    if (options == undefined) {
+    if (options === undefined) {
       options = new Map();
     }
 

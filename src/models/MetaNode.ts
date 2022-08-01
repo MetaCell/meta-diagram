@@ -13,7 +13,7 @@ export class MetaNode {
     variant: string,
     options: Map<string, any>
   ) {
-    if (options == undefined) {
+    if (options === undefined) {
       options = new Map<string, any>();
     }
     this.children = [];
