@@ -482,7 +482,7 @@ const applicationTheme = params => {
             border: solid 0.0625rem;
             height: 1rem;
             border-radius: 50%;
-            margin-right: 1.25rem;
+            margin: 0 1.25rem 0 0;
             position: relative;
           }
 
