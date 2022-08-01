@@ -118,12 +118,14 @@ class MetaNodeFactory extends reactCanvasCore.AbstractReactFactory {
 
   generateReactWidget(event) {
     if (this.componentsMap.has(event.model.options.shape)) {
-      const ReactComponentType = this.componentsMap.get(event.model.options.shape); // @ts-ignore
-
-      return React__default.createElement(ReactComponentType, {
-        engine: this.engine,
-        model: event.model
-      });
+      const ReactComponentType = this.componentsMap.get(event.model.options.shape);
+      return (// @ts-ignore
+        React__default.createElement(ReactComponentType, {
+          key: `node-factory-${event.model.getOptions().id}`,
+          engine: this.engine,
+          model: event.model
+        })
+      );
     } // TODO: Generate default node instead
 
 
@@ -160,6 +162,7 @@ class MetaLinkFactory extends createEngine.DefaultLinkFactory {
       model.getOptions().shape);
       return (// @ts-ignore
         React__default.createElement(ReactComponentType, {
+          key: `link-factory-${model.getOptions().id}`,
           engine: this.engine,
           model: model,
           path: path,
