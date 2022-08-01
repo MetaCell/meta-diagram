@@ -21,8 +21,14 @@ export class MetaNodeFactory extends AbstractReactFactory {
       const ReactComponentType = this.componentsMap.get(
         event.model.options.shape
       );
-      // @ts-ignore
-      return <ReactComponentType engine={this.engine} model={event.model} />;
+      return (
+        // @ts-ignore
+        <ReactComponentType
+          key={`node-factory-${event.model.getOptions().id}`}
+          engine={this.engine}
+          model={event.model}
+        />
+      );
     }
     // TODO: Generate default node instead
     return <UnknownTypeWidget />;
