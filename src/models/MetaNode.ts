@@ -10,10 +10,14 @@ export class MetaNode {
     name: string,
     shape: string,
     position: Position,
+    variant: string,
     options: Map<string, any>
   ) {
+    if (options === undefined) {
+      options = new Map<string, any>();
+    }
     this.children = [];
     options.set('position', position);
-    this.options = new MetaOptions(id, name, shape, options);
+    this.options = new MetaOptions(id, name, shape, variant, options);
   }
 }

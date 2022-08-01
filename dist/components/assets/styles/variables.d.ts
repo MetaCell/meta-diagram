@@ -1,4 +1,8 @@
 declare const vars: {
+    nodeGreenBackgroundColor: string;
+    nodeGreenTextColor: string;
+    nodeGreenBorderColor: string;
+    nodeGreenBoxShadow: string;
     fontFamily: string;
     primaryBg: string;
     textWhite: string;
@@ -23,5 +27,14 @@ declare const vars: {
     progressBar: string;
     progressShadow: string;
     switchShadow: string;
+    sidebarBg: string;
+    sidebarShadow: string;
+    canvasBg: string;
+    showPropertiesButtonBg: string;
+    nodeBorderColor: string;
+    nodePointerBg: string;
+    nodeButtonTextColor: string;
+    nodeButtonLineColor: string;
+    nodeTextColor: string;
 };
 export default vars;

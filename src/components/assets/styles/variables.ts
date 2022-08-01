@@ -1,3 +1,10 @@
+const nodeGreen = {
+  nodeGreenBackgroundColor: '#D4F4D4',
+  nodeGreenTextColor: '#669D66',
+  nodeGreenBorderColor: 'rgba(102, 157, 102, 0.2)',
+  nodeGreenBoxShadow: '0 0.25rem 0.625rem -0.25rem rgba(102, 157, 102, 0.3)',
+};
+
 const vars = {
   fontFamily: 'Inter, sans-serif',
   primaryBg: '#f1f1f1',
@@ -34,6 +41,18 @@ const vars = {
 
   switchShadow:
     '0 0.1875rem 0.5rem rgba(0, 0, 0, 0.15), 0 0.1875rem 0.0625rem rgba(0, 0, 0, 0.06)',
+
+  sidebarBg: '#ffffff',
+  sidebarShadow: `0 0 3.75rem rgba(0, 0, 0, 0.1),
+  0 0.5rem 2.5rem -0.625rem rgba(0, 0, 0, 0.1)`,
+  canvasBg: '#fff',
+  showPropertiesButtonBg: '#161A1E',
+  nodeBorderColor: '#18A0FB',
+  nodePointerBg: '#fff',
+  nodeButtonTextColor: 'rgba(255, 255, 255, 0.8)',
+  nodeButtonLineColor: 'rgba(255, 255, 255, 0.2)',
+  nodeTextColor: '#3C3C43',
+  ...nodeGreen,
 };
 
 export default vars;

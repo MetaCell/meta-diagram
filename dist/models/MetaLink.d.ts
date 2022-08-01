@@ -6,7 +6,7 @@ export declare class MetaLink implements ILink {
     targetId: string;
     targetPortId: string;
     options: MetaOptions;
-    constructor(id: string, name: string, shape: string, sourceId: string, sourcePortId: string, targetId: string, targetPortId: string, options: Map<string, any>);
+    constructor(id: string, name: string, shape: string, sourceId: string, sourcePortId: string, targetId: string, targetPortId: string, variant: string, options: Map<string, any>);
     getSourceId(): string;
     getSourcePortId(): string;
     getTargetId(): string;
