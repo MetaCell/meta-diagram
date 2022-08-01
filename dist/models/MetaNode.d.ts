@@ -1,7 +1,12 @@
-import { MetaOptions } from './MetaOptions';
 import { Position } from './Position';
+import { MetaNodeModel } from "../react-diagrams/MetaNodeModel";
 export declare class MetaNode {
-    children: MetaNode[];
-    options: MetaOptions;
-    constructor(id: string, name: string, shape: string, position: Position, options: Map<string, any>);
+    private readonly parent;
+    private readonly position;
+    private readonly options;
+    constructor(id: string, name: string, shape: string, position: Position, parent: MetaNode | undefined, options: Map<string, any>);
+    getId(): string;
+    getParentId(): string | undefined;
+    getWorldPosition(): Position;
+    toModel(): MetaNodeModel;
 }

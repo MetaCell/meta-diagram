@@ -14,6 +14,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
 import { Box } from '@mui/material';
+import {processNodes} from "./helpers/nodesHelper";
 
 const useStyles = makeStyles(_ => ({
   container: {
@@ -64,9 +65,8 @@ const MetaDiagram = ({
   // set up the diagram model
 
   const model = new DiagramModel();
-  const nodes = metaNodes.map(
-    mn => new MetaNodeModel(Object.fromEntries(mn.options.options))
-  );
+  const nodes = processNodes(metaNodes, () => console.log("repaint canvas"))
+
   const links = metaLinks
     .map(ml => getLinkModel(ml, nodes))
     .filter(mlm => mlm !== undefined);

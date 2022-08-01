@@ -15,68 +15,6 @@ var material = require('@mui/material');
 var styles$1 = require('@mui/material/styles');
 var CssBaseline = _interopDefault(require('@mui/material/CssBaseline'));
 
-class MetaOptions {
-  constructor(id, name, shape, options) {
-    this.options = options;
-    this.options.set('id', id);
-    this.options.set('name', name);
-    this.options.set('shape', shape);
-  }
-
-  getId() {
-    return this.options.get('id');
-  }
-
-  getShape() {
-    return this.options.get('shape');
-  }
-
-}
-
-class MetaNode {
-  constructor(id, name, shape, position, options) {
-    this.children = [];
-    options.set('position', position);
-    this.options = new MetaOptions(id, name, shape, options);
-  }
-
-}
-
-class MetaLink {
-  constructor(id, name, shape, sourceId, sourcePortId, targetId, targetPortId, options) {
-    this.sourceId = sourceId;
-    this.sourcePortId = sourcePortId;
-    this.targetId = targetId;
-    this.targetPortId = targetPortId;
-    this.options = new MetaOptions(id, name, shape, options);
-  }
-
-  getSourceId() {
-    return this.sourceId;
-  }
-
-  getSourcePortId() {
-    return this.sourcePortId;
-  }
-
-  getTargetId() {
-    return this.targetId;
-  }
-
-  getTargetPortId() {
-    return this.targetPortId;
-  }
-
-}
-
-class ComponentsMap {
-  constructor(nodesMap, linksMap) {
-    this.nodes = nodesMap;
-    this.links = linksMap;
-  }
-
-}
-
 var ReactDiagramMetaTypes;
 
 (function (ReactDiagramMetaTypes) {
@@ -98,6 +36,92 @@ class MetaNodeModel extends createEngine.NodeModel {
       in: false,
       name: 'out'
     }));
+  }
+
+}
+
+class MetaNode {
+  constructor(id, name, shape, position, parent, options) {
+    this.parent = parent;
+    this.position = position;
+    this.options = options;
+    this.options.set('id', id);
+    this.options.set('name', name);
+    this.options.set('shape', shape);
+  }
+
+  getId() {
+    return this.options.get('id');
+  }
+
+  getParentId() {
+    var _this$parent;
+
+    return (_this$parent = this.parent) == null ? void 0 : _this$parent.getId();
+  }
+
+  getWorldPosition() {
+    var _this$parent2;
+
+    return this.parent ? this.position.add((_this$parent2 = this.parent) == null ? void 0 : _this$parent2.getWorldPosition()) : this.position;
+  }
+
+  toModel() {
+    const optionsMap = this.options;
+    optionsMap.set('parentId', this.getParentId());
+    optionsMap.set('position', this.position);
+    return new MetaNodeModel(Object.fromEntries(optionsMap));
+  }
+
+}
+
+class MetaLinkModel extends createEngine.DefaultLinkModel {
+  constructor(options = {}) {
+    super({ ...options,
+      type: ReactDiagramMetaTypes.META_LINK
+    });
+  }
+
+}
+
+class MetaLink {
+  constructor(id, name, shape, sourceId, sourcePortId, targetId, targetPortId, options) {
+    this.sourceId = sourceId;
+    this.sourcePortId = sourcePortId;
+    this.targetId = targetId;
+    this.targetPortId = targetPortId;
+    this.options = options;
+    this.options.set('id', id);
+    this.options.set('name', name);
+    this.options.set('shape', shape);
+  }
+
+  getSourceId() {
+    return this.sourceId;
+  }
+
+  getSourcePortId() {
+    return this.sourcePortId;
+  }
+
+  getTargetId() {
+    return this.targetId;
+  }
+
+  getTargetPortId() {
+    return this.targetPortId;
+  }
+
+  toModel() {
+    return new MetaLinkModel(Object.fromEntries(this.options));
+  }
+
+}
+
+class ComponentsMap {
+  constructor(nodesMap, linksMap) {
+    this.nodes = nodesMap;
+    this.links = linksMap;
   }
 
 }
@@ -130,15 +154,6 @@ class MetaNodeFactory extends reactCanvasCore.AbstractReactFactory {
 
 
     return React__default.createElement(UnknownTypeWidget, null);
-  }
-
-}
-
-class MetaLinkModel extends createEngine.DefaultLinkModel {
-  constructor(options = {}) {
-    super({ ...options,
-      type: ReactDiagramMetaTypes.META_LINK
-    });
   }
 
 }
@@ -179,10 +194,25 @@ class MetaLinkFactory extends createEngine.DefaultLinkFactory {
 
 function getNode(id, nodes) {
   return nodes.find(n => n.getOptions().id === id);
+} // @ts-ignore
+
+function processNodes(metaNodes, callback) {
+  const metaNodeModels = [];
+
+  for (const mn of metaNodes) {
+    const metaNodeModel = mn.toModel();
+    const position = mn.getWorldPosition();
+    metaNodeModel.setPosition(position.x, position.y); // @ts-ignore
+    //metaNodeModel.registerListener({positionChanged: (event => callback(event))})
+
+    metaNodeModels.push(metaNodeModel);
+  }
+
+  return metaNodeModels;
 }
 
 function getLinkModel(metaLink, nodes) {
-  const link = new MetaLinkModel(Object.fromEntries(metaLink.options.options));
+  const link = metaLink.toModel();
   const source = getNode(metaLink.getSourceId(), nodes);
   const target = getNode(metaLink.getTargetId(), nodes);
 
@@ -425,6 +455,14 @@ class Position {
     this.y = y;
   }
 
+  add(otherPosition) {
+    return new Position(this.x + otherPosition.x, this.y + otherPosition.y);
+  }
+
+  sub(otherPosition) {
+    return new Position(this.x - otherPosition.x, this.y - otherPosition.y);
+  }
+
 }
 
 const useStyles$1 = /*#__PURE__*/styles.makeStyles(_ => ({
@@ -455,7 +493,7 @@ const MetaDiagram = ({
   .registerFactory(new MetaLinkFactory(componentsMap.links)); // set up the diagram model
 
   const model = new createEngine.DiagramModel();
-  const nodes = metaNodes.map(mn => new MetaNodeModel(Object.fromEntries(mn.options.options)));
+  const nodes = processNodes(metaNodes);
   const links = metaLinks.map(ml => getLinkModel(ml, nodes)).filter(mlm => mlm !== undefined); // @ts-ignore
 
   model.addAll(...nodes, ...links); // load model into engine

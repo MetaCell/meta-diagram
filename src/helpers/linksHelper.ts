@@ -7,7 +7,7 @@ export function getLinkModel(
   metaLink: MetaLink,
   nodes: MetaNodeModel[]
 ): MetaLinkModel | undefined {
-  const link = new MetaLinkModel(Object.fromEntries(metaLink.options.options));
+  const link = metaLink.toModel();
   const source = getNode(metaLink.getSourceId(), nodes);
   const target = getNode(metaLink.getTargetId(), nodes);
   if (source && target) {

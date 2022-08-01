@@ -21,11 +21,17 @@ const useStyles = makeStyles(_ => ({
 const App = () => {
     const classes = useStyles();
 
-    const node1 = new MetaNode('1', 'node1', 'default', new Position(250, 100),
+    const grandparent = new MetaNode('group2', 'grandparent', 'default', new Position(0, 0),
+        null, new Map(Object.entries({color: 'rgb(0,255,0)'})))
+
+    const parent = new MetaNode('group', 'parent', 'default', new Position(130, 105),
+        grandparent, new Map(Object.entries({color: 'rgb(255,0,0)'})))
+
+    const node1 = new MetaNode('1', 'node1', 'default', new Position(130, 105), parent,
         new Map(Object.entries({color: 'rgb(0,192,255)'})))
 
-    const node2 = new MetaNode('2', 'node2', 'default', new Position(500, 100),
-        new Map(Object.entries({color: 'rgb(255,192,0)'})))
+    const node2 = new MetaNode('2', 'node2', 'default', new Position(130, 210), parent,
+        new Map(Object.entries({color: 'rgb(255,255,0)'})))
 
     const link3 = new MetaLink('3', 'link3', 'default', '1', 'out', '2', 'in',
         new Map(Object.entries({color: 'rgb(255,192,0)'})))
@@ -37,7 +43,7 @@ const App = () => {
 
     return (
         <div className={classes.main}>
-            <MetaDiagram metaNodes={[node1, node2]} metaLinks={[link3]} componentsMap={componentsMap}
+            <MetaDiagram metaNodes={[node1, node2, parent, grandparent]} metaLinks={[link3]} componentsMap={componentsMap}
                 metaTheme={{
                     customThemeVariables: {},
                     canvasClassName: classes.canvasBG,
