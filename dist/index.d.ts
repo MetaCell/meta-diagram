@@ -14,5 +14,3 @@ export default MetaDiagram;
 export { MetaNode, MetaLink, MetaNodeModel, ComponentsMap };
 export { MetaLinkModel } from './react-diagrams/MetaLinkModel';
 export { Position } from './models/Position';
-export { DefaultLinkWidget } from "@projectstorm/react-diagrams";
-export { LinkWidget } from '@projectstorm/react-diagrams-core';

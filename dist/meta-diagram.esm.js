@@ -1,12 +1,10 @@
 import React__default, { createElement } from 'react';
 import createEngine, { NodeModel, DefaultPortModel, DefaultLinkModel, DefaultLinkFactory, DiagramModel } from '@projectstorm/react-diagrams';
-export { DefaultLinkWidget } from '@projectstorm/react-diagrams';
 import { AbstractReactFactory, CanvasWidget } from '@projectstorm/react-canvas-core';
 import { makeStyles as makeStyles$1 } from '@material-ui/core';
 import { Box } from '@mui/system';
 import { makeStyles } from '@mui/styles';
 import { List, ListItemButton, ListItemIcon, Divider } from '@mui/material';
-export { LinkWidget } from '@projectstorm/react-diagrams-core';
 
 class MetaOptions {
   constructor(id, name, shape, options) {
@@ -156,8 +154,8 @@ class MetaLinkFactory extends DefaultLinkFactory {
       return (// @ts-ignore
         React__default.createElement(ReactComponentType, {
           key: `link-factory-${model.getOptions().id}`,
-          diagramEngine: this.engine,
-          link: model,
+          engine: this.engine,
+          model: model,
           path: path,
           selected: selected
         })

@@ -13,7 +13,6 @@ var core = require('@material-ui/core');
 var system = require('@mui/system');
 var styles = require('@mui/styles');
 var material = require('@mui/material');
-var reactDiagramsCore = require('@projectstorm/react-diagrams-core');
 
 class MetaOptions {
   constructor(id, name, shape, options) {
@@ -163,8 +162,8 @@ class MetaLinkFactory extends createEngine.DefaultLinkFactory {
       return (// @ts-ignore
         React__default.createElement(ReactComponentType, {
           key: `link-factory-${model.getOptions().id}`,
-          diagramEngine: this.engine,
-          link: model,
+          engine: this.engine,
+          model: model,
           path: path,
           selected: selected
         })
@@ -357,18 +356,6 @@ const MetaDiagram = ({
   }));
 };
 
-Object.defineProperty(exports, 'DefaultLinkWidget', {
-  enumerable: true,
-  get: function () {
-    return createEngine.DefaultLinkWidget;
-  }
-});
-Object.defineProperty(exports, 'LinkWidget', {
-  enumerable: true,
-  get: function () {
-    return reactDiagramsCore.LinkWidget;
-  }
-});
 exports.ComponentsMap = ComponentsMap;
 exports.MetaLink = MetaLink;
 exports.MetaLinkModel = MetaLinkModel;
