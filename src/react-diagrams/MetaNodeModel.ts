@@ -1,5 +1,7 @@
 import { DefaultPortModel, NodeModel } from '@projectstorm/react-diagrams';
 import { ReactDiagramMetaTypes } from '../constants';
+import {Position} from "../models/Position";
+import {getNode} from "../helpers/nodesHelper";
 
 export class MetaNodeModel extends NodeModel {
   constructor(options = {}) {
@@ -23,4 +25,17 @@ export class MetaNodeModel extends NodeModel {
       })
     );
   }
+
+    getLocalPosition(nodes: MetaNodeModel[]): Position {
+        const worldPosition = new Position(this.getX(), this.getY())
+        // @ts-ignore
+        const parentId = this.options['parentId']
+        const parent = getNode(parentId, nodes)
+        return parent ? worldPosition.sub(parent.getLocalPosition(nodes)) : worldPosition
+    }
+
+    updateLocalPosition(nodes: MetaNodeModel[]) : void {
+        // @ts-ignore
+        this.options['position'] = this.getLocalPosition(nodes)
+    }
 }

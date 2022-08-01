@@ -14,6 +14,42 @@ var ReactDiagramMetaTypes;
   ReactDiagramMetaTypes["META_LINK"] = "meta-link-type";
 })(ReactDiagramMetaTypes || (ReactDiagramMetaTypes = {}));
 
+class Position {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  add(otherPosition) {
+    return new Position(this.x + otherPosition.x, this.y + otherPosition.y);
+  }
+
+  sub(otherPosition) {
+    return new Position(this.x - otherPosition.x, this.y - otherPosition.y);
+  }
+
+}
+
+function getNode(id, nodes) {
+  return nodes.find(n => n.getOptions().id === id);
+}
+function processNodes(metaNodes, callback) {
+  const metaNodeModels = [];
+
+  for (const mn of metaNodes) {
+    const metaNodeModel = mn.toModel();
+    const position = mn.getWorldPosition();
+    metaNodeModel.setPosition(position.x, position.y); // @ts-ignore
+
+    metaNodeModel.registerListener({
+      positionChanged: event => callback(event)
+    });
+    metaNodeModels.push(metaNodeModel);
+  }
+
+  return metaNodeModels;
+}
+
 class MetaNodeModel extends NodeModel {
   constructor(options = {}) {
     super({ ...options,
@@ -28,6 +64,19 @@ class MetaNodeModel extends NodeModel {
       in: false,
       name: 'out'
     }));
+  }
+
+  getLocalPosition(nodes) {
+    const worldPosition = new Position(this.getX(), this.getY()); // @ts-ignore
+
+    const parentId = this.options['parentId'];
+    const parent = getNode(parentId, nodes);
+    return parent ? worldPosition.sub(parent.getLocalPosition(nodes)) : worldPosition;
+  }
+
+  updateLocalPosition(nodes) {
+    // @ts-ignore
+    this.options['position'] = this.getLocalPosition(nodes);
   }
 
 }
@@ -182,25 +231,6 @@ class MetaLinkFactory extends DefaultLinkFactory {
     return React__default.createElement(UnknownTypeWidget, null);
   }
 
-}
-
-function getNode(id, nodes) {
-  return nodes.find(n => n.getOptions().id === id);
-} // @ts-ignore
-
-function processNodes(metaNodes, callback) {
-  const metaNodeModels = [];
-
-  for (const mn of metaNodes) {
-    const metaNodeModel = mn.toModel();
-    const position = mn.getWorldPosition();
-    metaNodeModel.setPosition(position.x, position.y); // @ts-ignore
-    //metaNodeModel.registerListener({positionChanged: (event => callback(event))})
-
-    metaNodeModels.push(metaNodeModel);
-  }
-
-  return metaNodeModels;
 }
 
 function getLinkModel(metaLink, nodes) {
@@ -441,20 +471,14 @@ var theme = (customVariables => applicationTheme({ ...vars,
   ...customVariables
 }));
 
-class Position {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-
-  add(otherPosition) {
-    return new Position(this.x + otherPosition.x, this.y + otherPosition.y);
-  }
-
-  sub(otherPosition) {
-    return new Position(this.x - otherPosition.x, this.y - otherPosition.y);
-  }
-
+function updateChildrenPosition(nodes, parent) {
+  // @ts-ignore
+  const children = nodes.filter(n => n.options['parentId'] == parent.options['id']);
+  children.forEach(n => {
+    // @ts-ignore
+    n.setPosition(parent.getX() + n.options['position'].x, parent.getY() + n.options['position'].y); // TODO: Fix nested position update
+    // updateChildrenPosition(nodes, n)
+  });
 }
 
 const useStyles$1 = /*#__PURE__*/makeStyles(_ => ({
@@ -482,10 +506,22 @@ const MetaDiagram = ({
   engine.getNodeFactories() // @ts-ignore
   .registerFactory(new MetaNodeFactory(componentsMap.nodes));
   engine.getLinkFactories() // @ts-ignore
-  .registerFactory(new MetaLinkFactory(componentsMap.links)); // set up the diagram model
+  .registerFactory(new MetaLinkFactory(componentsMap.links)); // @ts-ignore
+
+  const repaintCanvas = event => {
+    let model = engine.getModel();
+    const node = event.entity;
+    const nodes = model.getNodes(); // @ts-ignore
+
+    updateChildrenPosition(nodes, node); // @ts-ignore
+    // updateNodeLocalPosition(nodes, node)
+
+    engine.repaintCanvas();
+  }; // set up the diagram model
+
 
   const model = new DiagramModel();
-  const nodes = processNodes(metaNodes);
+  const nodes = processNodes(metaNodes, repaintCanvas);
   const links = metaLinks.map(ml => getLinkModel(ml, nodes)).filter(mlm => mlm !== undefined); // @ts-ignore
 
   model.addAll(...nodes, ...links); // load model into engine

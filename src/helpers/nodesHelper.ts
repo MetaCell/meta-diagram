@@ -10,7 +10,6 @@ export function getNode(
   return nodes.find(n => n.getOptions().id === id);
 }
 
-// @ts-ignore
 export function processNodes(metaNodes: MetaNode[], callback: { (event: any): void; (arg0: BaseEntityEvent<NodeModel<NodeModelGenerics>>): void; }) : MetaNodeModel[] {
   const metaNodeModels = []
   for(const mn of metaNodes){
@@ -18,7 +17,7 @@ export function processNodes(metaNodes: MetaNode[], callback: { (event: any): vo
     const position = mn.getWorldPosition()
     metaNodeModel.setPosition(position.x, position.y)
     // @ts-ignore
-    //metaNodeModel.registerListener({positionChanged: (event => callback(event))})
+    metaNodeModel.registerListener({positionChanged: (event => callback(event))})
     metaNodeModels.push(metaNodeModel)
   }
   return metaNodeModels

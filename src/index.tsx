@@ -15,6 +15,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
 import { Box } from '@mui/material';
 import {processNodes} from "./helpers/nodesHelper";
+import {updateChildrenPosition} from "./helpers/engineHelper";
 
 const useStyles = makeStyles(_ => ({
   container: {
@@ -62,10 +63,22 @@ const MetaDiagram = ({
     // @ts-ignore
     .registerFactory(new MetaLinkFactory(componentsMap.links));
 
+  // @ts-ignore
+  const repaintCanvas = (event: any) => {
+    let model = engine.getModel();
+    const node = event.entity
+    const nodes = model.getNodes()
+    // @ts-ignore
+    updateChildrenPosition(nodes, node)
+    // @ts-ignore
+    // updateNodeLocalPosition(nodes, node)
+    engine.repaintCanvas();
+  }
+
   // set up the diagram model
 
   const model = new DiagramModel();
-  const nodes = processNodes(metaNodes, () => console.log("repaint canvas"))
+  const nodes = processNodes(metaNodes, repaintCanvas)
 
   const links = metaLinks
     .map(ml => getLinkModel(ml, nodes))
