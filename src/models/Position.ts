@@ -14,4 +14,8 @@ export class Position {
   sub(otherPosition: Position) : Position {
     return new Position(this.x - otherPosition.x, this.y - otherPosition.y)
   }
+
+  log() {
+    console.log(`{x: ${this.x}, y: ${this.y}}`)
+  }
 }

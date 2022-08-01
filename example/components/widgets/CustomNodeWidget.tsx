@@ -23,9 +23,12 @@ export class CustomNodeWidget extends React.Component<CustomNodeWidgetProps> {
             justifyContent: "space-between",
             position: "relative",
             background: this.props.model.getOptions()['color'] || "darkgray",
-            top: this.props.model.getOptions()['position']?.y || 0,
-            left: this.props.model.getOptions()['position']?.x || 0
+            top: this.props.model.getY(),
+            left: this.props.model.getX()
         }
+
+        // console.log("Node Render Position: ")
+        // console.log(this.props.model.getX() + ":" + this.props.model.getY())
 
         const circlePortStyle = {
             width: "12px",

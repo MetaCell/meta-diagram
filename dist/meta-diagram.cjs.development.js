@@ -36,6 +36,10 @@ class Position {
     return new Position(this.x - otherPosition.x, this.y - otherPosition.y);
   }
 
+  log() {
+    console.log(`{x: ${this.x}, y: ${this.y}}`);
+  }
+
 }
 
 function getNode(id, nodes) {
@@ -79,12 +83,18 @@ class MetaNodeModel extends createEngine.NodeModel {
 
     const parentId = this.options['parentId'];
     const parent = getNode(parentId, nodes);
-    return parent ? worldPosition.sub(parent.getLocalPosition(nodes)) : worldPosition;
+    const parentWorldPosition = parent ? new Position(parent.getX(), parent.getY()) : new Position(0, 0); // console.log("Node World Position:")
+    // worldPosition.log()
+
+    return worldPosition.sub(parentWorldPosition);
   }
 
   updateLocalPosition(nodes) {
+    const localPosition = this.getLocalPosition(nodes); // console.log("Node Local Position:")
+    // localPosition.log()
     // @ts-ignore
-    this.options['position'] = this.getLocalPosition(nodes);
+
+    this.options['position'] = localPosition;
   }
 
 }
@@ -484,9 +494,11 @@ function updateChildrenPosition(nodes, parent) {
   const children = nodes.filter(n => n.options['parentId'] == parent.options['id']);
   children.forEach(n => {
     // @ts-ignore
-    n.setPosition(parent.getX() + n.options['position'].x, parent.getY() + n.options['position'].y); // TODO: Fix nested position update
-    // updateChildrenPosition(nodes, n)
+    n.setPosition(parent.getX() + n.options['position'].x, parent.getY() + n.options['position'].y);
   });
+}
+function updateNodeLocalPosition(nodes, node) {
+  node.updateLocalPosition(nodes);
 }
 
 const useStyles$1 = /*#__PURE__*/styles.makeStyles(_ => ({
@@ -521,9 +533,10 @@ const MetaDiagram = ({
     const node = event.entity;
     const nodes = model.getNodes(); // @ts-ignore
 
-    updateChildrenPosition(nodes, node); // @ts-ignore
-    // updateNodeLocalPosition(nodes, node)
+    updateChildrenPosition(nodes, node); // TODO: FIx nodes drifting away due to the following line
+    // @ts-ignore
 
+    updateNodeLocalPosition(nodes, node);
     engine.repaintCanvas();
   }; // set up the diagram model
 

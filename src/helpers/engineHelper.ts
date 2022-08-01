@@ -6,8 +6,6 @@ export function updateChildrenPosition(nodes: MetaNodeModel[], parent: MetaNodeM
     children.forEach(n => {
         // @ts-ignore
         n.setPosition(parent.getX() + n.options['position'].x, parent.getY() + n.options['position'].y)
-        // TODO: Fix nested position update
-        // updateChildrenPosition(nodes, n)
     })
 }
 

@@ -15,7 +15,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
 import { Box } from '@mui/material';
 import {processNodes} from "./helpers/nodesHelper";
-import {updateChildrenPosition} from "./helpers/engineHelper";
+import {updateChildrenPosition, updateNodeLocalPosition} from "./helpers/engineHelper";
 
 const useStyles = makeStyles(_ => ({
   container: {
@@ -70,8 +70,9 @@ const MetaDiagram = ({
     const nodes = model.getNodes()
     // @ts-ignore
     updateChildrenPosition(nodes, node)
+    // TODO: FIx nodes drifting away due to the following line
     // @ts-ignore
-    // updateNodeLocalPosition(nodes, node)
+    updateNodeLocalPosition(nodes, node)
     engine.repaintCanvas();
   }
 

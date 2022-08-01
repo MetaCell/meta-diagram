@@ -4,4 +4,5 @@ export declare class Position {
     constructor(x: number, y: number);
     add(otherPosition: Position): Position;
     sub(otherPosition: Position): Position;
+    log(): void;
 }
