@@ -1,3 +1,6 @@
+// TODO: Potentially not needed. Use react-diagrams rectangle instead
+
+
 export class BoundingBox {
     private _left: number
     private _top: number

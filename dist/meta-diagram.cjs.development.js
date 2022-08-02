@@ -82,6 +82,11 @@ class MetaNodeModel extends createEngine.NodeModel {
   getLocalPosition() {
     // @ts-ignore
     return this.getOptions()['localPosition'];
+  } // TODO: Change to consider mouse position; Currently considering top left corner
+
+
+  isInsideParent(parent) {
+    return parent ? parent.getBoundingBox().containsPoint(this.getPosition()) : true;
   }
 
   calculateLocalPosition(parent) {
@@ -513,6 +518,7 @@ class UnknownParent extends Error {
 
 }
 
+// TODO: Potentially not needed. Use react-diagrams rectangle instead
 class BoundingBox {
   constructor(left, top, right, bottom) {
     this._left = left;
@@ -581,7 +587,7 @@ class Graph {
     return this.root.getID();
   }
 
-  getRoot() {
+  getNode() {
     return this.root;
   }
 
@@ -594,7 +600,7 @@ class Graph {
   }
 
   getChildren() {
-    return Array.from(this.children.values()).map(g => g.getRoot());
+    return Array.from(this.children.values()).map(g => g.getNode());
   }
 
   getDescendancy() {
@@ -624,10 +630,10 @@ class Graph {
   }
 
   getContainerBoundingBox() {
-    let width = this.getRoot().width;
-    let height = this.getRoot().height;
-    let x = this.getRoot().getX();
-    let y = this.getRoot().getY();
+    let width = this.getNode().width;
+    let height = this.getNode().height;
+    let x = this.getNode().getX();
+    let y = this.getNode().getY();
     let left = x - width / 2;
     let right = x + width / 2;
     let top = y + height / 2;
@@ -680,24 +686,35 @@ class MetaGraph {
     const nodes = [];
 
     for (const graph of Array.from(this.roots.values())) {
-      nodes.push(graph.getRoot());
+      nodes.push(graph.getNode());
       nodes.push(...graph.getDescendancy());
     }
 
     return nodes;
   }
 
+  getAncestors(node) {
+    const path = node.getGraphPath();
+    const oldestAncestor = this.getRoot(path[0]);
+    return [oldestAncestor.getNode(), ...oldestAncestor.getChildren()];
+  }
+
+  getRoot(rootId) {
+    const root = this.roots.get(rootId);
+
+    if (root === undefined) {
+      throw new UnknownParent(rootId);
+    }
+
+    return root;
+  }
+
   getChildren(parent) {
     const path = parent.getGraphPath();
 
     if (path.length == 1) {
-      const root = this.roots.get(parent.getID());
-
-      if (root == undefined) {
-        throw new UnknownParent(parent.getID());
-      } else {
-        return root.getChildren();
-      }
+      const root = this.getRoot(parent.getID());
+      return root.getChildren();
     } else {
       const graph = this.findNodeGraph(path);
       return graph.getChildren();
@@ -713,7 +730,7 @@ class MetaGraph {
       path.pop(); // removes own id from path
 
       const parentGraph = this.findNodeGraph(path);
-      return parentGraph.getRoot();
+      return parentGraph.getNode();
     }
   }
 
@@ -738,13 +755,7 @@ class MetaGraph {
   findNodeGraph(path) {
     const rootId = path.shift(); // @ts-ignore
 
-    const root = this.roots.get(rootId);
-
-    if (root == undefined) {
-      throw new UnknownParent(rootId);
-    }
-
-    let parent = root;
+    let parent = this.getRoot(rootId);
 
     while (path.length > 0) {
       const next = path.shift(); // @ts-ignore
@@ -760,6 +771,7 @@ class MetaGraph {
   }
 
   handleNodePositionChanged(metaNodeModel) {
+    // TODO: Update node parent -> update node graph path, bounding boxes of parents, local position
     this.updateChildrenPosition(metaNodeModel);
     this.updateNodeLocalPosition(metaNodeModel);
   }
@@ -853,11 +865,8 @@ const MetaDiagram = ({
   engine.setModel(model);
   React.useEffect(() => {
     // @ts-ignore
-    metaGraph.updateNodesContainerBoundingBoxes(model.getNodes(), metaGraph); // @ts-ignore
-
-    model.registerListener({
-      nodesUpdated: event => metaGraph.updateNodesContainerBoundingBoxes([event.node], metaGraph)
-    });
+    metaGraph.updateNodesContainerBoundingBoxes(model.getNodes(), metaGraph); // TODO: Update bounding box on node adding/removing
+    // model.registerListener({nodesUpdated: (event => metaGraph.updateNodesContainerBoundingBoxes([event.node], metaGraph))})
   }, []);
   const containerClassName = wrapperClassName ? wrapperClassName : classes.container;
   return React.createElement(styles$1.ThemeProvider, {
