@@ -1,5 +1,6 @@
 import {MetaNodeModel} from "../react-diagrams/MetaNodeModel";
 import { UnknownParent } from "./Exceptions";
+import {BoundingBox} from "./BoundingBox";
 
 class Graph {
     private readonly root: MetaNodeModel;
@@ -51,12 +52,28 @@ class Graph {
         return false
     }
 
-    getContainerBoundingBox() : {width: number, height: number} {
+    getContainerBoundingBox() : BoundingBox {
         let width = this.getRoot().width
         let height = this.getRoot().height
-        // TODO continue digging in depth
-        // consider position + width and height of children
-        return {width, height}
+        let x = this.getRoot().getX()
+        let y = this.getRoot().getY()
+        let left = x - width / 2
+        let right = x + width / 2
+        let top = y + height / 2
+        let bottom = y - height / 2
+        for (let child of Array.from(this.children.values())) {
+            const childBox = child.getContainerBoundingBox()
+            if(childBox.left < left){
+                left = childBox.left
+            }if(childBox.right > right){
+                right = childBox.right
+            }if(childBox.top > top){
+                top = childBox.top
+            }if(childBox.bottom < bottom){
+                bottom = childBox.bottom
+            }
+        }
+        return new BoundingBox(left, top, right, bottom)
     }
 
 }
@@ -149,7 +166,7 @@ export class MetaGraph {
         return undefined
     }
 
-    getNodeContainerBoundingBox(node: MetaNodeModel) :  {width: number, height: number}  {
+    getNodeContainerBoundingBox(node: MetaNodeModel) : BoundingBox {
         const graph = this.findGraph(node.getGraphPath())
         return graph.getContainerBoundingBox()
     }

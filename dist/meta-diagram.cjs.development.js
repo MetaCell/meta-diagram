@@ -68,10 +68,7 @@ class MetaNodeModel extends createEngine.NodeModel {
   } // @ts-ignore
 
 
-  getContainerBoundingBox(nodes) {// @ts-ignore
-    // const parentId = this.options['parentId']
-    // const parent = getNode(parentId, nodes)
-    // return
+  getContainerBoundingBox(metaGraph) {// @ts-ignore
   }
 
   updateLocalPosition(metaGraph) {
@@ -79,9 +76,9 @@ class MetaNodeModel extends createEngine.NodeModel {
     this.options['localPosition'] = this.calculateLocalPosition(metaGraph);
   }
 
-  updateContainerBoundingBox(nodes) {
+  setContainerBoundingBox(containerBoundingBox) {
     // @ts-ignore
-    this.options['containerBB'] = this.calculateLocalPosition(nodes);
+    this.options['containerBoundingBox'] = containerBoundingBox;
   }
 
 }
@@ -496,6 +493,64 @@ class UnknownParent extends Error {
 
 }
 
+class BoundingBox {
+  constructor(left, top, right, bottom) {
+    this._left = left;
+    this._top = top;
+    this._right = right;
+    this._bottom = bottom;
+  } // @ts-ignore
+
+
+  get left() {
+    return this._left;
+  } // @ts-ignore
+
+
+  set left(value) {
+    this._left = value;
+  } // @ts-ignore
+
+
+  get top() {
+    return this._top;
+  } // @ts-ignore
+
+
+  set top(value) {
+    this._top = value;
+  } // @ts-ignore
+
+
+  get right() {
+    return this._right;
+  } // @ts-ignore
+
+
+  set right(value) {
+    this._right = value;
+  } // @ts-ignore
+
+
+  get bottom() {
+    return this._bottom;
+  } // @ts-ignore
+
+
+  set bottom(value) {
+    this._bottom = value;
+  }
+
+  getWidth() {
+    return this._right - this._left;
+  }
+
+  getHeight() {
+    return this._top - this._bottom;
+  }
+
+}
+
 class Graph {
   constructor(metaNodeModel) {
     this.root = metaNodeModel;
@@ -546,6 +601,39 @@ class Graph {
     }
 
     return false;
+  }
+
+  getContainerBoundingBox() {
+    let width = this.getRoot().width;
+    let height = this.getRoot().height;
+    let x = this.getRoot().getX();
+    let y = this.getRoot().getY();
+    let left = x - width / 2;
+    let right = x + width / 2;
+    let top = y + height / 2;
+    let bottom = y - height / 2;
+
+    for (let child of Array.from(this.children.values())) {
+      const childBox = child.getContainerBoundingBox();
+
+      if (childBox.left < left) {
+        left = childBox.left;
+      }
+
+      if (childBox.right > right) {
+        right = childBox.right;
+      }
+
+      if (childBox.top > top) {
+        top = childBox.top;
+      }
+
+      if (childBox.bottom < bottom) {
+        bottom = childBox.bottom;
+      }
+    }
+
+    return new BoundingBox(left, top, right, bottom);
   }
 
 }
@@ -650,6 +738,11 @@ class MetaGraph {
     return undefined;
   }
 
+  getNodeContainerBoundingBox(node) {
+    const graph = this.findGraph(node.getGraphPath());
+    return graph.getContainerBoundingBox();
+  }
+
 }
 
 function generateMetaGraph(metaNodes) {
@@ -691,7 +784,9 @@ function updateNodeLocalPosition(metaGraph, node) {
   node.updateLocalPosition(metaGraph); // TODO: check if it is still inside the parent or if it started to be inside a node
 } // @ts-ignore
 
-function updateNodesContainerBoundingBoxes(nodes) {// nodes.forEach(n => n.updateContainerBoundingBox(nodes))
+function updateNodesContainerBoundingBoxes(nodes, metaGraph) {
+  nodes.forEach(n => n.setContainerBoundingBox(metaGraph.getNodeContainerBoundingBox(n)));
+  console.log(nodes);
 }
 
 const useStyles$1 = /*#__PURE__*/styles.makeStyles(_ => ({
@@ -742,10 +837,10 @@ const MetaDiagram = ({
   engine.setModel(model);
   React.useEffect(() => {
     // @ts-ignore
-    updateNodesContainerBoundingBoxes(model.getNodes()); // @ts-ignore
+    updateNodesContainerBoundingBoxes(model.getNodes(), metaGraph); // @ts-ignore
 
     model.registerListener({
-      nodesUpdated: event => updateNodesContainerBoundingBoxes()
+      nodesUpdated: event => updateNodesContainerBoundingBoxes([event.node], metaGraph)
     });
   }, []);
   const containerClassName = wrapperClassName ? wrapperClassName : classes.container;

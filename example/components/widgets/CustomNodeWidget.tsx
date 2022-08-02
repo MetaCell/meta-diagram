@@ -11,13 +11,16 @@ export interface CustomNodeWidgetProps {
 export class CustomNodeWidget extends React.Component<CustomNodeWidgetProps> {
 
     render() {
+        const bb = this.props.model.getOptions()['containerBoundingBox']
+        const width = bb ? `${bb.getWidth()}px` : "250px"
+        const height = bb ? `${bb.getHeight()}px` : "200px"
         // @ts-ignore
         const customNodeStyle = {
             zIndex: Math.pow(10, this.props.model.getOptions()['depth']),
             border: "solid 2px gray",
             borderRadius: "5px",
-            width: "250px",
-            height: "200px",
+            width: width,
+            height: height,
             display: "flex",
             alignItems: "flex-start",
             justifyContent: "space-between",

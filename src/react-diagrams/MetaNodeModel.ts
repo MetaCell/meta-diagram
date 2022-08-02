@@ -51,7 +51,7 @@ export class MetaNodeModel extends NodeModel {
         this.options['localPosition'] =  this.calculateLocalPosition(metaGraph)
     }
 
-    setContainerBoundingBox(containerBoundingBox:  {width: number, height: number} ): void {
+    setContainerBoundingBox(containerBoundingBox: {left: number, top: number, right: number, bottom: number}): void {
         // @ts-ignore
         this.options['containerBoundingBox'] =  containerBoundingBox
     }

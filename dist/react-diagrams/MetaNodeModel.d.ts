@@ -4,7 +4,12 @@ export declare class MetaNodeModel extends NodeModel {
     constructor(options?: {});
     getGraphPath(): string[];
     private calculateLocalPosition;
-    getContainerBoundingBox(nodes: MetaNodeModel[]): any;
+    getContainerBoundingBox(metaGraph: MetaNodeModel[]): any;
     updateLocalPosition(metaGraph: MetaGraph): void;
-    updateContainerBoundingBox(nodes: MetaNodeModel[]): void;
+    setContainerBoundingBox(containerBoundingBox: {
+        left: number;
+        top: number;
+        right: number;
+        bottom: number;
+    }): void;
 }
