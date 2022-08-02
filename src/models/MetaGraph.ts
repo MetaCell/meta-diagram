@@ -15,7 +15,7 @@ class Graph {
         return this.root.getID()
     }
 
-    getNode() : MetaNodeModel{
+    getRoot() : MetaNodeModel{
         return this.root
     }
 
@@ -28,7 +28,7 @@ class Graph {
     }
 
     getChildren(): MetaNodeModel[] {
-        return Array.from(this.children.values()).map(g => g.getNode())
+        return Array.from(this.children.values()).map(g => g.getRoot())
     }
 
     getDescendancy(): MetaNodeModel[] {
@@ -53,10 +53,10 @@ class Graph {
     }
 
     getContainerBoundingBox() : BoundingBox {
-        let width = this.getNode().width
-        let height = this.getNode().height
-        let x = this.getNode().getX()
-        let y = this.getNode().getY()
+        let width = this.getRoot().width
+        let height = this.getRoot().height
+        let x = this.getRoot().getX()
+        let y = this.getRoot().getY()
         let left = x - width / 2
         let right = x + width / 2
         let top = y + height / 2
@@ -102,7 +102,7 @@ export class MetaGraph {
     getNodes() : MetaNodeModel[] {
         const nodes = []
         for(const graph of Array.from(this.roots.values())){
-            nodes.push(graph.getNode())
+            nodes.push(graph.getRoot())
             nodes.push(...graph.getDescendancy())
         }
         return nodes
@@ -111,14 +111,17 @@ export class MetaGraph {
     private findGraph(path: string[]) : Graph {
         const rootId = path.shift()
         // @ts-ignore
-        let parent = this.getRoot(rootId)
+        const root = this.roots.get(rootId)
+        if (root == undefined){
+            throw new UnknownParent(`Root with id ${rootId} not found`)
+        }
+        let parent = root
         while(path.length > 0){
             const next = path.shift()
             // @ts-ignore
             parent = parent.getChild(next)
             if (parent == undefined){
-                // @ts-ignore
-                throw new UnknownParent(next)
+                throw new UnknownParent(`Node with id ${next} not found`)
             }
         }
         return parent
@@ -130,7 +133,7 @@ export class MetaGraph {
         if (path.length == 1) {
             const root = this.roots.get(parent.getID())
             if (root == undefined) {
-                throw new UnknownParent(parent.getID())
+                throw new UnknownParent(`Root with id ${parent.getID()} not found`)
             } else {
                 return root.getChildren()
             }
@@ -138,20 +141,6 @@ export class MetaGraph {
             const graph = this.findGraph(path)
             return graph.getChildren()
         }
-    }
-
-    getAncestors(node : MetaNodeModel): MetaNodeModel[] {
-        const path = node.getGraphPath()
-        const oldestAncestor = this.getRoot(path[0])
-        return [oldestAncestor.getNode(), ...oldestAncestor.getChildren()]
-    }
-
-    getRoot(rootId: string) : Graph{
-        const root = this.roots.get(rootId)
-        if(root===undefined){
-            throw new UnknownParent(rootId)
-        }
-        return root
     }
 
     // @ts-ignore
@@ -162,7 +151,7 @@ export class MetaGraph {
         } else {
             path.pop() // removes own id from path
             const parentGraph = this.findGraph(path)
-            return parentGraph.getNode()
+            return parentGraph.getRoot()
         }
     }
 

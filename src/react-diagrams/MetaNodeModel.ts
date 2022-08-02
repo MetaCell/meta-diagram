@@ -1,6 +1,7 @@
 import {DefaultPortModel, NodeModel} from '@projectstorm/react-diagrams';
 import {ReactDiagramMetaTypes} from '../constants';
 import {Position} from "../models/Position";
+import {MetaGraph} from "../models/MetaGraph";
 
 export class MetaNodeModel extends NodeModel {
     constructor(options = {}) {
@@ -31,27 +32,23 @@ export class MetaNodeModel extends NodeModel {
         return [...this.getOptions()['graphPath']]
     }
 
-    getLocalPosition(): Position{
-        // @ts-ignore
-        return [...this.getOptions()['localPosition']]
-    }
-
-
-    // TODO: Change to consider mouse position; Currently considering top left corner
-    isInsideParent(parent: MetaNodeModel | undefined): boolean {
-        return parent ? parent.getBoundingBox().containsPoint(this.getPosition()) : true
-    }
-
-    private calculateLocalPosition(parent: MetaNodeModel | undefined): Position {
+    private calculateLocalPosition(metaGraph: MetaGraph): Position {
         const worldPosition = new Position(this.getX(), this.getY())
         // @ts-ignore
+        const parent = metaGraph.getParent(this)
         const parentWorldPosition = parent ? new Position(parent.getX(), parent.getY()): new Position(0,0)
         return worldPosition.sub(parentWorldPosition)
     }
 
-    updateLocalPosition(parent: MetaNodeModel | undefined): void {
+    // @ts-ignore
+    getContainerBoundingBox(metaGraph: MetaNodeModel[]): any {
         // @ts-ignore
-        this.options['localPosition'] =  this.calculateLocalPosition(parent)
+
+    }
+
+    updateLocalPosition(metaGraph: MetaGraph): void {
+        // @ts-ignore
+        this.options['localPosition'] =  this.calculateLocalPosition(metaGraph)
     }
 
     setContainerBoundingBox(containerBoundingBox: {left: number, top: number, right: number, bottom: number}): void {

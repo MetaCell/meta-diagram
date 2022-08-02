@@ -1,6 +1,5 @@
 export class UnknownParent extends Error {
-    constructor(id: string) {
-        const msg = `Graph with id ${id} not found`
+    constructor(msg: string) {
         super(msg);
         Object.setPrototypeOf(this, UnknownParent.prototype);
     }
