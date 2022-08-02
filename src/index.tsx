@@ -98,9 +98,9 @@ const MetaDiagram = ({
 
   useEffect(() => {
     // @ts-ignore
-    updateNodesContainerBoundingBoxes(model.getNodes())
+    updateNodesContainerBoundingBoxes(model.getNodes(), metaGraph)
     // @ts-ignore
-    model.registerListener({nodesUpdated: (event => updateNodesContainerBoundingBoxes([event.node]))})
+    model.registerListener({nodesUpdated: (event => updateNodesContainerBoundingBoxes([event.node], metaGraph))})
   }, [])
 
 

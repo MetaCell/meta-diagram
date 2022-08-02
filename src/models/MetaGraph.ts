@@ -51,6 +51,14 @@ class Graph {
         return false
     }
 
+    getContainerBoundingBox() : {width: number, height: number} {
+        let width = this.getRoot().width
+        let height = this.getRoot().height
+        // TODO continue digging in depth
+        // consider position + width and height of children
+        return {width, height}
+    }
+
 }
 
 
@@ -139,6 +147,11 @@ export class MetaGraph {
             }
         }
         return undefined
+    }
+
+    getNodeContainerBoundingBox(node: MetaNodeModel) :  {width: number, height: number}  {
+        const graph = this.findGraph(node.getGraphPath())
+        return graph.getContainerBoundingBox()
     }
 }
 

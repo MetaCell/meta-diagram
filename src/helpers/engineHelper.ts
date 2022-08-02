@@ -25,6 +25,6 @@ export function updateNodeLocalPosition(metaGraph: MetaGraph, node: MetaNodeMode
 }
 
 // @ts-ignore
-export function updateNodesContainerBoundingBoxes(nodes: MetaNodeModel[]): void {
-    // nodes.forEach(n => n.updateContainerBoundingBox(nodes))
+export function updateNodesContainerBoundingBoxes(nodes: MetaNodeModel[], metaGraph: MetaGraph): void {
+    nodes.forEach(n => n.setContainerBoundingBox(metaGraph.getNodeContainerBoundingBox(n)))
 }

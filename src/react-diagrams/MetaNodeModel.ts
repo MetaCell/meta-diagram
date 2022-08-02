@@ -41,11 +41,9 @@ export class MetaNodeModel extends NodeModel {
     }
 
     // @ts-ignore
-    getContainerBoundingBox(nodes: MetaNodeModel[]): any {
+    getContainerBoundingBox(metaGraph: MetaNodeModel[]): any {
         // @ts-ignore
-        // const parentId = this.options['parentId']
-        // const parent = getNode(parentId, nodes)
-        // return
+
     }
 
     updateLocalPosition(metaGraph: MetaGraph): void {
@@ -53,9 +51,9 @@ export class MetaNodeModel extends NodeModel {
         this.options['localPosition'] =  this.calculateLocalPosition(metaGraph)
     }
 
-    updateContainerBoundingBox(nodes: MetaNodeModel[]): void {
+    setContainerBoundingBox(containerBoundingBox:  {width: number, height: number} ): void {
         // @ts-ignore
-        this.options['containerBB'] =  this.calculateLocalPosition(nodes)
+        this.options['containerBoundingBox'] =  containerBoundingBox
     }
 
 }
