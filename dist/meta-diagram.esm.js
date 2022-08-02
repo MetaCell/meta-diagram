@@ -1,4 +1,4 @@
-import React__default, { createElement } from 'react';
+import React__default, { useEffect, createElement } from 'react';
 import createEngine, { NodeModel, DefaultPortModel, DefaultLinkModel, DefaultLinkFactory, DiagramModel } from '@projectstorm/react-diagrams';
 import { AbstractReactFactory, CanvasWidget } from '@projectstorm/react-canvas-core';
 import { makeStyles } from '@mui/styles';
@@ -28,31 +28,6 @@ class Position {
     return new Position(this.x - otherPosition.x, this.y - otherPosition.y);
   }
 
-  log() {
-    console.log(`{x: ${this.x}, y: ${this.y}}`);
-  }
-
-}
-
-function getNode(id, nodes) {
-  return nodes.find(n => n.getOptions().id === id);
-}
-function processNodes(metaNodes, callback) {
-  // TODO set z order
-  const metaNodeModels = [];
-
-  for (const mn of metaNodes) {
-    const metaNodeModel = mn.toModel();
-    const position = mn.getWorldPosition();
-    metaNodeModel.setPosition(position.x, position.y); // @ts-ignore
-
-    metaNodeModel.registerListener({
-      positionChanged: event => callback(event)
-    });
-    metaNodeModels.push(metaNodeModel);
-  }
-
-  return metaNodeModels;
 }
 
 class MetaNodeModel extends NodeModel {
@@ -71,23 +46,34 @@ class MetaNodeModel extends NodeModel {
     }));
   }
 
-  getLocalPosition(nodes) {
-    const worldPosition = new Position(this.getX(), this.getY()); // @ts-ignore
-
-    const parentId = this.options['parentId'];
-    const parent = getNode(parentId, nodes);
-    const parentWorldPosition = parent ? new Position(parent.getX(), parent.getY()) : new Position(0, 0); // console.log("Node World Position:")
-    // worldPosition.log()
-
-    return worldPosition.sub(parentWorldPosition);
+  getGraphPath() {
+    // @ts-ignore
+    return [...this.getOptions()['graphPath']];
   }
 
-  updateLocalPosition(nodes) {
-    const localPosition = this.getLocalPosition(nodes); // console.log("Node Local Position:")
-    // localPosition.log()
-    // @ts-ignore
+  calculateLocalPosition(metaGraph) {
+    const worldPosition = new Position(this.getX(), this.getY()); // @ts-ignore
 
-    this.options['position'] = localPosition;
+    const parent = metaGraph.getParent(this);
+    const parentWorldPosition = parent ? new Position(parent.getX(), parent.getY()) : new Position(0, 0);
+    return worldPosition.sub(parentWorldPosition);
+  } // @ts-ignore
+
+
+  getContainerBoundingBox(nodes) {// @ts-ignore
+    // const parentId = this.options['parentId']
+    // const parent = getNode(parentId, nodes)
+    // return
+  }
+
+  updateLocalPosition(metaGraph) {
+    // @ts-ignore
+    this.options['localPosition'] = this.calculateLocalPosition(metaGraph);
+  }
+
+  updateContainerBoundingBox(nodes) {
+    // @ts-ignore
+    this.options['containerBB'] = this.calculateLocalPosition(nodes);
   }
 
 }
@@ -96,7 +82,7 @@ class MetaNode {
   constructor(id, name, shape, position, parent, options) {
     this.parent = parent;
     this.position = position;
-    this.options = options;
+    this.options = new Map(options);
     this.options.set('id', id);
     this.options.set('name', name);
     this.options.set('shape', shape);
@@ -106,16 +92,20 @@ class MetaNode {
     return this.options.get('id');
   }
 
-  getParentId() {
-    var _this$parent;
+  getGraphPath() {
+    if (this.parent) {
+      const graphPath = this.parent.getGraphPath();
+      graphPath.push(this.getId());
+      return graphPath;
+    }
 
-    return (_this$parent = this.parent) == null ? void 0 : _this$parent.getId();
+    return [this.getId()];
   }
 
   getWorldPosition() {
-    var _this$parent2;
+    var _this$parent;
 
-    return this.parent ? this.position.add((_this$parent2 = this.parent) == null ? void 0 : _this$parent2.getWorldPosition()) : this.position;
+    return this.parent ? this.position.add((_this$parent = this.parent) == null ? void 0 : _this$parent.getWorldPosition()) : this.position;
   }
 
   getDepth() {
@@ -123,11 +113,14 @@ class MetaNode {
   }
 
   toModel() {
-    const optionsMap = this.options;
-    optionsMap.set('parentId', this.getParentId());
-    optionsMap.set('position', this.position);
+    const optionsMap = new Map(this.options);
+    optionsMap.set('graphPath', this.getGraphPath());
+    optionsMap.set('localPosition', this.position);
     optionsMap.set('depth', this.getDepth());
-    return new MetaNodeModel(Object.fromEntries(optionsMap));
+    const metaNodeModel = new MetaNodeModel(Object.fromEntries(optionsMap));
+    const worldPosition = this.getWorldPosition();
+    metaNodeModel.setPosition(worldPosition.x, worldPosition.y);
+    return metaNodeModel;
   }
 
 }
@@ -249,10 +242,10 @@ class MetaLinkFactory extends DefaultLinkFactory {
 
 }
 
-function getLinkModel(metaLink, nodes) {
+function getLinkModel(metaLink, metaGraph) {
   const link = metaLink.toModel();
-  const source = getNode(metaLink.getSourceId(), nodes);
-  const target = getNode(metaLink.getTargetId(), nodes);
+  const source = metaGraph.getNodeDFS(metaLink.getSourceId());
+  const target = metaGraph.getNodeDFS(metaLink.getTargetId());
 
   if (source && target) {
     link.setSourcePort(source.getPort(metaLink.getSourcePortId()));
@@ -487,18 +480,210 @@ var theme = (customVariables => applicationTheme({ ...vars,
   ...customVariables
 }));
 
-function updateChildrenPosition(nodes, parent) {
+class UnknownParent extends Error {
+  constructor(msg) {
+    super(msg);
+    Object.setPrototypeOf(this, UnknownParent.prototype);
+  }
+
+}
+
+class Graph {
+  constructor(metaNodeModel) {
+    this.root = metaNodeModel;
+    this.children = new Map();
+  }
+
+  getID() {
+    return this.root.getID();
+  }
+
+  getRoot() {
+    return this.root;
+  }
+
+  getChild(id) {
+    return this.children.get(id);
+  }
+
+  addChild(graph) {
+    this.children.set(graph.getID(), graph);
+  }
+
+  getChildren() {
+    return Array.from(this.children.values()).map(g => g.getRoot());
+  }
+
+  getDescendancy() {
+    const descendancy = this.getChildren();
+
+    for (const graph of Array.from(this.children.values())) {
+      descendancy.push(...graph.getDescendancy());
+    }
+
+    return descendancy;
+  }
+
+  dfs(id) {
+    if (this.getID() == id) {
+      return this.root;
+    }
+
+    for (let root of Array.from(this.children.values())) {
+      const found = root.dfs(id);
+
+      if (found) {
+        return found;
+      }
+    }
+
+    return false;
+  }
+
+}
+
+class MetaGraph {
+  constructor() {
+    this.roots = new Map();
+  } // @ts-ignore
+
+
+  addNode(metaNodeModel) {
+    const path = metaNodeModel.getGraphPath();
+
+    if (path.length == 1) {
+      this.roots.set(metaNodeModel.getID(), new Graph(metaNodeModel));
+    } else {
+      path.pop(); // Removes own id from path
+
+      const parentGraph = this.findGraph(path);
+      parentGraph.addChild(new Graph(metaNodeModel));
+    }
+  }
+
+  getNodes() {
+    const nodes = [];
+
+    for (const graph of Array.from(this.roots.values())) {
+      nodes.push(graph.getRoot());
+      nodes.push(...graph.getDescendancy());
+    }
+
+    return nodes;
+  } // @ts-ignore
+
+
+  findGraph(path) {
+    const rootId = path.shift(); // @ts-ignore
+
+    const root = this.roots.get(rootId);
+
+    if (root == undefined) {
+      throw new UnknownParent(`Root with id ${rootId} not found`);
+    }
+
+    let parent = root;
+
+    while (path.length > 0) {
+      const next = path.shift(); // @ts-ignore
+
+      parent = parent.getChild(next);
+
+      if (parent == undefined) {
+        throw new UnknownParent(`Node with id ${next} not found`);
+      }
+    }
+
+    return parent;
+  } // @ts-ignore
+
+
+  getChildren(parent) {
+    const path = parent.getGraphPath();
+
+    if (path.length == 1) {
+      const root = this.roots.get(parent.getID());
+
+      if (root == undefined) {
+        throw new UnknownParent(`Root with id ${parent.getID()} not found`);
+      } else {
+        return root.getChildren();
+      }
+    } else {
+      const graph = this.findGraph(path);
+      return graph.getChildren();
+    }
+  } // @ts-ignore
+
+
+  getParent(node) {
+    const path = node.getGraphPath();
+
+    if (path.length == 1) {
+      return undefined;
+    } else {
+      path.pop(); // removes own id from path
+
+      const parentGraph = this.findGraph(path);
+      return parentGraph.getRoot();
+    }
+  }
+
+  getNodeDFS(nodeId) {
+    for (let root of Array.from(this.roots.values())) {
+      const found = root.dfs(nodeId);
+
+      if (found) {
+        // @ts-ignore
+        return found;
+      }
+    }
+
+    return undefined;
+  }
+
+}
+
+function generateMetaGraph(metaNodes) {
+  const metaGraph = new MetaGraph();
+  metaNodes.sort(function (a, b) {
+    return a.getDepth() - b.getDepth();
+  });
+
+  for (const mn of metaNodes) {
+    const metaNodeModel = mn.toModel();
+    metaGraph.addNode(metaNodeModel);
+  }
+
+  return metaGraph;
+}
+function registerPositionListener(metaNodeModels, callback) {
   // @ts-ignore
-  const children = nodes.filter(n => n.options['parentId'] == parent.options['id']);
+  metaNodeModels.forEach(metaNodeModel => metaNodeModel.registerListener({
+    positionChanged: event => callback(event)
+  }));
+}
+
+function updateChildrenPosition(metaGraph, parent) {
+  const children = metaGraph.getChildren(parent); // // @ts-ignore
+
   children.forEach(n => {
+    /*
+        No need to explicitly call updateChildrenPosition for n children because it will happen automatically in
+        the event listener
+     */
     // @ts-ignore
-    n.setPosition(parent.getX() + n.options['position'].x, parent.getY() + n.options['position'].y);
+    n.setPosition(parent.getX() + n.options['localPosition'].x, parent.getY() + n.options['localPosition'].y);
   });
 }
-function updateNodeLocalPosition(nodes, node) {
-  node.updateLocalPosition(nodes); // TODO: check if it is still inside the parent
+function updateNodeLocalPosition(metaGraph, node) {
+  /*
+      Updates relative position from the node that moved to its parent
+  */
+  node.updateLocalPosition(metaGraph); // TODO: check if it is still inside the parent or if it started to be inside a node
+} // @ts-ignore
 
-  console.log(node);
+function updateNodesContainerBoundingBoxes(nodes) {// nodes.forEach(n => n.updateContainerBoundingBox(nodes))
 }
 
 const useStyles$1 = /*#__PURE__*/makeStyles(_ => ({
@@ -526,27 +711,35 @@ const MetaDiagram = ({
   engine.getNodeFactories() // @ts-ignore
   .registerFactory(new MetaNodeFactory(componentsMap.nodes));
   engine.getLinkFactories() // @ts-ignore
-  .registerFactory(new MetaLinkFactory(componentsMap.links)); // @ts-ignore
+  .registerFactory(new MetaLinkFactory(componentsMap.links));
+  const metaGraph = generateMetaGraph(metaNodes);
 
   const repaintCanvas = event => {
-    let model = engine.getModel();
-    const node = event.entity;
-    const nodes = model.getNodes(); // @ts-ignore
+    const node = event.entity; // @ts-ignore
 
-    updateChildrenPosition(nodes, node); // @ts-ignore
+    updateChildrenPosition(metaGraph, node); // @ts-ignore
 
-    updateNodeLocalPosition(nodes, node);
+    updateNodeLocalPosition(metaGraph, node);
     engine.repaintCanvas();
   }; // set up the diagram model
 
 
   const model = new DiagramModel();
-  const nodes = processNodes(metaNodes, repaintCanvas);
-  const links = metaLinks.map(ml => getLinkModel(ml, nodes)).filter(mlm => mlm !== undefined); // @ts-ignore
+  const nodes = metaGraph.getNodes();
+  registerPositionListener(nodes, repaintCanvas);
+  const links = metaLinks.map(ml => getLinkModel(ml, metaGraph)).filter(mlm => mlm !== undefined); // @ts-ignore
 
   model.addAll(...nodes, ...links); // load model into engine
 
   engine.setModel(model);
+  useEffect(() => {
+    // @ts-ignore
+    updateNodesContainerBoundingBoxes(model.getNodes()); // @ts-ignore
+
+    model.registerListener({
+      nodesUpdated: event => updateNodesContainerBoundingBoxes()
+    });
+  }, []);
   const containerClassName = wrapperClassName ? wrapperClassName : classes.container;
   return createElement(ThemeProvider, {
     theme: createTheme(theme(metaTheme == null ? void 0 : metaTheme.customThemeVariables))

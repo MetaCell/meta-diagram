@@ -14,8 +14,13 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
 import { Box } from '@mui/material';
-import {processNodes} from "./helpers/nodesHelper";
-import {updateChildrenPosition, updateNodeLocalPosition} from "./helpers/engineHelper";
+import {generateMetaGraph, registerPositionListener} from "./helpers/nodesHelper";
+import {
+  updateChildrenPosition,
+  updateNodeLocalPosition,
+  updateNodesContainerBoundingBoxes
+} from "./helpers/engineHelper";
+import {useEffect} from "react";
 
 const useStyles = makeStyles(_ => ({
   container: {
@@ -63,31 +68,41 @@ const MetaDiagram = ({
     // @ts-ignore
     .registerFactory(new MetaLinkFactory(componentsMap.links));
 
-  // @ts-ignore
+  const metaGraph = generateMetaGraph(metaNodes)
+
   const repaintCanvas = (event: any) => {
-    let model = engine.getModel();
     const node = event.entity
-    const nodes = model.getNodes()
     // @ts-ignore
-    updateChildrenPosition(nodes, node)
+    updateChildrenPosition(metaGraph, node)
     // @ts-ignore
-    updateNodeLocalPosition(nodes, node)
+    updateNodeLocalPosition(metaGraph, node)
     engine.repaintCanvas();
   }
+
 
   // set up the diagram model
 
   const model = new DiagramModel();
-  const nodes = processNodes(metaNodes, repaintCanvas)
+
+  const nodes = metaGraph.getNodes()
+  registerPositionListener(nodes, repaintCanvas)
 
   const links = metaLinks
-    .map(ml => getLinkModel(ml, nodes))
+    .map(ml => getLinkModel(ml, metaGraph))
     .filter(mlm => mlm !== undefined);
   // @ts-ignore
   model.addAll(...nodes, ...links);
 
   // load model into engine
   engine.setModel(model);
+
+  useEffect(() => {
+    // @ts-ignore
+    updateNodesContainerBoundingBoxes(model.getNodes())
+    // @ts-ignore
+    model.registerListener({nodesUpdated: (event => updateNodesContainerBoundingBoxes([event.node]))})
+  }, [])
+
 
   const containerClassName = wrapperClassName
     ? wrapperClassName

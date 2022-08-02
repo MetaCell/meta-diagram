@@ -1,25 +1,27 @@
-import { MetaNodeModel } from '../react-diagrams/MetaNodeModel';
 import {MetaNode} from "../models/MetaNode";
 import {BaseEntityEvent} from "@projectstorm/react-canvas-core";
 import {NodeModel, NodeModelGenerics} from "@projectstorm/react-diagrams";
+import {MetaGraph} from "../models/MetaGraph";
+import {MetaNodeModel} from "../react-diagrams/MetaNodeModel";
 
-export function getNode(
-  id: string,
-  nodes: MetaNodeModel[]
-): MetaNodeModel | undefined {
-  return nodes.find(n => n.getOptions().id === id);
-}
 
-export function processNodes(metaNodes: MetaNode[], callback: { (event: any): void; (arg0: BaseEntityEvent<NodeModel<NodeModelGenerics>>): void; }) : MetaNodeModel[] {
-  // TODO set z order
-  const metaNodeModels = []
+export function generateMetaGraph(metaNodes: MetaNode[]) : MetaGraph {
+  const metaGraph = new MetaGraph()
+  metaNodes.sort(function(a, b) {
+    return a.getDepth() - b.getDepth();
+  });
+
   for(const mn of metaNodes){
+
     const metaNodeModel = mn.toModel()
-    const position = mn.getWorldPosition()
-    metaNodeModel.setPosition(position.x, position.y)
-    // @ts-ignore
-    metaNodeModel.registerListener({positionChanged: (event => callback(event))})
-    metaNodeModels.push(metaNodeModel)
+
+    metaGraph.addNode(metaNodeModel)
   }
-  return metaNodeModels
+  return metaGraph
 }
+
+export function registerPositionListener(metaNodeModels: MetaNodeModel[], callback: { (event: any): void; (arg0: BaseEntityEvent<NodeModel<NodeModelGenerics>>): void; }){
+  // @ts-ignore
+  metaNodeModels.forEach(metaNodeModel => metaNodeModel.registerListener({positionChanged: (event => callback(event))}))
+}
+

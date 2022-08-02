@@ -5,9 +5,9 @@ export declare class MetaNode {
     private readonly position;
     private readonly options;
     constructor(id: string, name: string, shape: string, position: Position, parent: MetaNode | undefined, options: Map<string, any>);
-    getId(): string;
-    getParentId(): string | undefined;
-    getWorldPosition(): Position;
-    private getDepth;
+    private getId;
+    private getGraphPath;
+    private getWorldPosition;
+    getDepth(): number;
     toModel(): MetaNodeModel;
 }

@@ -1,7 +1,7 @@
 import {DefaultPortModel, NodeModel} from '@projectstorm/react-diagrams';
 import {ReactDiagramMetaTypes} from '../constants';
 import {Position} from "../models/Position";
-import {getNode} from "../helpers/nodesHelper";
+import {MetaGraph} from "../models/MetaGraph";
 
 export class MetaNodeModel extends NodeModel {
     constructor(options = {}) {
@@ -26,23 +26,36 @@ export class MetaNodeModel extends NodeModel {
         );
     }
 
-    getLocalPosition(nodes: MetaNodeModel[]): Position {
+
+    getGraphPath(): string[]{
+        // @ts-ignore
+        return [...this.getOptions()['graphPath']]
+    }
+
+    private calculateLocalPosition(metaGraph: MetaGraph): Position {
         const worldPosition = new Position(this.getX(), this.getY())
         // @ts-ignore
-        const parentId = this.options['parentId']
-        const parent = getNode(parentId, nodes)
+        const parent = metaGraph.getParent(this)
         const parentWorldPosition = parent ? new Position(parent.getX(), parent.getY()): new Position(0,0)
-        // console.log("Node World Position:")
-        // worldPosition.log()
         return worldPosition.sub(parentWorldPosition)
     }
 
-    updateLocalPosition(nodes: MetaNodeModel[]): void {
-        const localPosition = this.getLocalPosition(nodes)
-        // console.log("Node Local Position:")
-        // localPosition.log()
+    // @ts-ignore
+    getContainerBoundingBox(nodes: MetaNodeModel[]): any {
         // @ts-ignore
-        this.options['position'] = localPosition
+        // const parentId = this.options['parentId']
+        // const parent = getNode(parentId, nodes)
+        // return
+    }
+
+    updateLocalPosition(metaGraph: MetaGraph): void {
+        // @ts-ignore
+        this.options['localPosition'] =  this.calculateLocalPosition(metaGraph)
+    }
+
+    updateContainerBoundingBox(nodes: MetaNodeModel[]): void {
+        // @ts-ignore
+        this.options['containerBB'] =  this.calculateLocalPosition(nodes)
     }
 
 }

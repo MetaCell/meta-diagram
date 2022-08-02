@@ -1,15 +1,30 @@
 import {MetaNodeModel} from "../react-diagrams/MetaNodeModel";
+import {MetaGraph} from "../models/MetaGraph";
 
-export function updateChildrenPosition(nodes: MetaNodeModel[], parent: MetaNodeModel): void {
-    // @ts-ignore
-    const children = nodes.filter(n => n.options['parentId'] == parent.options['id']);
+export function updateChildrenPosition(metaGraph: MetaGraph, parent: MetaNodeModel): void {
+
+    const children = metaGraph.getChildren(parent);
+    // // @ts-ignore
     children.forEach(n => {
+        /*
+            No need to explicitly call updateChildrenPosition for n children because it will happen automatically in
+            the event listener
+         */
         // @ts-ignore
-        n.setPosition(parent.getX() + n.options['position'].x, parent.getY() + n.options['position'].y)
+        n.setPosition(parent.getX() + n.options['localPosition'].x, parent.getY() + n.options['localPosition'].y)
+
     })
 }
 
-export function updateNodeLocalPosition(nodes: MetaNodeModel[], node: MetaNodeModel): void {
-    node.updateLocalPosition(nodes)
-    // TODO: check if it is still inside the parent
+export function updateNodeLocalPosition(metaGraph: MetaGraph, node: MetaNodeModel): void {
+    /*
+        Updates relative position from the node that moved to its parent
+    */
+    node.updateLocalPosition(metaGraph)
+    // TODO: check if it is still inside the parent or if it started to be inside a node
+}
+
+// @ts-ignore
+export function updateNodesContainerBoundingBoxes(nodes: MetaNodeModel[]): void {
+    // nodes.forEach(n => n.updateContainerBoundingBox(nodes))
 }
