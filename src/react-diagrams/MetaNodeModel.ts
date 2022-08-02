@@ -1,7 +1,6 @@
 import {DefaultPortModel, NodeModel} from '@projectstorm/react-diagrams';
 import {ReactDiagramMetaTypes} from '../constants';
 import {Position} from "../models/Position";
-import {MetaGraph} from "../models/MetaGraph";
 
 export class MetaNodeModel extends NodeModel {
     constructor(options = {}) {
@@ -32,23 +31,21 @@ export class MetaNodeModel extends NodeModel {
         return [...this.getOptions()['graphPath']]
     }
 
-    private calculateLocalPosition(metaGraph: MetaGraph): Position {
-        const worldPosition = new Position(this.getX(), this.getY())
+    getLocalPosition(): Position{
+
         // @ts-ignore
-        const parent = metaGraph.getParent(this)
+        return this.getOptions()['localPosition']
+    }
+
+    private calculateLocalPosition(parent: MetaNodeModel | undefined): Position {
+        const worldPosition = new Position(this.getX(), this.getY())
         const parentWorldPosition = parent ? new Position(parent.getX(), parent.getY()): new Position(0,0)
         return worldPosition.sub(parentWorldPosition)
     }
 
-    // @ts-ignore
-    getContainerBoundingBox(metaGraph: MetaNodeModel[]): any {
+    updateLocalPosition(parent: MetaNodeModel | undefined): void {
         // @ts-ignore
-
-    }
-
-    updateLocalPosition(metaGraph: MetaGraph): void {
-        // @ts-ignore
-        this.options['localPosition'] =  this.calculateLocalPosition(metaGraph)
+        this.options['localPosition'] =  this.calculateLocalPosition(parent)
     }
 
     setContainerBoundingBox(containerBoundingBox: {left: number, top: number, right: number, bottom: number}): void {

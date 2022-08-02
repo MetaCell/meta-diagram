@@ -16,16 +16,36 @@ var ReactDiagramMetaTypes;
 
 class Position {
   constructor(x, y) {
-    this.x = x;
-    this.y = y;
+    this._x = x;
+    this._y = y;
+  } // @ts-ignore
+
+
+  get x() {
+    return this._x;
+  } // @ts-ignore
+
+
+  set x(value) {
+    this._x = value;
+  } // @ts-ignore
+
+
+  get y() {
+    return this._y;
+  } // @ts-ignore
+
+
+  set y(value) {
+    this._y = value;
   }
 
   add(otherPosition) {
-    return new Position(this.x + otherPosition.x, this.y + otherPosition.y);
+    return new Position(this._x + otherPosition._x, this._y + otherPosition._y);
   }
 
   sub(otherPosition) {
-    return new Position(this.x - otherPosition.x, this.y - otherPosition.y);
+    return new Position(this._x - otherPosition._x, this._y - otherPosition._y);
   }
 
 }
@@ -51,21 +71,20 @@ class MetaNodeModel extends NodeModel {
     return [...this.getOptions()['graphPath']];
   }
 
-  calculateLocalPosition(metaGraph) {
-    const worldPosition = new Position(this.getX(), this.getY()); // @ts-ignore
-
-    const parent = metaGraph.getParent(this);
-    const parentWorldPosition = parent ? new Position(parent.getX(), parent.getY()) : new Position(0, 0);
-    return worldPosition.sub(parentWorldPosition);
-  } // @ts-ignore
-
-
-  getContainerBoundingBox(metaGraph) {// @ts-ignore
+  getLocalPosition() {
+    // @ts-ignore
+    return this.getOptions()['localPosition'];
   }
 
-  updateLocalPosition(metaGraph) {
+  calculateLocalPosition(parent) {
+    const worldPosition = new Position(this.getX(), this.getY());
+    const parentWorldPosition = parent ? new Position(parent.getX(), parent.getY()) : new Position(0, 0);
+    return worldPosition.sub(parentWorldPosition);
+  }
+
+  updateLocalPosition(parent) {
     // @ts-ignore
-    this.options['localPosition'] = this.calculateLocalPosition(metaGraph);
+    this.options['localPosition'] = this.calculateLocalPosition(parent);
   }
 
   setContainerBoundingBox(containerBoundingBox) {
@@ -478,7 +497,8 @@ var theme = (customVariables => applicationTheme({ ...vars,
 }));
 
 class UnknownParent extends Error {
-  constructor(msg) {
+  constructor(id) {
+    const msg = `Root with id ${id} not found`;
     super(msg);
     Object.setPrototypeOf(this, UnknownParent.prototype);
   }
@@ -633,8 +653,7 @@ class Graph {
 class MetaGraph {
   constructor() {
     this.roots = new Map();
-  } // @ts-ignore
-
+  }
 
   addNode(metaNodeModel) {
     const path = metaNodeModel.getGraphPath();
@@ -644,7 +663,7 @@ class MetaGraph {
     } else {
       path.pop(); // Removes own id from path
 
-      const parentGraph = this.findGraph(path);
+      const parentGraph = this.findNodeGraph(path);
       parentGraph.addChild(new Graph(metaNodeModel));
     }
   }
@@ -658,33 +677,7 @@ class MetaGraph {
     }
 
     return nodes;
-  } // @ts-ignore
-
-
-  findGraph(path) {
-    const rootId = path.shift(); // @ts-ignore
-
-    const root = this.roots.get(rootId);
-
-    if (root == undefined) {
-      throw new UnknownParent(`Root with id ${rootId} not found`);
-    }
-
-    let parent = root;
-
-    while (path.length > 0) {
-      const next = path.shift(); // @ts-ignore
-
-      parent = parent.getChild(next);
-
-      if (parent == undefined) {
-        throw new UnknownParent(`Node with id ${next} not found`);
-      }
-    }
-
-    return parent;
-  } // @ts-ignore
-
+  }
 
   getChildren(parent) {
     const path = parent.getGraphPath();
@@ -693,16 +686,15 @@ class MetaGraph {
       const root = this.roots.get(parent.getID());
 
       if (root == undefined) {
-        throw new UnknownParent(`Root with id ${parent.getID()} not found`);
+        throw new UnknownParent(parent.getID());
       } else {
         return root.getChildren();
       }
     } else {
-      const graph = this.findGraph(path);
+      const graph = this.findNodeGraph(path);
       return graph.getChildren();
     }
-  } // @ts-ignore
-
+  }
 
   getParent(node) {
     const path = node.getGraphPath();
@@ -712,7 +704,7 @@ class MetaGraph {
     } else {
       path.pop(); // removes own id from path
 
-      const parentGraph = this.findGraph(path);
+      const parentGraph = this.findNodeGraph(path);
       return parentGraph.getRoot();
     }
   }
@@ -731,8 +723,59 @@ class MetaGraph {
   }
 
   getNodeContainerBoundingBox(node) {
-    const graph = this.findGraph(node.getGraphPath());
+    const graph = this.findNodeGraph(node.getGraphPath());
     return graph.getContainerBoundingBox();
+  }
+
+  findNodeGraph(path) {
+    const rootId = path.shift(); // @ts-ignore
+
+    const root = this.roots.get(rootId);
+
+    if (root == undefined) {
+      throw new UnknownParent(rootId);
+    }
+
+    let parent = root;
+
+    while (path.length > 0) {
+      const next = path.shift(); // @ts-ignore
+
+      parent = parent.getChild(next);
+
+      if (parent == undefined) {
+        throw new UnknownParent(next);
+      }
+    }
+
+    return parent;
+  }
+
+  handleNodePositionChanged(metaNodeModel) {
+    this.updateChildrenPosition(metaNodeModel);
+    this.updateNodeLocalPosition(metaNodeModel);
+  }
+
+  updateChildrenPosition(metaNodeModel) {
+    const children = this.getChildren(metaNodeModel);
+    children.forEach(n => {
+      /*
+          No need to explicitly call updateChildrenPosition for n children because it will happen automatically in
+          the event listener
+       */
+      // @ts-ignore
+      const localPosition = n.getLocalPosition();
+      n.setPosition(metaNodeModel.getX() + localPosition.x, metaNodeModel.getY() + localPosition.y);
+    });
+  }
+
+  updateNodeLocalPosition(metaNodeModel) {
+    const parent = this.getParent(metaNodeModel);
+    metaNodeModel.updateLocalPosition(parent);
+  }
+
+  updateNodesContainerBoundingBoxes(nodes) {
+    nodes.forEach(n => n.setContainerBoundingBox(this.getNodeContainerBoundingBox(n)));
   }
 
 }
@@ -755,30 +798,6 @@ function registerPositionListener(metaNodeModels, callback) {
   metaNodeModels.forEach(metaNodeModel => metaNodeModel.registerListener({
     positionChanged: event => callback(event)
   }));
-}
-
-function updateChildrenPosition(metaGraph, parent) {
-  const children = metaGraph.getChildren(parent); // // @ts-ignore
-
-  children.forEach(n => {
-    /*
-        No need to explicitly call updateChildrenPosition for n children because it will happen automatically in
-        the event listener
-     */
-    // @ts-ignore
-    n.setPosition(parent.getX() + n.options['localPosition'].x, parent.getY() + n.options['localPosition'].y);
-  });
-}
-function updateNodeLocalPosition(metaGraph, node) {
-  /*
-      Updates relative position from the node that moved to its parent
-  */
-  node.updateLocalPosition(metaGraph); // TODO: check if it is still inside the parent or if it started to be inside a node
-} // @ts-ignore
-
-function updateNodesContainerBoundingBoxes(nodes, metaGraph) {
-  nodes.forEach(n => n.setContainerBoundingBox(metaGraph.getNodeContainerBoundingBox(n)));
-  console.log(nodes);
 }
 
 const useStyles$1 = /*#__PURE__*/makeStyles(_ => ({
@@ -810,11 +829,8 @@ const MetaDiagram = ({
   const metaGraph = generateMetaGraph(metaNodes);
 
   const repaintCanvas = event => {
-    const node = event.entity; // @ts-ignore
-
-    updateChildrenPosition(metaGraph, node); // @ts-ignore
-
-    updateNodeLocalPosition(metaGraph, node);
+    const node = event.entity;
+    metaGraph.handleNodePositionChanged(node);
     engine.repaintCanvas();
   }; // set up the diagram model
 
@@ -829,10 +845,10 @@ const MetaDiagram = ({
   engine.setModel(model);
   useEffect(() => {
     // @ts-ignore
-    updateNodesContainerBoundingBoxes(model.getNodes(), metaGraph); // @ts-ignore
+    metaGraph.updateNodesContainerBoundingBoxes(model.getNodes(), metaGraph); // @ts-ignore
 
     model.registerListener({
-      nodesUpdated: event => updateNodesContainerBoundingBoxes([event.node], metaGraph)
+      nodesUpdated: event => metaGraph.updateNodesContainerBoundingBoxes([event.node], metaGraph)
     });
   }, []);
   const containerClassName = wrapperClassName ? wrapperClassName : classes.container;

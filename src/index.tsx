@@ -15,11 +15,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
 import { Box } from '@mui/material';
 import {generateMetaGraph, registerPositionListener} from "./helpers/nodesHelper";
-import {
-  updateChildrenPosition,
-  updateNodeLocalPosition,
-  updateNodesContainerBoundingBoxes
-} from "./helpers/engineHelper";
 import {useEffect} from "react";
 
 const useStyles = makeStyles(_ => ({
@@ -72,10 +67,7 @@ const MetaDiagram = ({
 
   const repaintCanvas = (event: any) => {
     const node = event.entity
-    // @ts-ignore
-    updateChildrenPosition(metaGraph, node)
-    // @ts-ignore
-    updateNodeLocalPosition(metaGraph, node)
+    metaGraph.handleNodePositionChanged(node)
     engine.repaintCanvas();
   }
 
@@ -98,9 +90,9 @@ const MetaDiagram = ({
 
   useEffect(() => {
     // @ts-ignore
-    updateNodesContainerBoundingBoxes(model.getNodes(), metaGraph)
+    metaGraph.updateNodesContainerBoundingBoxes(model.getNodes(), metaGraph)
     // @ts-ignore
-    model.registerListener({nodesUpdated: (event => updateNodesContainerBoundingBoxes([event.node], metaGraph))})
+    model.registerListener({nodesUpdated: (event => metaGraph.updateNodesContainerBoundingBoxes([event.node], metaGraph))})
   }, [])
 
 

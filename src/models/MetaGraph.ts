@@ -86,14 +86,13 @@ export class MetaGraph {
         this.roots = new Map<string, Graph>()
     }
 
-    // @ts-ignore
     addNode(metaNodeModel:MetaNodeModel): void {
         const path = metaNodeModel.getGraphPath()
         if(path.length == 1){
             this.roots.set(metaNodeModel.getID(), new Graph(metaNodeModel))
         }else{
             path.pop() // Removes own id from path
-            const parentGraph = this.findGraph(path)
+            const parentGraph = this.findNodeGraph(path)
             parentGraph.addChild(new Graph(metaNodeModel))
         }
     }
@@ -107,50 +106,29 @@ export class MetaGraph {
         }
         return nodes
     }
-    // @ts-ignore
-    private findGraph(path: string[]) : Graph {
-        const rootId = path.shift()
-        // @ts-ignore
-        const root = this.roots.get(rootId)
-        if (root == undefined){
-            throw new UnknownParent(`Root with id ${rootId} not found`)
-        }
-        let parent = root
-        while(path.length > 0){
-            const next = path.shift()
-            // @ts-ignore
-            parent = parent.getChild(next)
-            if (parent == undefined){
-                throw new UnknownParent(`Node with id ${next} not found`)
-            }
-        }
-        return parent
-    }
 
-    // @ts-ignore
     getChildren(parent : MetaNodeModel): MetaNodeModel[] {
         const path = parent.getGraphPath()
         if (path.length == 1) {
             const root = this.roots.get(parent.getID())
             if (root == undefined) {
-                throw new UnknownParent(`Root with id ${parent.getID()} not found`)
+                throw new UnknownParent(parent.getID())
             } else {
                 return root.getChildren()
             }
         } else {
-            const graph = this.findGraph(path)
+            const graph = this.findNodeGraph(path)
             return graph.getChildren()
         }
     }
 
-    // @ts-ignore
     getParent(node : MetaNodeModel): MetaNodeModel | undefined {
         const path = node.getGraphPath()
         if (path.length == 1) {
            return undefined
         } else {
             path.pop() // removes own id from path
-            const parentGraph = this.findGraph(path)
+            const parentGraph = this.findNodeGraph(path)
             return parentGraph.getRoot()
         }
     }
@@ -167,8 +145,56 @@ export class MetaGraph {
     }
 
     getNodeContainerBoundingBox(node: MetaNodeModel) : BoundingBox {
-        const graph = this.findGraph(node.getGraphPath())
+        const graph = this.findNodeGraph(node.getGraphPath())
         return graph.getContainerBoundingBox()
+    }
+
+    private findNodeGraph(path: string[]) : Graph {
+        const rootId = path.shift()
+        // @ts-ignore
+        const root = this.roots.get(rootId)
+        if (root == undefined){
+            throw new UnknownParent(rootId)
+        }
+        let parent = root
+        while(path.length > 0){
+            const next = path.shift()
+            // @ts-ignore
+            parent = parent.getChild(next)
+            if (parent == undefined){
+                throw new UnknownParent(next)
+            }
+        }
+        return parent
+    }
+
+    handleNodePositionChanged(metaNodeModel: MetaNodeModel){
+        this.updateChildrenPosition(metaNodeModel)
+        this.updateNodeLocalPosition(metaNodeModel)
+    }
+
+    private updateChildrenPosition(metaNodeModel: MetaNodeModel){
+        const children = this.getChildren(metaNodeModel);
+
+        children.forEach(n => {
+            /*
+                No need to explicitly call updateChildrenPosition for n children because it will happen automatically in
+                the event listener
+             */
+            // @ts-ignore
+            const localPosition = n.getLocalPosition()
+            n.setPosition(metaNodeModel.getX() + localPosition.x, metaNodeModel.getY() + localPosition.y)
+
+        })
+    }
+
+    private updateNodeLocalPosition(metaNodeModel: MetaNodeModel){
+        const parent = this.getParent(metaNodeModel)
+        metaNodeModel.updateLocalPosition(parent)
+    }
+
+    updateNodesContainerBoundingBoxes(nodes: MetaNodeModel[]): void {
+        nodes.forEach(n => n.setContainerBoundingBox(this.getNodeContainerBoundingBox(n)))
     }
 }
 
