@@ -1,11 +1,12 @@
 import { NodeModel } from '@projectstorm/react-diagrams';
-import { MetaGraph } from "../models/MetaGraph";
+import { Position } from "../models/Position";
 export declare class MetaNodeModel extends NodeModel {
     constructor(options?: {});
     getGraphPath(): string[];
+    getLocalPosition(): Position;
+    isInsideParent(parent: MetaNodeModel | undefined): boolean;
     private calculateLocalPosition;
-    getContainerBoundingBox(metaGraph: MetaNodeModel[]): any;
-    updateLocalPosition(metaGraph: MetaGraph): void;
+    updateLocalPosition(parent: MetaNodeModel | undefined): void;
     setContainerBoundingBox(containerBoundingBox: {
         left: number;
         top: number;

@@ -1,3 +1,5 @@
+// TODO: Might be overlapping with react-diagrams bounding box
+
 export class BoundingBox {
     private _left: number
     private _top: number
