@@ -100,6 +100,7 @@ class MetaNodeModel extends NodeModel {
 }
 
 class MetaNode {
+  // TODO: Add private children attribute
   constructor(id, name, shape, position, parent, options) {
     this.parent = parent;
     this.position = position;
@@ -510,7 +511,7 @@ class UnknownParent extends Error {
 
 }
 
-// TODO: Potentially not needed. Use react-diagrams rectangle instead
+//TODO: Not needed. Use react-diagrams rectangle instead
 class BoundingBox {
   constructor(left, top, right, bottom) {
     this._left = left;
@@ -571,16 +572,16 @@ class BoundingBox {
 
 class Graph {
   constructor(metaNodeModel) {
-    this.root = metaNodeModel;
+    this.node = metaNodeModel;
     this.children = new Map();
   }
 
   getID() {
-    return this.root.getID();
+    return this.node.getID();
   }
 
   getNode() {
-    return this.root;
+    return this.node;
   }
 
   getChild(id) {
@@ -607,11 +608,11 @@ class Graph {
 
   dfs(id) {
     if (this.getID() == id) {
-      return this.root;
+      return this.node;
     }
 
-    for (let root of Array.from(this.children.values())) {
-      const found = root.dfs(id);
+    for (let node of Array.from(this.children.values())) {
+      const found = node.dfs(id);
 
       if (found) {
         return found;
@@ -622,10 +623,13 @@ class Graph {
   }
 
   getContainerBoundingBox() {
+    // TODO: Refactor to use this.node.getBoundingBox()
     let width = this.getNode().width;
     let height = this.getNode().height;
     let x = this.getNode().getX();
     let y = this.getNode().getY();
+    console.log(x, y, x + width, y + height);
+    console.log(this.node.getBoundingBox());
     let left = x - width / 2;
     let right = x + width / 2;
     let top = y + height / 2;
@@ -651,7 +655,9 @@ class Graph {
       }
     }
 
-    return new BoundingBox(left, top, right, bottom);
+    const bb = new BoundingBox(left, top, right, bottom); // console.log(bb)
+
+    return bb;
   }
 
 }
@@ -763,8 +769,12 @@ class MetaGraph {
   }
 
   handleNodePositionChanged(metaNodeModel) {
-    // TODO: Update node parent -> update node graph path, bounding boxes of parents, local position
-    this.updateChildrenPosition(metaNodeModel);
+    // TODO: Update node parent (add or remove parent)
+    //  update node graph path,
+    //  bounding boxes of parents
+    // Update children position (children should move the same delta as node)
+    this.updateChildrenPosition(metaNodeModel); //  Update local position / relative position to the parent
+
     this.updateNodeLocalPosition(metaNodeModel);
   }
 
@@ -838,11 +848,12 @@ const MetaDiagram = ({
   .registerFactory(new MetaNodeFactory(componentsMap.nodes));
   engine.getLinkFactories() // @ts-ignore
   .registerFactory(new MetaLinkFactory(componentsMap.links));
-  const metaGraph = generateMetaGraph(metaNodes);
+  const metaGraph = generateMetaGraph(metaNodes); // TODO: Internally add children to metaNode
 
   const repaintCanvas = event => {
     const node = event.entity;
-    metaGraph.handleNodePositionChanged(node);
+    metaGraph.handleNodePositionChanged(node); // TODO: We might not need the full canvas to be repainted
+
     engine.repaintCanvas();
   }; // set up the diagram model
 
@@ -854,11 +865,13 @@ const MetaDiagram = ({
 
   model.addAll(...nodes, ...links); // load model into engine
 
-  engine.setModel(model);
+  engine.setModel(model); // TODO: Update metagraph on prop changes
+  // We can start by generating a completely new graph
+  // Later on we can optimize to detect what changed
+
   useEffect(() => {
     // @ts-ignore
-    metaGraph.updateNodesContainerBoundingBoxes(model.getNodes(), metaGraph); // TODO: Update bounding box on node adding/removing
-    // model.registerListener({nodesUpdated: (event => metaGraph.updateNodesContainerBoundingBoxes([event.node], metaGraph))})
+    metaGraph.updateNodesContainerBoundingBoxes(model.getNodes(), metaGraph);
   }, []);
   const containerClassName = wrapperClassName ? wrapperClassName : classes.container;
   return createElement(ThemeProvider, {

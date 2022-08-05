@@ -64,10 +64,12 @@ const MetaDiagram = ({
     .registerFactory(new MetaLinkFactory(componentsMap.links));
 
   const metaGraph = generateMetaGraph(metaNodes)
+  // TODO: Internally add children to metaNode
 
   const repaintCanvas = (event: any) => {
     const node = event.entity
     metaGraph.handleNodePositionChanged(node)
+    // TODO: We might not need the full canvas to be repainted
     engine.repaintCanvas();
   }
 
@@ -82,17 +84,20 @@ const MetaDiagram = ({
   const links = metaLinks
     .map(ml => getLinkModel(ml, metaGraph))
     .filter(mlm => mlm !== undefined);
+
   // @ts-ignore
   model.addAll(...nodes, ...links);
 
   // load model into engine
   engine.setModel(model);
 
+  // TODO: Update metagraph on prop changes
+  // We can start by generating a completely new graph
+  // Later on we can optimize to detect what changed
+
   useEffect(() => {
     // @ts-ignore
     metaGraph.updateNodesContainerBoundingBoxes(model.getNodes(), metaGraph)
-    // TODO: Update bounding box on node adding/removing
-    // model.registerListener({nodesUpdated: (event => metaGraph.updateNodesContainerBoundingBoxes([event.node], metaGraph))})
   }, [])
 
 

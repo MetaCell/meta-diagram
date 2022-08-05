@@ -6,6 +6,7 @@ export class MetaNode {
   private readonly position: Position;
   private readonly options: Map<string, any>;
 
+  // TODO: Add private children attribute
   constructor(
     id: string,
     name: string,

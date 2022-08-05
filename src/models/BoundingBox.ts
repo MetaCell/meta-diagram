@@ -1,4 +1,4 @@
-// TODO: Potentially not needed. Use react-diagrams rectangle instead
+//TODO: Not needed. Use react-diagrams rectangle instead
 
 
 export class BoundingBox {

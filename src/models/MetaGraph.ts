@@ -3,20 +3,20 @@ import { UnknownParent } from "./Exceptions";
 import {BoundingBox} from "./BoundingBox";
 
 class Graph {
-    private readonly root: MetaNodeModel;
+    private readonly node: MetaNodeModel;
     private readonly children: Map<string, Graph>;
 
     constructor(metaNodeModel: MetaNodeModel) {
-        this.root = metaNodeModel;
+        this.node = metaNodeModel;
         this.children = new Map<string, Graph>()
     }
 
     getID() : string{
-        return this.root.getID()
+        return this.node.getID()
     }
 
     getNode() : MetaNodeModel{
-        return this.root
+        return this.node
     }
 
     getChild(id:string) {
@@ -41,10 +41,10 @@ class Graph {
 
     dfs(id: string): MetaNodeModel | boolean {
         if(this.getID() == id){
-            return this.root
+            return this.node
         }
-        for (let root of Array.from(this.children.values())) {
-            const found = root.dfs(id)
+        for (let node of Array.from(this.children.values())) {
+            const found = node.dfs(id)
             if(found){
                 return found
             }
@@ -53,6 +53,7 @@ class Graph {
     }
 
     getContainerBoundingBox() : BoundingBox {
+        // TODO: Refactor to use this.node.getBoundingBox()
         let width = this.getNode().width
         let height = this.getNode().height
         let x = this.getNode().getX()
@@ -73,7 +74,9 @@ class Graph {
                 bottom = childBox.bottom
             }
         }
-        return new BoundingBox(left, top, right, bottom)
+        const bb = new BoundingBox(left, top, right, bottom)
+        // console.log(bb)
+        return bb
     }
 
 }
@@ -175,8 +178,13 @@ export class MetaGraph {
     }
 
     handleNodePositionChanged(metaNodeModel: MetaNodeModel){
-        // TODO: Update node parent -> update node graph path, bounding boxes of parents, local position
+        // TODO: Update node parent (add or remove parent)
+                //  update node graph path,
+        //  bounding boxes of parents
+
+        // Update children position (children should move the same delta as node)
         this.updateChildrenPosition(metaNodeModel)
+        //  Update local position / relative position to the parent
         this.updateNodeLocalPosition(metaNodeModel)
     }
 

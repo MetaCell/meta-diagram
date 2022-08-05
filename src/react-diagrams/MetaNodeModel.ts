@@ -58,4 +58,5 @@ export class MetaNodeModel extends NodeModel {
         this.options['containerBoundingBox'] =  containerBoundingBox
     }
 
+
 }
