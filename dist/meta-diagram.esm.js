@@ -100,7 +100,6 @@ class MetaNodeModel extends NodeModel {
 }
 
 class MetaNode {
-  // TODO: Add private children attribute
   constructor(id, name, shape, position, parent, options) {
     this.parent = parent;
     this.position = position;
@@ -628,8 +627,6 @@ class Graph {
     let height = this.getNode().height;
     let x = this.getNode().getX();
     let y = this.getNode().getY();
-    console.log(x, y, x + width, y + height);
-    console.log(this.node.getBoundingBox());
     let left = x - width / 2;
     let right = x + width / 2;
     let top = y + height / 2;
@@ -848,11 +845,12 @@ const MetaDiagram = ({
   .registerFactory(new MetaNodeFactory(componentsMap.nodes));
   engine.getLinkFactories() // @ts-ignore
   .registerFactory(new MetaLinkFactory(componentsMap.links));
-  const metaGraph = generateMetaGraph(metaNodes); // TODO: Internally add children to metaNode
+  const metaGraph = generateMetaGraph(metaNodes);
 
   const repaintCanvas = event => {
     const node = event.entity;
-    metaGraph.handleNodePositionChanged(node); // TODO: We might not need the full canvas to be repainted
+    metaGraph.handleNodePositionChanged(node); // TODO: Add call application OnDiagramChange callback
+    // TODO: We might not need the full canvas to be repainted
 
     engine.repaintCanvas();
   }; // set up the diagram model

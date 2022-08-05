@@ -64,11 +64,11 @@ const MetaDiagram = ({
     .registerFactory(new MetaLinkFactory(componentsMap.links));
 
   const metaGraph = generateMetaGraph(metaNodes)
-  // TODO: Internally add children to metaNode
 
   const repaintCanvas = (event: any) => {
     const node = event.entity
     metaGraph.handleNodePositionChanged(node)
+    // TODO: Add call application OnDiagramChange callback
     // TODO: We might not need the full canvas to be repainted
     engine.repaintCanvas();
   }
