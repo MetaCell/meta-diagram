@@ -5,14 +5,15 @@ import {MetaNodeModel} from "../../../dist";
 import {Box, Typography} from "@mui/material";
 import NodeSelection from "./NodeSelection";
 import InputOutputNode from "./InputOutputNode";
+import vars from "../assets/styles/variables";
 
 const styles = {
   root: {
     textColor: {
-      color: '#4579EE',
+      color: vars.functionTextColor
     },
     codeColor: {
-      color: '#ED745D'
+      color: vars.functionCodeColor
     }
   }
 };
