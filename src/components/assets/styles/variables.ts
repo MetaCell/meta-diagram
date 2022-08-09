@@ -52,6 +52,9 @@ const vars = {
   nodeButtonTextColor: 'rgba(255, 255, 255, 0.8)',
   nodeButtonLineColor: 'rgba(255, 255, 255, 0.2)',
   nodeTextColor: '#3C3C43',
+  nodeWrapperBg: '#FFFFFF',
+  nodeLabelColor: '#76787D',
+  nodeBlockBg: 'rgba(255, 255, 255, 0.6)',
   ...nodeGreen,
 };
 

@@ -36,5 +36,8 @@ declare const vars: {
     nodeButtonTextColor: string;
     nodeButtonLineColor: string;
     nodeTextColor: string;
+    nodeWrapperBg: string;
+    nodeLabelColor: string;
+    nodeBlockBg: string;
 };
 export default vars;
