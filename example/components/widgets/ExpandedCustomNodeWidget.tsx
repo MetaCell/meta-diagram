@@ -6,22 +6,24 @@ import {Box, Typography} from "@mui/material";
 import NodeSelection from "./NodeSelection";
 import InputOutputNode from "./InputOutputNode";
 
-export interface CustomNodeWidgetProps {
+const styles = {
+  root: {
+    textColor: {
+      color: '#4579EE',
+    },
+    codeColor: {
+      color: '#ED745D'
+    }
+  }
+};
+
+export interface ExpandedCustomNodeWidgetProps {
     model: MetaNodeModel;
     engine: DiagramEngine;
     classes: any;
 }
 
-const styles = () => ({
-  textColor: {
-    color: '#4579EE',
-  },
-  codeColor: {
-    color: '#ED745D'
-  }
-});
-
-export class CustomNodeWidget extends React.Component<CustomNodeWidgetProps> {
+export class ExpandedCustomNodeWidget extends React.Component<ExpandedCustomNodeWidgetProps> {
     render() {
         const { classes } = this.props;
         const functionValues = (label: string, value: string) => (
@@ -64,9 +66,9 @@ export class CustomNodeWidget extends React.Component<CustomNodeWidgetProps> {
               <Box className="block">
                 <Typography component="label">Function</Typography>
                 <Typography className="function">
-                  <Typography component="strong" className={classes.textColor} >
+                  <Typography component="strong" className={classes?.textColor} >
                     function
-                  </Typography>=pnl.<Typography className={classes.codeColor} component="strong">Logistic</Typography>(gain=1.0, bias=-4)</Typography>
+                  </Typography>=pnl.<Typography className={classes?.codeColor} component="strong">Logistic</Typography>(gain=1.0, bias=-4)</Typography>
               </Box>
             </Box>
 
@@ -82,4 +84,4 @@ export class CustomNodeWidget extends React.Component<CustomNodeWidgetProps> {
 }
 
 // @ts-ignore
-export default withStyles(styles)(CustomNodeWidget);
+export default withStyles(styles)(ExpandedCustomNodeWidget);

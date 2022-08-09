@@ -225,7 +225,7 @@ const applicationTheme = (params: ThemeVars) => {
             width: 1rem;
             height: 1rem;
             border: solid 0.0625rem ${nodeGreenTextColor};
-            background: ${nodeGreenBackgroundColor}
+            background: ${nodeGreenBackgroundColor};
             border-radius: 50%;
             display: flex;
             align-items: center;
