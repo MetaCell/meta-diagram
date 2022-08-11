@@ -20,4 +20,16 @@ export class MetaNode {
     options.set('position', position);
     this.options = new MetaOptions(id, name, shape, variant, options);
   }
+
+  getId(): string {
+    return this.options.getId();
+  }
+
+  getName(): string {
+    return this.options.getName();
+  }
+
+  getShape(): string {
+    return this.options.getShape();
+  }
 }

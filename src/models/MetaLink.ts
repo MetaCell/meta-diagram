@@ -44,4 +44,16 @@ export class MetaLink implements ILink {
   getTargetPortId(): string {
     return this.targetPortId;
   }
+
+  getId(): string {
+    return this.options.getId();
+  }
+
+  getName(): string {
+    return this.options.getName();
+  }
+
+  getShape(): string {
+    return this.options.getShape();
+  }
 }
