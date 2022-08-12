@@ -1,6 +1,6 @@
 import * as React from "react";
 import {DiagramEngine} from "@projectstorm/react-diagrams";
-import {MetaNodeModel} from "../../../.";
+import {MetaNodeModel} from "../../../dist";
 import {Box, Typography} from "@mui/material";
 import NodeSelection from "./NodeSelection";
 

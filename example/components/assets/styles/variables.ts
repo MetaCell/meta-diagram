@@ -23,6 +23,8 @@ const vars = {
   ...nodeRed,
   ...nodeBlue,
   ...nodeGray,
+  functionTextColor: '#4579EE',
+  functionCodeColor: '#ED745D',
 };
 
 export default vars;
