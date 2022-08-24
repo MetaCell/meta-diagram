@@ -12,7 +12,7 @@ export class MetaNode {
     shape: string,
     position: Position,
     variant: string,
-    ports: Map<string, MetaPort>,
+    ports: Array<MetaPort>,
     options: Map<string, any>
   ) {
     if (options === undefined) {

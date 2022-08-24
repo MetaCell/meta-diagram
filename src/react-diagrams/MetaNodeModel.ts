@@ -1,17 +1,16 @@
-import { PortTypes, ReactDiagramMetaTypes } from '../constants';
-import { DefaultPortModel, NodeModel, PortModel } from '@projectstorm/react-diagrams';
 import { MetaPort } from '../models/MetaPort';
+import { PortTypes, ReactDiagramMetaTypes } from '../constants';
+import { DefaultPortModel, NodeModel } from '@projectstorm/react-diagrams';
 
 export class MetaNodeModel extends NodeModel {
-  constructor(options = { ports: Map<string, PortModel> }) {
+  constructor(options = {}) {
     super({
       ...options,
       type: ReactDiagramMetaTypes.META_NODE,
     });
 
-    // ts-ignore
-    const values = Array.from(options.ports.values());
-    values.forEach((port: PortModel) => {
+    // @ts-ignore
+    options?.ports?.forEach((port: MetaPort) => {
       switch (port.getType()) {
         case PortTypes.INPUT_PORT:
           this.addPort(

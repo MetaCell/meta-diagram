@@ -4,7 +4,7 @@ export enum ReactDiagramMetaTypes {
 };
 
 export enum PortTypes {
-  INPUT_PORT = 'inputPort',
-  OUTPUT_PORT = 'outputPort',
-  PARAMETER_PORT = 'parameterPort'
+  INPUT_PORT = 'InputPort',
+  OUTPUT_PORT = 'OutputPort',
+  PARAMETER_PORT = 'ParameterPort'
 };
