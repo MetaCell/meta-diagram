@@ -6,6 +6,7 @@ import { MetaPort } from './models/MetaPort';
 import CssBaseline from '@mui/material/CssBaseline';
 import { getLinkModel } from './helpers/linksHelper';
 import { ComponentsMap } from './models/ComponentsMap';
+import { PortWidget } from '@projectstorm/react-diagrams';
 import { MetaNodeModel } from './react-diagrams/MetaNodeModel';
 import { CanvasWidget } from '@projectstorm/react-canvas-core';
 import { MetaNodeFactory } from './react-diagrams/MetaNodeFactory';
@@ -97,6 +98,7 @@ const MetaDiagram = ({
 
 export default MetaDiagram;
 export { MetaNode, MetaLink, MetaPort, MetaNodeModel, ComponentsMap };
+export { PortWidget };
 export { MetaLinkModel } from './react-diagrams/MetaLinkModel';
 export { Position } from './models/Position';
 export { PortTypes } from './constants';
