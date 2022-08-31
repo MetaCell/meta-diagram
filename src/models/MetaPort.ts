@@ -1,7 +1,6 @@
 import { Position } from './Position';
 import { PortTypes } from '../constants';
 
-
 export class MetaPort {
     id: string;
     name: string;

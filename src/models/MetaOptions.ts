@@ -30,11 +30,11 @@ export class MetaOptions implements IShape, IId {
     return this.options.get('shape');
   }
 
-  setNew(key: string, item: any) {
+  setNew(key: string, item: any): void {
     this.options.set(key, item);
   }
 
-  getKey(key:string) {
+  getKey(key: string): any {
     return this.options.get(key);
   }
 }

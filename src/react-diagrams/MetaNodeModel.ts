@@ -32,7 +32,7 @@ export class MetaNodeModel extends NodeModel {
           console.log('parameter type found!');
           break;
         default:
-          console.error('Port type')
+          console.error('Port type');
       }
     });
   }
