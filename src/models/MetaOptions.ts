@@ -22,7 +22,19 @@ export class MetaOptions implements IShape, IId {
     return this.options.get('id');
   }
 
+  getName(): string {
+    return this.options.get('name');
+  }
+
   getShape(): string {
     return this.options.get('shape');
+  }
+
+  setNew(key: string, item: any): void {
+    this.options.set(key, item);
+  }
+
+  getKey(key: string): any {
+    return this.options.get(key);
   }
 }
