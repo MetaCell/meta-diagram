@@ -1,6 +1,7 @@
-import {DefaultPortModel, NodeModel} from '@projectstorm/react-diagrams';
-import {ReactDiagramMetaTypes} from '../constants';
-import {Position} from "../models/Position";
+import { Position } from "../models/Position";
+import { MetaPort } from '../models/MetaPort';
+import { PortTypes, ReactDiagramMetaTypes } from '../constants';
+import { DefaultPortModel, NodeModel } from '@projectstorm/react-diagrams';
 
 export class MetaNodeModel extends NodeModel {
     constructor(options = {}) {
@@ -9,22 +10,33 @@ export class MetaNodeModel extends NodeModel {
             type: ReactDiagramMetaTypes.META_NODE,
         });
 
-        // set up an in and out port
-
-        this.addPort(
-            new DefaultPortModel({
-                in: true,
-                name: 'in',
-            })
-        );
-        this.addPort(
-            new DefaultPortModel({
-                in: false,
-                name: 'out',
-            })
-        );
+        // @ts-ignore
+        options?.ports?.forEach((port: MetaPort) => {
+          switch (port.getType()) {
+            case PortTypes.INPUT_PORT:
+              this.addPort(
+                new DefaultPortModel({
+                  in: true,
+                  name: port.getName(),
+                })
+              );
+              break;
+            case PortTypes.OUTPUT_PORT:
+              this.addPort(
+                new DefaultPortModel({
+                  in: false,
+                  name: port.getName(),
+                })
+              );
+              break;
+            case PortTypes.PARAMETER_PORT:
+              console.log('parameter type found!');
+              break;
+            default:
+              console.error('Port type');
+          }
+        });
     }
-
 
     getGraphPath(): string[]{
         // @ts-ignore
@@ -32,7 +44,6 @@ export class MetaNodeModel extends NodeModel {
     }
 
     getLocalPosition(): Position{
-
         // @ts-ignore
         return this.getOptions()['localPosition']
     }
@@ -57,6 +68,4 @@ export class MetaNodeModel extends NodeModel {
         // @ts-ignore
         this.options['containerBoundingBox'] =  containerBoundingBox
     }
-
-
 }

@@ -1,21 +1,23 @@
 import * as React from 'react';
+import Sidebar from './components/Sidebar';
 import { MetaNode } from './models/MetaNode';
 import { MetaLink } from './models/MetaLink';
+import { MetaPort } from './models/MetaPort';
+import CssBaseline from '@mui/material/CssBaseline';
+import { getLinkModel } from './helpers/linksHelper';
 import { ComponentsMap } from './models/ComponentsMap';
-import createEngine, { DiagramModel } from '@projectstorm/react-diagrams';
+import { PortWidget } from '@projectstorm/react-diagrams';
+import { MetaNodeModel } from './react-diagrams/MetaNodeModel';
+import { CanvasWidget } from '@projectstorm/react-canvas-core';
 import { MetaNodeFactory } from './react-diagrams/MetaNodeFactory';
 import { MetaLinkFactory } from './react-diagrams/MetaLinkFactory';
-import { CanvasWidget } from '@projectstorm/react-canvas-core';
-import { MetaNodeModel } from './react-diagrams/MetaNodeModel';
-import { getLinkModel } from './helpers/linksHelper';
-import { makeStyles } from '@mui/styles';
-import Sidebar from './components/Sidebar';
+import createEngine, { DiagramModel } from '@projectstorm/react-diagrams';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import theme from './theme';
+import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/material';
 import {generateMetaGraph, registerPositionListener} from "./helpers/nodesHelper";
 import {useEffect} from "react";
+import theme from './theme';
 
 const useStyles = makeStyles(_ => ({
   container: {
@@ -111,7 +113,7 @@ const MetaDiagram = ({
       <Box className={containerClassName}>
         <Sidebar />
         <CanvasWidget
-          className={`${classes.canvasContainer} ${metaTheme?.canvasClassName}`}
+          className={`canvas-widget ${metaTheme?.canvasClassName}`}
           engine={engine}
         />
       </Box>
@@ -120,6 +122,8 @@ const MetaDiagram = ({
 };
 
 export default MetaDiagram;
-export { MetaNode, MetaLink, MetaNodeModel, ComponentsMap };
+export { MetaNode, MetaLink, MetaPort, MetaNodeModel, ComponentsMap };
+export { PortWidget };
 export { MetaLinkModel } from './react-diagrams/MetaLinkModel';
 export { Position } from './models/Position';
+export { PortTypes } from './constants';

@@ -16,8 +16,12 @@ export class MetaLink implements ILink {
     sourcePortId: string,
     targetId: string,
     targetPortId: string,
+    variant: string,
     options: Map<string, any>
   ) {
+    if (options === undefined) {
+      options = new Map<string, any>();
+    }
     this.sourceId = sourceId;
     this.sourcePortId = sourcePortId;
     this.targetId = targetId;
@@ -26,6 +30,7 @@ export class MetaLink implements ILink {
     this.options.set('id', id);
     this.options.set('name', name);
     this.options.set('shape', shape);
+    this.options.set('varian', variant);
   }
 
   getSourceId(): string {
@@ -44,7 +49,19 @@ export class MetaLink implements ILink {
     return this.targetPortId;
   }
 
+  getId(): string {
+    return this.options.get('id');
+  }
+
+  getName(): string {
+    return this.options.get('name');
+  }
+
+  getShape(): string {
+    return this.options.get('shape');
+  }
+
   toModel(): MetaLinkModel {
-    return new MetaLinkModel(Object.fromEntries(this.options))
+    return new MetaLinkModel(Object.fromEntries(this.options));
   }
 }

@@ -1,4 +1,5 @@
 import vars from './components/assets/styles/variables';
+import nodeGreen from './components/assets/svg/node/green.svg';
 
 type ThemeVars = {
   [key: string]: any;
@@ -15,6 +16,22 @@ const applicationTheme = (params: ThemeVars) => {
     listSelectedTextColor,
     listBoxShadow,
     listBorderColor,
+    sidebarBg,
+    sidebarShadow,
+    canvasBg,
+    showPropertiesButtonBg,
+    nodeBorderColor,
+    nodePointerBg,
+    nodeButtonTextColor,
+    nodeButtonLineColor,
+    nodeGreenBackgroundColor,
+    nodeGreenTextColor,
+    nodeGreenBorderColor,
+    nodeGreenBoxShadow,
+    nodeTextColor,
+    nodeWrapperBg,
+    nodeLabelColor,
+    nodeBlockBg,
   } = params;
   return {
     components: {
@@ -28,6 +45,273 @@ const applicationTheme = (params: ThemeVars) => {
             background-color:${primaryBg};
             font-family: ${fontFamily};
             font-size: 1rem;
+          }
+          .sidebar {
+            z-index: 5;
+            width: 4rem;
+            background: ${sidebarBg};
+            box-shadow: ${sidebarShadow};
+            border-radius: 2rem;
+            position: fixed;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+
+          .sidebar.right {
+            left: auto;
+            right: 1rem;
+          }
+
+          .sidebar .MuiList-root {
+            padding: 0.75rem
+          }
+
+          .canvas-widget {
+            height: 100%;
+            width: 100%;
+            background-color: ${canvasBg};
+          }
+
+          .primary-node {
+            border: solid 0.0625rem ${nodeGreenBorderColor};
+            border-radius: 50%;
+            box-shadow: ${nodeGreenBoxShadow};
+            background: ${nodeGreenBackgroundColor};
+            position: relative;
+            width: 10rem;
+            height: 10rem;
+          }
+
+          .primary-node .primary-node_header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            flex-direction: column;
+          }
+
+          .primary-node .icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin: 0 auto 0.25rem;
+            background: url(data:image/svg+xml;base64,${new Buffer(
+              nodeGreen
+            ).toString('base64')});
+          }
+
+          .primary-node .primary-node_header p {
+            color: ${nodeGreenTextColor};
+          }
+
+          .primary-node p {
+            font-weight: 500;
+            color: ${nodeTextColor};
+            font-size: 0.8125rem;
+            line-height: 1.25rem;
+            letter-spacing: -0.005rem;
+            margin: 0;
+          }
+
+          .node-button.MuiButton-root {
+            background-color: ${showPropertiesButtonBg};
+            border-radius: 1.125rem;
+            font-weight: 600;
+            font-size: 0.8125rem;
+            display: flex;
+            line-height: 1rem;
+            letter-spacing: -0.025625rem;
+            color: ${nodeButtonTextColor};
+            margin: 0 !important;
+            width: 9.625rem;
+            padding: 0;
+            height: 2.25rem;
+            position: absolute;
+            top: -2.625rem;
+            font-family: ${fontFamily};
+            text-transform: none;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+
+          .node-button.MuiButton-root:hover {
+            background-color: ${showPropertiesButtonBg};
+          }
+
+          .node-button .icon {
+            width: 1rem;
+            border: solid 0.0625rem;
+            height: 1rem;
+            border-radius: 50%;
+            margin: 0 1.25rem 0 0;
+            position: relative;
+          }
+
+          .node-button .icon:after {
+            content: "";
+            height: 1.75rem;
+            width: 0.0625rem;
+            display: block;
+            position: absolute;
+            right: -0.625rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: ${nodeButtonLineColor};
+          }
+
+          .primary-node .node-button .icon {
+            background: ${nodeGreenBackgroundColor};
+            border-color: ${nodeGreenBorderColor}
+          }
+
+          .nodes {
+            width: 10rem;
+            height: 10rem;
+            border: 0.09375rem solid ${nodeBorderColor};
+            z-index: 99999;
+            position: absolute;
+          }
+
+          .node .pointer {
+            width: 0.625rem;
+            height: 0.625rem;
+            background: ${nodePointerBg};
+            border: 0.09375rem solid ${nodeBorderColor};
+            border-radius: 0.125rem;
+            position: absolute;
+          }
+
+          .primary-node.rounded {
+            border-radius: 0.875rem;
+            padding: 0.5rem;
+            width: 18rem;
+            height: auto;
+          }
+
+          .primary-node.rounded .nodes {
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+          }
+
+          .primary-node.rounded .primary-node_header {
+            height: 4.25rem;
+            margin-bottom: 0.25rem
+          }
+
+          .primary-node .block {
+            padding: 0.625rem 0.5rem;
+            background-color: ${nodeBlockBg};
+            display: flex;
+            align-items: center;
+          }
+
+          .primary-node .block:first-of-type {
+            border-top-left-radius: 0.625rem;
+            border-top-right-radius: 0.625rem;
+          }
+
+          .primary-node .block:last-child {
+            border-bottom-left-radius: 0.625rem;
+            border-bottom-right-radius: 0.625rem;
+          }
+
+          .primary-node .block:not(:last-child) {
+            margin-bottom: 0.0625rem;
+          }
+
+          .primary-node .block .disc {
+            width: 1rem;
+            height: 1rem;
+            border: solid 0.0625rem ${nodeGreenTextColor};
+            background: ${nodeGreenBackgroundColor};
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.5rem
+          }
+
+          .primary-node .block .disc:after {
+            content: '';
+            background: ${nodeGreenTextColor};
+            width: 0.375rem;
+            height: 0.375rem;
+            border-radius: 50%;
+          }
+
+          .primary-node .block.reverse {
+            justify-content: end;
+          }
+
+          .primary-node .block.reverse .disc {
+            order: 2;
+            margin-left: 0.5rem;
+            margin-right: 0;
+          }
+
+          .primary-node .block.reverse p {
+            order: 1
+          }
+
+          .primary-node .block-wrapper {
+            display: flex;
+            gap: 0 0.0625rem;
+            flex-wrap: wrap;
+          }
+
+          .primary-node .block-wrapper .block {
+            flex-direction: column;
+            align-items: flex-start;
+            background: ${nodeWrapperBg};
+            padding: 0.5rem;
+            width: calc((100% - 0.125rem) / 3);
+          }
+
+          .primary-node .block-wrapper .block .function.MuiTypography-root {
+            margin-top: 0.25rem;
+            word-break: break-all;
+            font-weight: 600;
+            font-family: 'Roboto Mono', monospace;
+          }
+
+          .primary-node .block-wrapper .block .function.MuiTypography-root strong {
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 600;
+          }
+
+          .primary-node .block-wrapper .block:first-of-type {
+            border-top-left-radius: 0.625rem;
+            border-top-right-radius: 0
+          }
+
+          .primary-node .block-wrapper .block:nth-of-type(3) {
+            border-top-right-radius: 0.625rem
+          }
+
+          .primary-node .block-wrapper .block:last-child {
+            width: 100%;
+            border-bottom-left-radius: 0.625rem;
+            border-bottom-right-radius: 0.625rem;
+          }
+
+          .primary-node .block-wrapper .block label {
+            display: block;
+            font-weight: 400;
+            font-size: 0.625rem;
+            line-height: 0.625rem;
+            letter-spacing: -0.005rem;
+            color: ${nodeLabelColor};
+            text-transform: uppercase;
+          }
+
+          .primary-node .seprator {
+            width: 0.125rem;
+            height: 1rem;
+            border-radius: 1.25rem;
+            margin: 0.25rem auto;
+            background: ${nodeGreenBorderColor};
           }
         `,
       },

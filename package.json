@@ -13,9 +13,12 @@
   "scripts": {
     "start": "tsdx watch --target node",
     "build": "tsdx build --target node",
+    "build:dev": "yarn run build && yarn run build:package",
+    "build:package": "cp package.json dist",
     "test": "tsdx test --passWithNoTests",
     "lint": "tsdx lint",
-    "prepare": "tsdx build"
+    "prepare": "tsdx build",
+    "publish": "yalc publish --push"
   },
   "peerDependencies": {
     "react": ">=16"
@@ -75,5 +78,13 @@
     "@projectstorm/react-diagrams": "^6.7.4",
     "assets": "^3.0.1",
     "rollup-plugin-svg": "^2.0.0"
+  },
+  "buildOptions": {
+    "emitEntryPoint": true,
+    "compile": {
+      "exclude": [
+        "node_modules"
+      ]
+    }
   }
 }

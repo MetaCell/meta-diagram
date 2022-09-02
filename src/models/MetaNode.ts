@@ -1,4 +1,5 @@
 import { Position } from './Position';
+import { MetaPort } from './MetaPort';
 import {MetaNodeModel} from "../react-diagrams/MetaNodeModel";
 
 export class MetaNode {
@@ -11,7 +12,9 @@ export class MetaNode {
     name: string,
     shape: string,
     position: Position,
+    variant: string,
     parent: MetaNode | undefined,
+    ports: Array<MetaPort>,
     options: Map<string, any>
   ) {
     this.parent = parent
@@ -20,10 +23,21 @@ export class MetaNode {
     this.options.set('id', id);
     this.options.set('name', name);
     this.options.set('shape', shape);
+    this.options.set('ports', ports);
+    this.options.set('variant', variant);
+    this.options.set('position', position);
   }
 
-  private getId() : string{
-    return this.options.get('id')
+  getId(): string {
+    return this.options.get('id');
+  }
+
+  getName(): string {
+    return this.options.get('name');
+  }
+
+  getShape(): string {
+    return this.options.get('shape');
   }
 
   private getGraphPath() : string[] {
@@ -40,7 +54,7 @@ export class MetaNode {
   }
 
   getDepth() : number {
-    return this.parent ? this.parent.getDepth()+1 : 0
+    return this.parent ? this.parent.getDepth() + 1 : 0
   }
 
   toModel() : MetaNodeModel {
