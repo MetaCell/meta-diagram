@@ -38,6 +38,11 @@ export class MetaNodeModel extends NodeModel {
         });
     }
 
+    getId(): string[]{
+      // @ts-ignore
+      return [...this.getOptions()['id']];
+    }
+
     getGraphPath(): string[]{
         // @ts-ignore
         return [...this.getOptions()['graphPath']]
@@ -67,5 +72,11 @@ export class MetaNodeModel extends NodeModel {
     setContainerBoundingBox(containerBoundingBox: {left: number, top: number, right: number, bottom: number}): void {
         // @ts-ignore
         this.options['containerBoundingBox'] =  containerBoundingBox
+    }
+
+    setOption(label: string, newValue: any) {
+      // @ts-ignore
+      this.options[label] = newValue;
+      this.fireEvent({node: this, function: 'nodeUpdated'}, 'nodeUpdated');
     }
 }

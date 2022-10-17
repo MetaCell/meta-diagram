@@ -75,7 +75,6 @@ class Graph {
             }
         }
         const bb = new BoundingBox(left, top, right, bottom)
-        // console.log(bb)
         return bb
     }
 
@@ -138,7 +137,7 @@ export class MetaGraph {
     getParent(node : MetaNodeModel): MetaNodeModel | undefined {
         const path = node.getGraphPath()
         if (path.length == 1) {
-           return undefined
+            return undefined
         } else {
             path.pop() // removes own id from path
             const parentGraph = this.findNodeGraph(path)
@@ -179,7 +178,7 @@ export class MetaGraph {
 
     handleNodePositionChanged(metaNodeModel: MetaNodeModel){
         // TODO: Update node parent (add or remove parent)
-                //  update node graph path,
+        //  update node graph path,
         //  bounding boxes of parents
 
         // Update children position (children should move the same delta as node)
@@ -212,4 +211,3 @@ export class MetaGraph {
         nodes.forEach(n => n.setContainerBoundingBox(this.getNodeContainerBoundingBox(n)))
     }
 }
-
