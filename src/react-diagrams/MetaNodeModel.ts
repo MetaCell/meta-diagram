@@ -1,6 +1,6 @@
 import { Position } from "../models/Position";
 import { MetaPort } from '../models/MetaPort';
-import { PortTypes, ReactDiagramMetaTypes } from '../constants';
+import { PortTypes, ReactDiagramMetaTypes, CallbackTypes } from '../constants';
 import { DefaultPortModel, NodeModel } from '@projectstorm/react-diagrams';
 
 export class MetaNodeModel extends NodeModel {
@@ -38,19 +38,33 @@ export class MetaNodeModel extends NodeModel {
         });
     }
 
-    getId(): string[]{
+    setOption(label: string, newValue: any, triggerUpdate?: boolean|undefined) {
       // @ts-ignore
-      return [...this.getOptions()['id']];
+      this.options[label] = newValue;
+      if (triggerUpdate) {
+        this.flagUpdate(CallbackTypes.OPTIONS_UPDATED);
+      }
+    }
+
+    getOption(label: string): any {
+      // @ts-ignore
+      return this.getOptions()[label]
+    }
+
+    flagUpdate(updateType: CallbackTypes) {
+      this.fireEvent({node: this, function: updateType}, updateType);
+    }
+
+    getId(): string[]{
+      return [...this.getOption('id')]
     }
 
     getGraphPath(): string[]{
-        // @ts-ignore
-        return [...this.getOptions()['graphPath']]
+      return [...this.getOption('graphPath')]
     }
 
     getLocalPosition(): Position{
-        // @ts-ignore
-        return this.getOptions()['localPosition']
+      return this.getOption('localPosition');
     }
 
     // TODO: Change to consider mouse position; Currently considering top left corner
@@ -65,18 +79,15 @@ export class MetaNodeModel extends NodeModel {
     }
 
     updateLocalPosition(parent: MetaNodeModel | undefined): void {
-        // @ts-ignore
-        this.options['localPosition'] =  this.calculateLocalPosition(parent)
+      this.setOption('localPosition', this.calculateLocalPosition(parent))
     }
 
     setContainerBoundingBox(containerBoundingBox: {left: number, top: number, right: number, bottom: number}): void {
-        // @ts-ignore
-        this.options['containerBoundingBox'] =  containerBoundingBox
+        this.setOption('containerBoundingBox', containerBoundingBox);
     }
 
-    setOption(label: string, newValue: any) {
-      // @ts-ignore
-      this.options[label] = newValue;
-      this.fireEvent({node: this, function: 'nodeUpdated'}, 'nodeUpdated');
+    updateSize(width: number, height: number) {
+      this.updateDimensions({width, height});
+      this.flagUpdate(CallbackTypes.NODE_DIMENSION_UPDATED);
     }
 }

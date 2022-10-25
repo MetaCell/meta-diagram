@@ -77,7 +77,6 @@ class Graph {
         const bb = new BoundingBox(left, top, right, bottom)
         return bb
     }
-
 }
 
 

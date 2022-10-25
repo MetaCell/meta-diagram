@@ -10,9 +10,11 @@ export enum PortTypes {
 }
 
 export enum CallbackTypes {
+  NODE_RESIZED = 'nodeResized',
   OPTIONS_UPDATED = 'nodeUpdated',
   POSITION_CHANGED = 'positionChanged',
   SELECTION_CHANGED = 'selectionChanged',
+  NODE_DIMENSION_UPDATED = 'nodeDimensionUpdated',
 }
 
 export enum EventTypes {
