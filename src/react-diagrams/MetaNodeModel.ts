@@ -2,13 +2,30 @@ import { Position } from "../models/Position";
 import { MetaPort } from '../models/MetaPort';
 import { PortTypes, ReactDiagramMetaTypes, CallbackTypes } from '../constants';
 import { DefaultPortModel, NodeModel } from '@projectstorm/react-diagrams';
+import { BoundingBox } from "../models/BoundingBox";
 
 export class MetaNodeModel extends NodeModel {
+    private boundingBox: BoundingBox;
     constructor(options = {}) {
         super({
             ...options,
             type: ReactDiagramMetaTypes.META_NODE,
         });
+
+        // @ts-ignore
+        if (options.width && options.height) {
+          // @ts-ignore
+          this.width = options.width;
+          // @ts-ignore
+          this.height = options.height;
+        }
+
+        this.boundingBox = new BoundingBox(
+          this.getX(),
+          this.getY(),
+          this.getX() + this.width,
+          this.getY() + this.height,
+        )
 
         // @ts-ignore
         options?.ports?.forEach((port: MetaPort) => {
@@ -83,11 +100,20 @@ export class MetaNodeModel extends NodeModel {
     }
 
     setContainerBoundingBox(containerBoundingBox: {left: number, top: number, right: number, bottom: number}): void {
-        this.setOption('containerBoundingBox', containerBoundingBox);
+      this.boundingBox = new BoundingBox(
+        containerBoundingBox.left,
+        containerBoundingBox.top,
+        containerBoundingBox.right,
+        containerBoundingBox.bottom
+      );
     }
 
     updateSize(width: number, height: number) {
       this.updateDimensions({width, height});
-      this.flagUpdate(CallbackTypes.NODE_DIMENSION_UPDATED);
+      this.flagUpdate(CallbackTypes.NODE_RESIZED);
+    }
+
+    getNodeBoundingBox(): BoundingBox {
+      return this.boundingBox;
     }
 }

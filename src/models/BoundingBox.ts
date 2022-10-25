@@ -1,5 +1,4 @@
-//TODO: Not needed. Use react-diagrams rectangle instead
-
+import { Point } from "@projectstorm/geometry";
 
 export class BoundingBox {
     private _left: number
@@ -13,7 +12,6 @@ export class BoundingBox {
         this._right = right;
         this._bottom = bottom;
     }
-
 
     // @ts-ignore
     get left(): number {
@@ -59,5 +57,18 @@ export class BoundingBox {
 
     getHeight() : number {
         return this._top - this._bottom
+    }
+
+    containsPoint(points?: Point, x?: number, y?: number): boolean {
+        if (points) {
+            if (points.x >= this._left && points.x <= this._right && points.y >= this._top && points.x <= this._bottom) {
+                return true;
+            }
+        } else if (x && y) {
+            if (x >= this._left && x <= this._right && y >= this._top && x <= this._bottom) {
+                return true;
+            }
+        }
+        return false;
     }
 }
