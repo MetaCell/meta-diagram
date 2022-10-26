@@ -12,12 +12,13 @@ const applicationTheme = (params: ThemeVars) => {
     chipTextColor,
     chipBgColor,
     textWhite,
-    listItemActiveBg,
     listSelectedTextColor,
     listBoxShadow,
     listBorderColor,
     sidebarBg,
     sidebarShadow,
+    sidebarBorder,
+    subBarBg,
     canvasBg,
     showPropertiesButtonBg,
     nodeBorderColor,
@@ -48,23 +49,40 @@ const applicationTheme = (params: ThemeVars) => {
           }
           .sidebar {
             z-index: 5;
-            width: 4rem;
+            width: 3rem;
             background: ${sidebarBg};
             box-shadow: ${sidebarShadow};
-            border-radius: 2rem;
+            border: 1px solid ${sidebarBorder};
+            border-radius: 0 0.75rem 0.75rem 0;
             position: fixed;
-            left: 1rem;
+            left: 0;
             top: 50%;
             transform: translateY(-50%);
           }
 
           .sidebar.right {
             left: auto;
-            right: 1rem;
+            right: 0;
           }
 
           .sidebar .MuiList-root {
-            padding: 0.75rem
+            padding: 0.5rem
+          }
+
+          .sub-sidebar {
+            z-index: 5;
+            width: 2.375rem;
+            background: ${subBarBg};
+            position: fixed;
+            border-radius: 0 0.5rem 0.5rem 0;
+            left: 3rem;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+
+          .sub-sidebar.right {
+            left: auto;
+            right: 0;
           }
 
           .canvas-widget {
@@ -371,21 +389,20 @@ const applicationTheme = (params: ThemeVars) => {
         styleOverrides: {
           root: {
             padding: 0,
-            width: '2.5rem',
-            height: '2.5rem',
-            borderRadius: '50%',
+            width: '2rem',
+            height: '2rem',
+            borderRadius: '0.5rem',
             justifyContent: 'center',
-            backgroundColor: chipTextColor,
             '&:hover': {
               backgroundColor: chipTextColor,
             },
             '&:not(:last-child)': {
-              marginBottom: '0.75rem',
+              marginBottom: '0.5rem',
             },
             '&.Mui-selected': {
-              backgroundColor: listItemActiveBg,
+              backgroundColor: chipTextColor,
               '&:hover': {
-                backgroundColor: listItemActiveBg,
+                backgroundColor: chipBgColor,
               },
             },
             '&.Mui-disabled': {
