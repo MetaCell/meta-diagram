@@ -1,5 +1,7 @@
 import vars from './components/assets/styles/variables';
 import nodeGreen from './components/assets/svg/node/green.svg';
+import topSubArrow from './components/assets/svg/sub-top-arrow.svg';
+import bottomSubArrow from './components/assets/svg/sub-bottom-arrow.svg';
 
 type ThemeVars = {
   [key: string]: any;
@@ -70,7 +72,7 @@ const applicationTheme = (params: ThemeVars) => {
           }
 
           .sub-sidebar {
-            z-index: 5;
+            z-index: 4;
             width: 2.375rem;
             background: ${subBarBg};
             position: fixed;
@@ -80,9 +82,39 @@ const applicationTheme = (params: ThemeVars) => {
             transform: translateY(-50%);
           }
 
+          .sub-sidebar:before {
+            content: "";
+            width: 0.5rem;
+            height: 0.5rem;
+            background: url(data:image/svg+xml;base64,${btoa(
+              topSubArrow
+            )});           
+            position: absolute;
+            background-size: 150%;
+            top: -0.5rem;
+            left: 0rem;
+          }
+
+          .sub-sidebar:after {
+            content: "";
+            width: 0.5rem;
+            height: 0.5rem;
+            background: url(data:image/svg+xml;base64,${btoa(
+              bottomSubArrow
+            )});           
+            position: absolute;
+            background-size: 150%;
+            bottom: -0.45rem;
+            left: -0.0875rem;
+          }
+
           .sub-sidebar.right {
             left: auto;
             right: 0;
+          }
+
+          .sub-sidebar .MuiList-root {
+            padding: 0.25rem;
           }
 
           .canvas-widget {
@@ -413,6 +445,22 @@ const applicationTheme = (params: ThemeVars) => {
       },
     },
   };
+};
+
+export const subBarStyle = {
+  '&:hover': {
+    backgroundColor: vars.chipTextColor,
+  },
+  '&:not(:last-child)': {
+    marginBottom: '0.25rem',
+  },
+  '&.Mui-selected': {
+    backgroundColor: vars.listItemActiveBg,
+    color: vars.textWhite,
+    '&:hover': {
+      backgroundColor: vars.listItemActiveBg,
+    },
+  },
 };
 
 export default (customVariables: ThemeVars) =>

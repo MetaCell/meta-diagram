@@ -47,6 +47,7 @@ const vars = {
   sidebarShadow: `0 0 3.75rem rgba(0, 0, 0, 0.1),
   0 0.5rem 2.5rem -0.625rem rgba(0, 0, 0, 0.1)`,
   subBarBg: '#D0D0D0',
+  subBarIconColor: '#1A1A1A',
   canvasBg: '#fff',
   showPropertiesButtonBg: '#161A1E',
   nodeBorderColor: '#18A0FB',
