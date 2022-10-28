@@ -3,7 +3,6 @@ import { MetaPort } from '../models/MetaPort';
 import { PortTypes, ReactDiagramMetaTypes, CallbackTypes } from '../constants';
 import { DefaultPortModel, NodeModel } from '@projectstorm/react-diagrams';
 import { BoundingBox } from "../models/BoundingBox";
-import { Point } from "@projectstorm/geometry";
 
 export class MetaNodeModel extends NodeModel {
     private boundingBox: BoundingBox;
@@ -97,7 +96,7 @@ export class MetaNodeModel extends NodeModel {
       this.setOption('localPosition', this.calculateLocalPosition(parent))
     }
 
-    setContainerBoundingBox(containerBoundingBox: {left: number, top: number, right: number, bottom: number}): void {
+    setNodeBoundingBox(containerBoundingBox: {left: number, top: number, right: number, bottom: number}): void {
       this.boundingBox = new BoundingBox(
         containerBoundingBox.left,
         containerBoundingBox.top,
@@ -113,15 +112,5 @@ export class MetaNodeModel extends NodeModel {
 
     getNodeBoundingBox(): BoundingBox {
       return this.boundingBox;
-    }
-
-    setChildPosition(x: number | Point, y?: number): void {
-      if (x instanceof Point) {
-        this.position = x;
-      } else {
-        // @ts-ignore
-        this.position = new Point(x, y);
-      }
-      this.flagUpdate(CallbackTypes.POSITION_CHANGED, CallbackTypes.CHILD_POSITION_CHANGED)
     }
 }
