@@ -59,9 +59,9 @@ export class BoundingBox {
         return this._top - this._bottom
     }
 
-    containsPoint(points?: Point, x?: number, y?: number): boolean {
-        if (points) {
-            if (points.x >= this._left && points.x <= this._right && points.y >= this._top && points.x <= this._bottom) {
+    containsPoint(x: Point | number, y?: number): boolean {
+        if (x instanceof Point) {
+            if (x.x >= this._left && x.x <= this._right && x.y >= this._top && x.x <= this._bottom) {
                 return true;
             }
         } else if (x && y) {

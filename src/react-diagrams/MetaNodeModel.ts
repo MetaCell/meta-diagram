@@ -3,6 +3,7 @@ import { MetaPort } from '../models/MetaPort';
 import { PortTypes, ReactDiagramMetaTypes, CallbackTypes } from '../constants';
 import { DefaultPortModel, NodeModel } from '@projectstorm/react-diagrams';
 import { BoundingBox } from "../models/BoundingBox";
+import { Point } from "@projectstorm/geometry";
 
 export class MetaNodeModel extends NodeModel {
     private boundingBox: BoundingBox;
@@ -11,13 +12,10 @@ export class MetaNodeModel extends NodeModel {
             ...options,
             type: ReactDiagramMetaTypes.META_NODE,
         });
-
         // @ts-ignore
         if (options.width && options.height) {
           // @ts-ignore
-          this.width = options.width;
-          // @ts-ignore
-          this.height = options.height;
+          this.updateDimensions({width: options.width, height: options.height});
         }
 
         this.boundingBox = new BoundingBox(
@@ -68,8 +66,8 @@ export class MetaNodeModel extends NodeModel {
       return this.getOptions()[label]
     }
 
-    flagUpdate(updateType: CallbackTypes) {
-      this.fireEvent({node: this, function: updateType}, updateType);
+    flagUpdate(updateType: CallbackTypes, extraCondition?: CallbackTypes) {
+      this.fireEvent({node: this, function: updateType, extraCondition: extraCondition}, updateType);
     }
 
     getId(): string[]{
@@ -115,5 +113,15 @@ export class MetaNodeModel extends NodeModel {
 
     getNodeBoundingBox(): BoundingBox {
       return this.boundingBox;
+    }
+
+    setChildPosition(x: number | Point, y?: number): void {
+      if (x instanceof Point) {
+        this.position = x;
+      } else {
+        // @ts-ignore
+        this.position = new Point(x, y);
+      }
+      this.flagUpdate(CallbackTypes.POSITION_CHANGED, CallbackTypes.CHILD_POSITION_CHANGED)
     }
 }
