@@ -11,52 +11,14 @@ import {
 } from '@mui/material';
 import Node from './assets/svg/node.svg';
 import {
-  ControlIcon,
   FileIcon,
   HandIcon,
-  IntegratorIcon,
-  LearningIcon,
-  ModulatoryIcon,
   MoveToolIcon,
-  ProcessingIcon,
   ShapeArrowToolIcon,
-  TargetIcon,
-  TransferIcon,
 } from './assets/icons';
 import { subBarStyle } from '../theme';
 
 const { dividerColor } = vars;
-
-const subBarData = [
-  {
-    name: 'Target',
-    icon: <TargetIcon />,
-  },
-  {
-    name: 'Transfer',
-    icon: <TransferIcon />,
-  },
-  {
-    name: 'Processing',
-    icon: <ProcessingIcon />,
-  },
-  {
-    name: 'Integrator',
-    icon: <IntegratorIcon />,
-  },
-  {
-    name: 'Modulatory',
-    icon: <ModulatoryIcon />,
-  },
-  {
-    name: 'Learning',
-    icon: <LearningIcon />,
-  },
-  {
-    name: 'Control',
-    icon: <ControlIcon />,
-  },
-];
 
 const useStyles = makeStyles(() => ({
   node: {
@@ -83,7 +45,13 @@ type subSidebarItemProps = {
   updateSelected?: (name: string) => void;
 };
 
-const Sidebar = () => {
+export interface ISidebarNode {
+  id: string;
+  icon: React.ReactElement;
+  name: string;
+}
+
+const Sidebar = ({ sidebarNodes }: { sidebarNodes?: ISidebarNode[] }) => {
   const classes = useStyles();
   const [selected, setSelected] = React.useState('1');
   const [subSelected, setSubSelected] = React.useState('Target');
@@ -132,20 +100,24 @@ const Sidebar = () => {
         <Box className={classes.node}>
           <Divider />
 
-          <ListItemButton
-            selected={selected === '3'}
-            onClick={() => setSelected('3')}
-            sx={{
-              height: 128,
-              borderRadius: '0 0.5rem 0.5rem 0 !important',
-              width: '2.75rem',
-              margin: '0.25rem 0 !important',
-            }}
-          >
-            <ListItemIcon>
-              {<img src={svgImg(Node)} alt="Nodes" />}
-            </ListItemIcon>
-          </ListItemButton>
+          {sidebarNodes !== undefined ? (
+            <ListItemButton
+              selected={selected === '3'}
+              onClick={() => setSelected('3')}
+              sx={{
+                height: 128,
+                borderRadius: '0 0.5rem 0.5rem 0 !important',
+                width: '2.75rem',
+                margin: '0.25rem 0 !important',
+              }}
+            >
+              <ListItemIcon>
+                {<img src={svgImg(Node)} alt="Node" />}
+              </ListItemIcon>
+            </ListItemButton>
+          ) : (
+            <img src={svgImg(Node)} alt="Node" />
+          )}
 
           <Divider />
         </Box>
@@ -159,13 +131,13 @@ const Sidebar = () => {
           <SidebarItem icon={<FileIcon />} name="fullscreen" selection="5" />
         </List>
       </Box>
-      {selected === '3' && (
+      {selected === '3' && sidebarNodes && (
         <Box className="sub-sidebar">
           <Collapse orientation="horizontal" in={selected === '3'}>
             <List disablePadding component="nav">
-              {subBarData.map(({ name, icon }) => (
+              {sidebarNodes.map(({ id, name, icon }) => (
                 <SubSidebarItem
-                  key={name}
+                  key={id}
                   name={name}
                   icon={icon}
                   selected={subSelected === name}

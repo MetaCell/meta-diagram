@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Sidebar from './components/Sidebar';
+import Sidebar, { ISidebarNode } from './components/Sidebar';
 import { MetaNode } from './models/MetaNode';
 import { MetaLink } from './models/MetaLink';
 import { MetaPort } from './models/MetaPort';
@@ -33,6 +33,7 @@ interface MetaDiagramProps {
   metaNodes: MetaNode[];
   metaLinks: MetaLink[];
   componentsMap: ComponentsMap;
+  sidebarNodes?: ISidebarNode[];
   wrapperClassName?: string;
   canvasClassName?: string;
   metaTheme: {
@@ -47,6 +48,7 @@ const MetaDiagram = ({
   componentsMap,
   wrapperClassName,
   metaTheme,
+  sidebarNodes,
 }: MetaDiagramProps) => {
   const classes = useStyles();
 
@@ -86,7 +88,7 @@ const MetaDiagram = ({
     <ThemeProvider theme={createTheme(theme(metaTheme?.customThemeVariables))}>
       <CssBaseline />
       <Box className={containerClassName}>
-        <Sidebar />
+        <Sidebar sidebarNodes={sidebarNodes} />
         <CanvasWidget
           className={`canvas-widget ${metaTheme?.canvasClassName}`}
           engine={engine}
