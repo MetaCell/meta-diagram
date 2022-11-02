@@ -8,6 +8,7 @@ import {
   List,
   ListItemButton,
   ListItemIcon,
+  Tooltip,
 } from '@mui/material';
 import Node from './assets/svg/node.svg';
 import {
@@ -77,15 +78,19 @@ const Sidebar = ({ sidebarNodes }: { sidebarNodes?: ISidebarNode[] }) => {
     const iconColor = selected ? '#fff' : 'rgba(26, 26, 26, 0.6)';
 
     return (
-      <ListItemButton
-        selected={selected}
-        onClick={() => {
-          if (!!updateSelected) updateSelected(name);
-        }}
-        sx={subBarStyle}
-      >
-        <ListItemIcon>{cloneElement(icon, { color: iconColor })}</ListItemIcon>
-      </ListItemButton>
+      <Tooltip id={name} title={name} placement="right" arrow>
+        <ListItemButton
+          selected={selected}
+          onClick={() => {
+            if (!!updateSelected) updateSelected(name);
+          }}
+          sx={subBarStyle}
+        >
+          <ListItemIcon>
+            {cloneElement(icon, { color: iconColor })}
+          </ListItemIcon>
+        </ListItemButton>
+      </Tooltip>
     );
   };
 
