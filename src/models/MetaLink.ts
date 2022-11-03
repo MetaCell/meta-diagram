@@ -1,12 +1,12 @@
-import { MetaOptions } from './MetaOptions';
 import { ILink } from './ILink';
+import {MetaLinkModel} from "../react-diagrams/MetaLinkModel";
 
 export class MetaLink implements ILink {
   sourceId: string;
   sourcePortId: string;
   targetId: string;
   targetPortId: string;
-  options: MetaOptions;
+  options: Map<string, any>;
 
   constructor(
     id: string,
@@ -26,7 +26,11 @@ export class MetaLink implements ILink {
     this.sourcePortId = sourcePortId;
     this.targetId = targetId;
     this.targetPortId = targetPortId;
-    this.options = new MetaOptions(id, name, shape, variant, options);
+    this.options = options;
+    this.options.set('id', id);
+    this.options.set('name', name);
+    this.options.set('shape', shape);
+    this.options.set('varian', variant);
   }
 
   getSourceId(): string {
@@ -46,14 +50,18 @@ export class MetaLink implements ILink {
   }
 
   getId(): string {
-    return this.options.getId();
+    return this.options.get('id');
   }
 
   getName(): string {
-    return this.options.getName();
+    return this.options.get('name');
   }
 
   getShape(): string {
-    return this.options.getShape();
+    return this.options.get('shape');
+  }
+
+  toModel(): MetaLinkModel {
+    return new MetaLinkModel(Object.fromEntries(this.options));
   }
 }
