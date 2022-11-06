@@ -57,7 +57,9 @@ const MetaDiagram = ({
   const engine = createEngine();
 
   if (metaCallback === undefined) {
-    metaCallback = (node: any) => {console.log(node)}
+    metaCallback = (node: any) => {
+      console.log(node);
+    };
   }
 
   engine
@@ -69,7 +71,6 @@ const MetaDiagram = ({
     .getLinkFactories()
     // @ts-ignore
     .registerFactory(new MetaLinkFactory(componentsMap.links));
-
 
   // set up the diagram model
   const model = new DiagramModel();
@@ -92,32 +93,25 @@ const MetaDiagram = ({
     if (repaint) {
       engine.repaintCanvas();
     }
-
   };
 
   // add listeners to the model and children
-  models.forEach((item) => {
-		item.registerListener({
-			nodeUpdated: postCallback,
+  models.forEach(item => {
+    item.registerListener({
+      nodeUpdated: postCallback,
       eventDidFire: postCallback,
-      eventWillFire: preCallback
-		});
-	});
+      eventWillFire: preCallback,
+    });
+  });
 
-	model.registerListener({
-		nodeUpdated: postCallback,
+  model.registerListener({
+    nodeUpdated: postCallback,
     eventDidFire: postCallback,
-    eventWillFire: preCallback
-	});
+    eventWillFire: preCallback,
+  });
 
   // load model into engine
   engine.setModel(model);
-
-  // useEffect(() => {
-  //   // @ts-ignore
-  //   metaGraph.updateNodesContainerBoundingBoxes(model.getNodes(), metaGraph)
-  // }, [])
-
 
   const containerClassName = wrapperClassName
     ? wrapperClassName

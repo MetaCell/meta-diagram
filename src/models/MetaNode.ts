@@ -1,6 +1,6 @@
 import { Position } from './Position';
 import { MetaPort } from './MetaPort';
-import {MetaNodeModel} from "../react-diagrams/MetaNodeModel";
+import { MetaNodeModel } from '../react-diagrams/MetaNodeModel';
 
 export class MetaNode {
   private readonly parent: MetaNode | undefined;
@@ -34,7 +34,7 @@ export class MetaNode {
 
     this.children?.forEach((child: MetaNode) => {
       this.childrenMap.set(child.getId(), child);
-    })
+    });
   }
 
   addChild(child: MetaNode): Boolean {
@@ -50,7 +50,7 @@ export class MetaNode {
     if (this.childrenMap.has(childId)) {
       this.childrenMap.delete(childId);
       this.children = this.children?.filter((child: MetaNode) => {
-        child.getId() !== childId
+        return child.getId() !== childId;
       });
       return true;
     }
@@ -69,32 +69,33 @@ export class MetaNode {
     return this.options.get('shape');
   }
 
-  private getGraphPath() : string[] {
-    if(this.parent){
-      const graphPath = this.parent.getGraphPath()
-      graphPath.push(<string>this.getId())
-      return graphPath
+  private getGraphPath(): string[] {
+    if (this.parent) {
+      const graphPath = this.parent.getGraphPath();
+      graphPath.push(this.getId() as string);
+      return graphPath;
     }
-    return [this.getId()]
+    return [this.getId()];
   }
 
-  private getWorldPosition() : Position {
-    return this.parent ? this.position.add(this.parent?.getWorldPosition()) : this.position
+  private getWorldPosition(): Position {
+    return this.parent
+      ? this.position.add(this.parent?.getWorldPosition())
+      : this.position;
   }
 
-  getDepth() : number {
-    return this.parent ? this.parent.getDepth() + 1 : 0
+  getDepth(): number {
+    return this.parent ? this.parent.getDepth() + 1 : 0;
   }
 
-  toModel() : MetaNodeModel {
-    const optionsMap = new Map(this.options)
-    optionsMap.set('graphPath', this.getGraphPath())
-    optionsMap.set('localPosition', this.position)
-    optionsMap.set('depth', this.getDepth())
-    const metaNodeModel =  new MetaNodeModel(Object.fromEntries(optionsMap))
+  toModel(): MetaNodeModel {
+    const optionsMap = new Map(this.options);
+    optionsMap.set('graphPath', this.getGraphPath());
+    optionsMap.set('localPosition', this.position);
+    optionsMap.set('depth', this.getDepth());
+    const metaNodeModel = new MetaNodeModel(Object.fromEntries(optionsMap));
     // const worldPosition = this.getWorldPosition()
     // metaNodeModel.setPosition(worldPosition.x, worldPosition.y)
-    return metaNodeModel
+    return metaNodeModel;
   }
-
 }

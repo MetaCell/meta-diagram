@@ -1,5 +1,5 @@
 import { ILink } from './ILink';
-import {MetaLinkModel} from "../react-diagrams/MetaLinkModel";
+import { MetaLinkModel } from '../react-diagrams/MetaLinkModel';
 
 export class MetaLink implements ILink {
   sourceId: string;

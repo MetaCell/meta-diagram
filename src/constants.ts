@@ -14,7 +14,7 @@ export enum CallbackTypes {
   OPTIONS_UPDATED = 'nodeUpdated',
   POSITION_CHANGED = 'positionChanged',
   SELECTION_CHANGED = 'selectionChanged',
-  CHILD_POSITION_CHANGED = 'childPositionChanged'
+  CHILD_POSITION_CHANGED = 'childPositionChanged',
 }
 
 export enum EventTypes {
