@@ -1,7 +1,7 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import MetaDiagram, { MetaNode, Position, ComponentsMap, MetaLink, MetaPort, PortTypes } from './..';
+import MetaDiagram, { MetaNode, Position, ComponentsMap, MetaLink, MetaPort, PortTypes } from '@metacell/meta-diagram';
 // import {makeStyles} from "@material-ui/core";
 import CustomLinkWidget from './components/widgets/CustomLinkWidget';
 import BG from './components/assets/svg/bg-dotted.svg';
@@ -34,6 +34,7 @@ const App = () => {
     'node-red',
     null,
     [new MetaPort('in', 'in', PortTypes.INPUT_PORT, undefined, undefined), new MetaPort('out', 'out', PortTypes.OUTPUT_PORT, undefined, undefined)],
+    [],
     new Map(Object.entries({ color: 'rgb(0,255,0)' }))
   );
 
@@ -45,6 +46,7 @@ const App = () => {
     'node-blue',
     grandparent,
     [new MetaPort('in', 'in', PortTypes.INPUT_PORT, undefined, undefined), new MetaPort('out', 'out', PortTypes.OUTPUT_PORT, undefined, undefined)],
+    [],
     new Map(Object.entries({ color: 'rgb(255,0,0)' }))
   );
 
@@ -56,6 +58,7 @@ const App = () => {
     'node-red',
     parent,
     [new MetaPort('in', 'in', PortTypes.INPUT_PORT, undefined, undefined), new MetaPort('out', 'out', PortTypes.OUTPUT_PORT, undefined, undefined)],
+    [],
     new Map(Object.entries({ color: 'rgb(0,192,255)' }))
   );
 
@@ -67,6 +70,7 @@ const App = () => {
     'node-blue',
     parent,
     [new MetaPort('in', 'in', PortTypes.INPUT_PORT, undefined, undefined), new MetaPort('out', 'out', PortTypes.OUTPUT_PORT, undefined, undefined)],
+    [],
     new Map(Object.entries({ color: 'rgb(255,255,0)' }))
   );
 
@@ -87,12 +91,15 @@ const App = () => {
     new Map(Object.entries({ default: CustomLinkWidget }))
   );
 
+  const nodes = [node1, node2, parent, grandparent];
+  const metaNodes = nodes.map((item:MetaNode) => item.toModel());
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className={classes.main}>
         <MetaDiagram
-          metaNodes={[node1, node2, parent, grandparent]}
+          metaNodes={metaNodes}
           metaLinks={[]}
           componentsMap={componentsMap}
           metaTheme={{
