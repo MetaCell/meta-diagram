@@ -1,5 +1,4 @@
 export class Position {
-
   private _x: number;
   private _y: number;
 
@@ -28,12 +27,11 @@ export class Position {
     this._y = value;
   }
 
-  add(otherPosition: Position) : Position {
-    return new Position(this._x+ otherPosition._x, this._y + otherPosition._y)
+  add(otherPosition: Position): Position {
+    return new Position(this._x + otherPosition._x, this._y + otherPosition._y);
   }
 
-  sub(otherPosition: Position) : Position {
-    return new Position(this._x - otherPosition._x, this._y - otherPosition._y)
+  sub(otherPosition: Position): Position {
+    return new Position(this._x - otherPosition._x, this._y - otherPosition._y);
   }
-
 }
