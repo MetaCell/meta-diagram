@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Sidebar from './components/Sidebar';
+import Sidebar, { ISidebarProps } from './components/Sidebar';
 import { MetaNode } from './models/MetaNode';
 import { MetaLink } from './models/MetaLink';
 import { MetaPort } from './models/MetaPort';
@@ -34,6 +34,7 @@ interface MetaDiagramProps {
   metaNodes: MetaNode[];
   metaLinks: MetaLink[];
   componentsMap: ComponentsMap;
+  sidebarProps?: ISidebarProps;
   wrapperClassName?: string;
   canvasClassName?: string;
   metaTheme: {
@@ -49,10 +50,10 @@ const MetaDiagram = ({
   componentsMap,
   wrapperClassName,
   metaTheme,
+  sidebarProps,
   metaCallback,
 }: MetaDiagramProps) => {
   const classes = useStyles();
-
   // set up the diagram engine
   const engine = createEngine();
 
@@ -96,7 +97,7 @@ const MetaDiagram = ({
   };
 
   // add listeners to the model and children
-  models.forEach(item => {
+  models.forEach((item: any) => {
     item.registerListener({
       nodeUpdated: postCallback,
       eventDidFire: postCallback,
@@ -113,6 +114,11 @@ const MetaDiagram = ({
   // load model into engine
   engine.setModel(model);
 
+  // useEffect(() => {
+  //   // @ts-ignore
+  //   metaGraph.updateNodesContainerBoundingBoxes(model.getNodes(), metaGraph)
+  // }, [])
+
   const containerClassName = wrapperClassName
     ? wrapperClassName
     : classes.container;
@@ -121,7 +127,7 @@ const MetaDiagram = ({
     <ThemeProvider theme={createTheme(theme(metaTheme?.customThemeVariables))}>
       <CssBaseline />
       <Box className={containerClassName}>
-        <Sidebar />
+        <Sidebar {...sidebarProps} />
         <CanvasWidget
           className={`canvas-widget ${metaTheme?.canvasClassName}`}
           engine={engine}

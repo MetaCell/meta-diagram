@@ -1,23 +1,28 @@
-import React from 'react';
+import React, { cloneElement } from 'react';
 import { Box } from '@mui/system';
 import { makeStyles } from '@mui/styles';
 import vars from './assets/styles/variables';
-import { Divider, List, ListItemButton, ListItemIcon } from '@mui/material';
-import Move from './assets/svg/move.svg';
-import MoveActive from './assets/svg/move-active.svg';
-import Icon from './assets/svg/icon.svg';
-import IconActive from './assets/svg/icon-active.svg';
+import {
+  Collapse,
+  Divider,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  Tooltip,
+} from '@mui/material';
 import Node from './assets/svg/node.svg';
-import Cursor from './assets/svg/cursor.svg';
-import CursorActive from './assets/svg/cursor-active.svg';
-import Fullscreen from './assets/svg/fullscreen.svg';
-import FullscreenActive from './assets/svg/fullscreen-active.svg';
+import {
+  FileIcon,
+  HandIcon,
+  MoveToolIcon,
+  ShapeArrowToolIcon,
+} from './assets/icons';
+import { subBarStyle } from '../theme';
 
 const { dividerColor } = vars;
 
 const useStyles = makeStyles(() => ({
   node: {
-    margin: '0.25rem 0',
     '& .MuiDivider-root': {
       borderColor: dividerColor,
       width: 'calc(100% - 1.5rem)',
@@ -25,82 +30,143 @@ const useStyles = makeStyles(() => ({
       border: 'none',
       borderTop: '0.0625rem solid',
     },
-
-    '& img': {
-      display: 'block',
-      margin: '1rem 0',
-    },
   },
 }));
 
 type sidebarItemProps = {
-  image: string;
+  icon: React.ReactNode;
   name: string;
-  selectedImage: string;
   selection: string;
 };
 
-const Sidebar = () => {
+type subSidebarItemProps = {
+  id: string;
+  icon: React.ReactElement;
+  name: string;
+  selected?: boolean;
+  updateSelected?: (name: string) => void;
+};
+
+export interface ISidebarNode {
+  id: string;
+  icon: React.ReactElement;
+  name: string;
+}
+
+export interface ISidebarProps {
+  selectedBarNode?: string;
+  sidebarNodes?: ISidebarNode[];
+  updateSelectedBar?: (id: string) => void;
+}
+
+const Sidebar = ({
+  selectedBarNode,
+  sidebarNodes,
+  updateSelectedBar,
+}: ISidebarProps) => {
   const classes = useStyles();
   const [selected, setSelected] = React.useState('1');
   const svgImg = (img: string) =>
     `data:image/svg+xml;base64,${new Buffer(img).toString('base64')}`;
   const SidebarItem = (props: sidebarItemProps) => {
-    const { image, name, selectedImage, selection } = props;
+    const { icon, selection } = props;
     return (
       <ListItemButton
         selected={selected === selection}
-        onClick={() => setSelected(selection)}
+        onClick={() => {
+          setSelected(selection);
+        }}
       >
-        <ListItemIcon>
-          {selected === selection ? (
-            <img src={svgImg(image)} alt={name} />
-          ) : (
-            <img src={svgImg(selectedImage)} alt={name} />
-          )}
-        </ListItemIcon>
+        <ListItemIcon>{icon}</ListItemIcon>
       </ListItemButton>
     );
   };
 
+  const SubSidebarItem = (props: subSidebarItemProps) => {
+    const { icon, selected, name, id, updateSelected } = props;
+
+    const iconColor = selected ? '#fff' : 'rgba(26, 26, 26, 0.6)';
+
+    return (
+      <Tooltip id={name} title={name} placement="right" arrow>
+        <ListItemButton
+          selected={selected}
+          onClick={() => {
+            if (!!updateSelected) updateSelected(id);
+          }}
+          sx={subBarStyle}
+        >
+          <ListItemIcon>
+            {cloneElement(icon, { color: iconColor })}
+          </ListItemIcon>
+        </ListItemButton>
+      </Tooltip>
+    );
+  };
+
   return (
-    <Box className="sidebar">
-      <List disablePadding component="nav">
-        <SidebarItem
-          image={CursorActive}
-          selectedImage={Cursor}
-          name="cursor"
-          selection="1"
-        />
-        <SidebarItem
-          image={MoveActive}
-          selectedImage={Move}
-          name="move"
-          selection="2"
-        />
-      </List>
+    <>
+      <Box className="sidebar">
+        <List disablePadding component="nav">
+          <SidebarItem icon={<MoveToolIcon />} name="cursor" selection="1" />
+          <SidebarItem icon={<HandIcon />} name="move" selection="2" />
+        </List>
 
-      <Box className={classes.node}>
-        <Divider />
-        <img src={svgImg(Node)} alt="Node" />
-        <Divider />
+        <Box className={classes.node}>
+          <Divider />
+
+          {sidebarNodes !== undefined ? (
+            <ListItemButton
+              selected={selected === '3'}
+              onClick={() => setSelected('3')}
+              sx={{
+                height: 128,
+                borderRadius: '0 0.5rem 0.5rem 0 !important',
+                width: '2.75rem',
+                margin: '0.25rem 0 !important',
+              }}
+            >
+              <ListItemIcon>
+                {<img src={svgImg(Node)} alt="Node" />}
+              </ListItemIcon>
+            </ListItemButton>
+          ) : (
+            <img src={svgImg(Node)} alt="Node" />
+          )}
+
+          <Divider />
+        </Box>
+
+        <List disablePadding component="nav">
+          <SidebarItem
+            icon={<ShapeArrowToolIcon />}
+            name="draw"
+            selection="4"
+          />
+          <SidebarItem icon={<FileIcon />} name="fullscreen" selection="5" />
+        </List>
       </Box>
-
-      <List disablePadding component="nav">
-        <SidebarItem
-          image={IconActive}
-          selectedImage={Icon}
-          name="draw"
-          selection="3"
-        />
-        <SidebarItem
-          image={FullscreenActive}
-          selectedImage={Fullscreen}
-          name="fullscreen"
-          selection="4"
-        />
-      </List>
-    </Box>
+      {selected === '3' && sidebarNodes && (
+        <Box className="sub-sidebar">
+          <Collapse orientation="horizontal" in={selected === '3'}>
+            <List disablePadding component="nav">
+              {sidebarNodes.map(({ id, name, icon }) => (
+                <SubSidebarItem
+                  key={id}
+                  id={id}
+                  name={name}
+                  icon={icon}
+                  selected={id === selectedBarNode}
+                  updateSelected={id => {
+                    if (!!updateSelectedBar) updateSelectedBar(id);
+                  }}
+                />
+              ))}
+            </List>
+          </Collapse>
+        </Box>
+      )}
+    </>
   );
 };
 

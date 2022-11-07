@@ -1,5 +1,7 @@
 import vars from './components/assets/styles/variables';
 import nodeGreen from './components/assets/svg/node/green.svg';
+import topSubArrow from './components/assets/svg/sub-top-arrow.svg';
+import bottomSubArrow from './components/assets/svg/sub-bottom-arrow.svg';
 
 type ThemeVars = {
   [key: string]: any;
@@ -12,12 +14,13 @@ const applicationTheme = (params: ThemeVars) => {
     chipTextColor,
     chipBgColor,
     textWhite,
-    listItemActiveBg,
     listSelectedTextColor,
     listBoxShadow,
     listBorderColor,
     sidebarBg,
     sidebarShadow,
+    sidebarBorder,
+    subBarBg,
     canvasBg,
     showPropertiesButtonBg,
     nodeBorderColor,
@@ -48,23 +51,70 @@ const applicationTheme = (params: ThemeVars) => {
           }
           .sidebar {
             z-index: 5;
-            width: 4rem;
+            width: 3rem;
             background: ${sidebarBg};
             box-shadow: ${sidebarShadow};
-            border-radius: 2rem;
+            border: 1px solid ${sidebarBorder};
+            border-radius: 0 0.75rem 0.75rem 0;
             position: fixed;
-            left: 1rem;
+            left: 0;
             top: 50%;
             transform: translateY(-50%);
           }
 
           .sidebar.right {
             left: auto;
-            right: 1rem;
+            right: 0;
           }
 
           .sidebar .MuiList-root {
-            padding: 0.75rem
+            padding: 0.5rem
+          }
+
+          .sub-sidebar {
+            z-index: 4;
+            width: 2.375rem;
+            background: ${subBarBg};
+            position: fixed;
+            border-radius: 0 0.5rem 0.5rem 0;
+            left: 3rem;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+
+          .sub-sidebar:before {
+            content: "";
+            width: 0.5rem;
+            height: 0.5rem;
+            background: url(data:image/svg+xml;base64,${btoa(
+              topSubArrow
+            )});           
+            position: absolute;
+            background-size: 150%;
+            top: -0.5rem;
+            left: 0rem;
+          }
+
+          .sub-sidebar:after {
+            content: "";
+            width: 0.5rem;
+            height: 0.5rem;
+            background: url(data:image/svg+xml;base64,${btoa(
+              bottomSubArrow
+            )});           
+            position: absolute;
+            background-size: 150%;
+            bottom: -0.45rem;
+            left: -0.0875rem;
+          }
+
+          .sub-sidebar.right {
+            left: auto;
+            right: 0;
+          }
+
+          .sub-sidebar .MuiList-root {
+            padding: 0.25rem;
           }
 
           .canvas-widget {
@@ -371,21 +421,20 @@ const applicationTheme = (params: ThemeVars) => {
         styleOverrides: {
           root: {
             padding: 0,
-            width: '2.5rem',
-            height: '2.5rem',
-            borderRadius: '50%',
+            width: '2rem',
+            height: '2rem',
+            borderRadius: '0.5rem',
             justifyContent: 'center',
-            backgroundColor: chipTextColor,
             '&:hover': {
               backgroundColor: chipTextColor,
             },
             '&:not(:last-child)': {
-              marginBottom: '0.75rem',
+              marginBottom: '0.5rem',
             },
             '&.Mui-selected': {
-              backgroundColor: listItemActiveBg,
+              backgroundColor: chipTextColor,
               '&:hover': {
-                backgroundColor: listItemActiveBg,
+                backgroundColor: chipBgColor,
               },
             },
             '&.Mui-disabled': {
@@ -396,6 +445,22 @@ const applicationTheme = (params: ThemeVars) => {
       },
     },
   };
+};
+
+export const subBarStyle = {
+  '&:hover': {
+    backgroundColor: vars.chipTextColor,
+  },
+  '&:not(:last-child)': {
+    marginBottom: '0.25rem',
+  },
+  '&.Mui-selected': {
+    backgroundColor: vars.listItemActiveBg,
+    color: vars.textWhite,
+    '&:hover': {
+      backgroundColor: vars.listItemActiveBg,
+    },
+  },
 };
 
 export default (customVariables: ThemeVars) =>
