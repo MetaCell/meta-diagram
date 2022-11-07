@@ -40,9 +40,10 @@ type sidebarItemProps = {
 };
 
 type subSidebarItemProps = {
+  id: string;
   icon: React.ReactElement;
   name: string;
-  selected: boolean;
+  selected?: boolean;
   updateSelected?: (name: string) => void;
 };
 
@@ -52,10 +53,19 @@ export interface ISidebarNode {
   name: string;
 }
 
-const Sidebar = ({ sidebarNodes }: { sidebarNodes?: ISidebarNode[] }) => {
+export interface ISidebarProps {
+  selectedBarNode?: string;
+  sidebarNodes?: ISidebarNode[];
+  updateSelectedBar?: (id: string) => void;
+}
+
+const Sidebar = ({
+  selectedBarNode,
+  sidebarNodes,
+  updateSelectedBar,
+}: ISidebarProps) => {
   const classes = useStyles();
   const [selected, setSelected] = React.useState('1');
-  const [subSelected, setSubSelected] = React.useState('Target');
   const svgImg = (img: string) =>
     `data:image/svg+xml;base64,${new Buffer(img).toString('base64')}`;
   const SidebarItem = (props: sidebarItemProps) => {
@@ -73,7 +83,7 @@ const Sidebar = ({ sidebarNodes }: { sidebarNodes?: ISidebarNode[] }) => {
   };
 
   const SubSidebarItem = (props: subSidebarItemProps) => {
-    const { icon, selected, name, updateSelected } = props;
+    const { icon, selected, name, id, updateSelected } = props;
 
     const iconColor = selected ? '#fff' : 'rgba(26, 26, 26, 0.6)';
 
@@ -82,7 +92,7 @@ const Sidebar = ({ sidebarNodes }: { sidebarNodes?: ISidebarNode[] }) => {
         <ListItemButton
           selected={selected}
           onClick={() => {
-            if (!!updateSelected) updateSelected(name);
+            if (!!updateSelected) updateSelected(id);
           }}
           sx={subBarStyle}
         >
@@ -143,10 +153,13 @@ const Sidebar = ({ sidebarNodes }: { sidebarNodes?: ISidebarNode[] }) => {
               {sidebarNodes.map(({ id, name, icon }) => (
                 <SubSidebarItem
                   key={id}
+                  id={id}
                   name={name}
                   icon={icon}
-                  selected={subSelected === name}
-                  updateSelected={name => setSubSelected(name)}
+                  selected={id === selectedBarNode}
+                  updateSelected={id => {
+                    if (!!updateSelectedBar) updateSelectedBar(id);
+                  }}
                 />
               ))}
             </List>

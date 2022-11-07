@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Sidebar, { ISidebarNode } from './components/Sidebar';
+import Sidebar, { ISidebarProps } from './components/Sidebar';
 import { MetaNode } from './models/MetaNode';
 import { MetaLink } from './models/MetaLink';
 import { MetaPort } from './models/MetaPort';
@@ -34,7 +34,7 @@ interface MetaDiagramProps {
   metaNodes: MetaNode[];
   metaLinks: MetaLink[];
   componentsMap: ComponentsMap;
-  sidebarNodes?: ISidebarNode[];
+  sidebarProps?: ISidebarProps;
   wrapperClassName?: string;
   canvasClassName?: string;
   metaTheme: {
@@ -50,16 +50,17 @@ const MetaDiagram = ({
   componentsMap,
   wrapperClassName,
   metaTheme,
-  sidebarNodes,
+  sidebarProps,
   metaCallback,
 }: MetaDiagramProps) => {
   const classes = useStyles();
-
   // set up the diagram engine
   const engine = createEngine();
 
   if (metaCallback === undefined) {
-    metaCallback = (node: any) => {console.log(node)}
+    metaCallback = (node: any) => {
+      console.log(node);
+    };
   }
 
   engine
@@ -71,7 +72,6 @@ const MetaDiagram = ({
     .getLinkFactories()
     // @ts-ignore
     .registerFactory(new MetaLinkFactory(componentsMap.links));
-
 
   // set up the diagram model
   const model = new DiagramModel();
@@ -94,23 +94,22 @@ const MetaDiagram = ({
     if (repaint) {
       engine.repaintCanvas();
     }
-
   };
 
   // add listeners to the model and children
-  models.forEach((item:any) => {
-		item.registerListener({
-			nodeUpdated: postCallback,
+  models.forEach((item: any) => {
+    item.registerListener({
+      nodeUpdated: postCallback,
       eventDidFire: postCallback,
-      eventWillFire: preCallback
-		});
-	});
+      eventWillFire: preCallback,
+    });
+  });
 
-	model.registerListener({
-		nodeUpdated: postCallback,
+  model.registerListener({
+    nodeUpdated: postCallback,
     eventDidFire: postCallback,
-    eventWillFire: preCallback
-	});
+    eventWillFire: preCallback,
+  });
 
   // load model into engine
   engine.setModel(model);
@@ -120,7 +119,6 @@ const MetaDiagram = ({
   //   metaGraph.updateNodesContainerBoundingBoxes(model.getNodes(), metaGraph)
   // }, [])
 
-
   const containerClassName = wrapperClassName
     ? wrapperClassName
     : classes.container;
@@ -129,7 +127,7 @@ const MetaDiagram = ({
     <ThemeProvider theme={createTheme(theme(metaTheme?.customThemeVariables))}>
       <CssBaseline />
       <Box className={containerClassName}>
-        <Sidebar sidebarNodes={sidebarNodes} />
+        <Sidebar {...sidebarProps} />
         <CanvasWidget
           className={`canvas-widget ${metaTheme?.canvasClassName}`}
           engine={engine}
