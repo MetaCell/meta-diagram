@@ -49,6 +49,10 @@ const applicationTheme = (params: ThemeVars) => {
             font-family: ${fontFamily};
             font-size: 1rem;
           }
+          .sidebar-container {
+            position: relative;
+            z-index: 1301;
+          }
           .sidebar {
             z-index: 5;
             width: 3rem;
