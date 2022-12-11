@@ -84,7 +84,10 @@ const MetaDiagram = ({
   let preCallback = (event: any) => {
     event.metaEvent = EventTypes.PRE_UPDATE;
     // @ts-ignore
-    metaCallback(event);
+    let repaint = metaCallback(event);
+    if (repaint) {
+      engine.repaintCanvas();
+    }
   };
 
   let postCallback = (event: any) => {
