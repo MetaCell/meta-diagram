@@ -105,7 +105,7 @@ const Sidebar = ({
   };
 
   return (
-    <>
+    <Box className="sidebar-container">
       <Box className="sidebar">
         <List disablePadding component="nav">
           <SidebarItem icon={<MoveToolIcon />} name="cursor" selection="1" />
@@ -166,7 +166,7 @@ const Sidebar = ({
           </Collapse>
         </Box>
       )}
-    </>
+    </Box>
   );
 };
 
