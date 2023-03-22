@@ -1,17 +1,17 @@
-import { Position } from './Position';
 import { PortTypes } from '../constants';
+import {Point} from "@projectstorm/geometry";
 
 export class MetaPort {
   id: string;
   name: string;
   type: PortTypes;
-  position: Position;
+  position: Point;
 
   constructor(
     id: string,
     name: string,
     type: PortTypes,
-    position: Position,
+    position: Point,
     options: Map<string, any>
   ) {
     if (options === undefined) {

@@ -1,10 +1,10 @@
-import { Position } from './Position';
-import { MetaPort } from './MetaPort';
-import { MetaNodeModel } from '../react-diagrams/MetaNodeModel';
+import {MetaPort} from './MetaPort';
+import {MetaNodeModel} from '../react-diagrams/MetaNodeModel';
+import {Point} from "@projectstorm/geometry";
 
 export class MetaNode {
   private readonly parent: MetaNode | undefined;
-  private readonly position: Position;
+  private readonly position: Point;
   private readonly options: Map<string, any>;
   private children: Array<MetaNode> | undefined;
   private childrenMap: Map<string, MetaNode>;
@@ -13,7 +13,7 @@ export class MetaNode {
     id: string,
     name: string,
     shape: string,
-    position: Position,
+    position: Point,
     variant: string,
     parent: MetaNode | undefined,
     ports: Array<MetaPort>,
@@ -78,12 +78,6 @@ export class MetaNode {
     return [this.getId()];
   }
 
-  private getWorldPosition(): Position {
-    return this.parent
-      ? this.position.add(this.parent?.getWorldPosition())
-      : this.position;
-  }
-
   getDepth(): number {
     return this.parent ? this.parent.getDepth() + 1 : 0;
   }
@@ -93,9 +87,6 @@ export class MetaNode {
     optionsMap.set('graphPath', this.getGraphPath());
     optionsMap.set('localPosition', this.position);
     optionsMap.set('depth', this.getDepth());
-    const metaNodeModel = new MetaNodeModel(Object.fromEntries(optionsMap));
-    // const worldPosition = this.getWorldPosition()
-    // metaNodeModel.setPosition(worldPosition.x, worldPosition.y)
-    return metaNodeModel;
+    return new MetaNodeModel(Object.fromEntries(optionsMap));
   }
 }

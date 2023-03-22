@@ -14,7 +14,6 @@ import createEngine, { DiagramModel } from '@projectstorm/react-diagrams';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/material';
-// import {useEffect} from "react";
 import theme from './theme';
 import { EventTypes } from './constants';
 
@@ -144,8 +143,6 @@ export default MetaDiagram;
 export { MetaNode, MetaLink, MetaPort, MetaNodeModel, ComponentsMap };
 export { PortWidget };
 export { MetaLinkModel } from './react-diagrams/MetaLinkModel';
-export { Position } from './models/Position';
 export { PortTypes } from './constants';
 export { CallbackTypes } from './constants';
 export { EventTypes } from './constants';
-export { BoundingBox } from './models/BoundingBox';
