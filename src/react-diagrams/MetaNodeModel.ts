@@ -1,8 +1,8 @@
 import { MetaPort } from '../models/MetaPort';
 import { PortTypes, ReactDiagramMetaTypes, CallbackTypes } from '../constants';
 import { DefaultPortModel, NodeModel } from '@projectstorm/react-diagrams';
-import {Point} from "@projectstorm/geometry";
-import {subPoints} from "../utils";
+import { Point } from '@projectstorm/geometry';
+import { subPoints } from '../utils';
 
 export class MetaNodeModel extends NodeModel {
   constructor(options = {}) {
@@ -95,7 +95,6 @@ export class MetaNodeModel extends NodeModel {
     this.setOption('localPosition', this.calculateLocalPosition(parent));
   }
 
-
   updateSize(width: number, height: number) {
     this.updateDimensions({ width, height });
     this.flagUpdate(CallbackTypes.NODE_RESIZED);
@@ -104,11 +103,11 @@ export class MetaNodeModel extends NodeModel {
   serialise(params: Array<string>) {
     const additionalParams = Object.create({});
     params.forEach(param => {
-      additionalParams[param] = this.getOption(param); 
+      additionalParams[param] = this.getOption(param);
     });
-		return {
-			...super.serialize(),
-			...additionalParams,
-		};
-	}
+    return {
+      ...super.serialize(),
+      ...additionalParams,
+    };
+  }
 }

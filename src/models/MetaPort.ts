@@ -1,5 +1,5 @@
 import { PortTypes } from '../constants';
-import {Point} from "@projectstorm/geometry";
+import { Point } from '@projectstorm/geometry';
 
 export class MetaPort {
   id: string;

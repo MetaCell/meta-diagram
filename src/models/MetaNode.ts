@@ -1,6 +1,6 @@
-import {MetaPort} from './MetaPort';
-import {MetaNodeModel} from '../react-diagrams/MetaNodeModel';
-import {Point} from "@projectstorm/geometry";
+import { MetaPort } from './MetaPort';
+import { MetaNodeModel } from '../react-diagrams/MetaNodeModel';
+import { Point } from '@projectstorm/geometry';
 
 export class MetaNode {
   private readonly parent: MetaNode | undefined;
