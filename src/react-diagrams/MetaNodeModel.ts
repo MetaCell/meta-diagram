@@ -129,11 +129,11 @@ export class MetaNodeModel extends NodeModel {
   serialise(params: Array<string>) {
     const additionalParams = Object.create({});
     params.forEach(param => {
-      additionalParams[param] = this.getOption(param); 
+      additionalParams[param] = this.getOption(param);
     });
-		return {
-			...super.serialize(),
-			...additionalParams,
-		};
-	}
+    return {
+      ...super.serialize(),
+      ...additionalParams,
+    };
+  }
 }
