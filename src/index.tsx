@@ -7,16 +7,18 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ComponentsMap } from './models/ComponentsMap';
 import { PortWidget } from '@projectstorm/react-diagrams';
 import { MetaNodeModel } from './react-diagrams/MetaNodeModel';
-import { CanvasWidget } from '@projectstorm/react-canvas-core';
 import { MetaNodeFactory } from './react-diagrams/MetaNodeFactory';
 import { MetaLinkFactory } from './react-diagrams/MetaLinkFactory';
 import createEngine, { DiagramModel } from '@projectstorm/react-diagrams';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/material';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
 // import {useEffect} from "react";
 import theme from './theme';
 import { EventTypes } from './constants';
+import { CanvasWidget } from './components/CanvasWidget';
 
 const useStyles = makeStyles(_ => ({
   container: {
@@ -128,14 +130,16 @@ const MetaDiagram = ({
 
   return (
     <ThemeProvider theme={createTheme(theme(metaTheme?.customThemeVariables))}>
-      <CssBaseline />
-      <Box className={containerClassName}>
-        <Sidebar {...sidebarProps} />
-        <CanvasWidget
-          className={`canvas-widget ${metaTheme?.canvasClassName}`}
-          engine={engine}
-        />
-      </Box>
+      <DndProvider backend={HTML5Backend}>
+        <CssBaseline />
+        <Box className={containerClassName}>
+          <Sidebar {...sidebarProps} />
+          <CanvasWidget
+            engine={engine}
+            className={metaTheme?.canvasClassName}
+          />
+        </Box>
+      </DndProvider>
     </ThemeProvider>
   );
 };
