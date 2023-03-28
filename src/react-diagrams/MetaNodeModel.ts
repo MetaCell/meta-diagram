@@ -1,11 +1,10 @@
-import { Position } from '../models/Position';
 import { MetaPort } from '../models/MetaPort';
 import { PortTypes, ReactDiagramMetaTypes, CallbackTypes } from '../constants';
 import { DefaultPortModel, NodeModel } from '@projectstorm/react-diagrams';
-import { BoundingBox } from '../models/BoundingBox';
+import { Point } from '@projectstorm/geometry';
+import { subPoints } from '../utils';
 
 export class MetaNodeModel extends NodeModel {
-  private boundingBox: BoundingBox;
   constructor(options = {}) {
     super({
       ...options,
@@ -16,13 +15,6 @@ export class MetaNodeModel extends NodeModel {
       // @ts-ignore
       this.updateDimensions({ width: options.width, height: options.height });
     }
-
-    this.boundingBox = new BoundingBox(
-      this.getX(),
-      this.getY(),
-      this.getX() + this.width,
-      this.getY() + this.height
-    );
 
     // @ts-ignore
     options?.ports?.forEach((port: MetaPort) => {
@@ -80,7 +72,7 @@ export class MetaNodeModel extends NodeModel {
     return [...this.getOption('graphPath')];
   }
 
-  getLocalPosition(): Position {
+  getLocalPosition(): Point {
     return this.getOption('localPosition');
   }
 
@@ -91,30 +83,16 @@ export class MetaNodeModel extends NodeModel {
       : true;
   }
 
-  private calculateLocalPosition(parent: MetaNodeModel | undefined): Position {
-    const worldPosition = new Position(this.getX(), this.getY());
+  private calculateLocalPosition(parent: MetaNodeModel | undefined): Point {
+    const worldPosition = new Point(this.getX(), this.getY());
     const parentWorldPosition = parent
-      ? new Position(parent.getX(), parent.getY())
-      : new Position(0, 0);
-    return worldPosition.sub(parentWorldPosition);
+      ? new Point(parent.getX(), parent.getY())
+      : new Point(0, 0);
+    return subPoints(worldPosition, parentWorldPosition);
   }
 
   updateLocalPosition(parent: MetaNodeModel | undefined): void {
     this.setOption('localPosition', this.calculateLocalPosition(parent));
-  }
-
-  setNodeBoundingBox(containerBoundingBox: {
-    left: number;
-    top: number;
-    right: number;
-    bottom: number;
-  }): void {
-    this.boundingBox = new BoundingBox(
-      containerBoundingBox.left,
-      containerBoundingBox.top,
-      containerBoundingBox.right,
-      containerBoundingBox.bottom
-    );
   }
 
   updateSize(width: number, height: number) {
@@ -122,18 +100,14 @@ export class MetaNodeModel extends NodeModel {
     this.flagUpdate(CallbackTypes.NODE_RESIZED);
   }
 
-  getNodeBoundingBox(): BoundingBox {
-    return this.boundingBox;
-  }
-
   serialise(params: Array<string>) {
     const additionalParams = Object.create({});
     params.forEach(param => {
-      additionalParams[param] = this.getOption(param); 
+      additionalParams[param] = this.getOption(param);
     });
-		return {
-			...super.serialize(),
-			...additionalParams,
-		};
-	}
+    return {
+      ...super.serialize(),
+      ...additionalParams,
+    };
+  }
 }

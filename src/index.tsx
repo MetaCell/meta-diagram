@@ -148,8 +148,6 @@ export default MetaDiagram;
 export { MetaNode, MetaLink, MetaPort, MetaNodeModel, ComponentsMap };
 export { PortWidget };
 export { MetaLinkModel } from './react-diagrams/MetaLinkModel';
-export { Position } from './models/Position';
 export { PortTypes } from './constants';
 export { CallbackTypes } from './constants';
 export { EventTypes } from './constants';
-export { BoundingBox } from './models/BoundingBox';
