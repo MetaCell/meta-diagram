@@ -11,6 +11,9 @@ import {
   Tooltip,
 } from '@mui/material';
 import { subBarStyle } from '../theme';
+import { CanvasDropTypes } from '../constants';
+import { DropTargetMonitor, useDrag } from 'react-dnd';
+import { CanvasEngine } from '@projectstorm/react-canvas-core';
 
 const { dividerColor } = vars;
 
@@ -33,13 +36,21 @@ export interface INode {
   type: string;
   draggable: boolean;
   // do something before the default behaviour is triggered.
-  preCallback?: (event: any, node: any) => void;
+  preCallback?: (event: any, node: unknown) => void;
 
   // do something AFTER the default behaviour is triggered.
-  postCallback?: (event: any, node: any) => void;
+  postCallback?: (event: any, node: unknown) => void;
 
-  // overrides default behaviour if triggered.
-  defaultCallback?: (event: any, node: any, model: {}) => void;
+  // overrides default behaviour if triggered. omitted prop model: {}
+  defaultCallback?: (event: any, node: unknown) => void;
+
+  // overrides default behaviour if triggered. omitted prop model: {}
+  onNodeDrop?: (
+    monitor: DropTargetMonitor,
+    node: unknown,
+    engine?: CanvasEngine
+  ) => void;
+
   // style object adds or override default styling.
   css?: React.CSSProperties;
   children?: INode[];
@@ -60,23 +71,54 @@ export interface ISidebarProps {
   updateSelectedBar?: (id: string) => void;
 }
 
+// handle item click callback
+const handleItemClick = (
+  event: unknown,
+  node: INode | ISidebarNodeProps,
+  updateSelected?: (id: string) => void
+) => {
+  const { id, draggable, preCallback, postCallback, defaultCallback } = node;
+  // if item is un-draggable click event fires only
+  if (!draggable) {
+    if (!!updateSelected) updateSelected(id);
+
+    // execute pre & post-callback when no overriding default-callback
+    if (!!preCallback && !defaultCallback) preCallback(event, node);
+    if (!!postCallback && !defaultCallback) postCallback(event, node);
+
+    // call default - callback if exists
+    if (!!defaultCallback) defaultCallback(event, node);
+  }
+};
+
 // image based icon function
 // const svgImg = (img: string) =>
 //   `data:image/svg+xml;base64,${new Buffer(img).toString('base64')}`;
 
 const SidebarItem = ({ node, selected, updateSelected }: SidebarItemProps) => {
+  const [{}, dragRef, dragPreview] = useDrag(
+    () => ({
+      type: CanvasDropTypes.CANVAS_NODE,
+      item: node,
+      collect: monitor => ({
+        isDragging: monitor.isDragging(),
+        opacity: monitor.isDragging() ? 0.9 : 1,
+      }),
+    }),
+    [node]
+  );
   const classes = useStyles();
   const { id, icon, divider, css, draggable } = node as ISidebarNodeProps;
 
   if (!!divider) {
     return (
-      <Box className={classes.node}>
+      <Box className={classes.node} key={id}>
         <Divider />
 
         <ListItemButton
           selected={selected}
-          onClick={() => {
-            if (!!updateSelected && !draggable) updateSelected(id);
+          onClick={event => {
+            handleItemClick(event, node, updateSelected);
           }}
           sx={css}
         >
@@ -90,11 +132,19 @@ const SidebarItem = ({ node, selected, updateSelected }: SidebarItemProps) => {
   return (
     <ListItemButton
       selected={selected}
-      onClick={() => {
-        if (!!updateSelected && !draggable) updateSelected(id);
+      key={id}
+      onClick={event => {
+        handleItemClick(event, node, updateSelected);
+      }}
+      ref={dragPreview}
+      sx={{
+        transform: 'translate(0,0)',
+        '&.Mui-selected:hover': {
+          backgroundColor: draggable ? 'none' : 'unset',
+        },
       }}
     >
-      <ListItemIcon>{icon}</ListItemIcon>
+      <ListItemIcon ref={draggable ? dragRef : null}>{icon}</ListItemIcon>
     </ListItemButton>
   );
 };
@@ -104,20 +154,34 @@ const SubSidebarItem = ({
   selected,
   updateSelected,
 }: SidebarItemProps) => {
+  const [{}, dragRef, dragPreview] = useDrag(
+    () => ({
+      type: CanvasDropTypes.CANVAS_NODE,
+      item: node,
+      collect: monitor => ({
+        isDragging: monitor.isDragging(),
+        opacity: monitor.isDragging() ? 0.9 : 1,
+      }),
+    }),
+    [node]
+  );
   const { icon, name, id, draggable } = node;
 
   const iconColor = selected ? '#fff' : 'rgba(26, 26, 26, 0.6)';
 
   return (
-    <Tooltip id={name} title={name} placement="right" arrow>
+    <Tooltip id={id} title={name} placement="right" arrow>
       <ListItemButton
         selected={selected}
-        onClick={() => {
-          if (!!updateSelected && !draggable) updateSelected(id);
+        onClick={event => {
+          handleItemClick(event, node, updateSelected);
         }}
+        ref={dragPreview}
         sx={subBarStyle}
       >
-        <ListItemIcon>{cloneElement(icon, { color: iconColor })}</ListItemIcon>
+        <ListItemIcon ref={draggable ? dragRef : null}>
+          {cloneElement(icon, { color: iconColor })}
+        </ListItemIcon>
       </ListItemButton>
     </Tooltip>
   );
