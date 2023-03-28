@@ -21,3 +21,7 @@ export enum EventTypes {
   POST_UPDATE = 'postUpdate',
   PRE_UPDATE = 'preUpdate',
 }
+
+export enum CanvasDropTypes {
+  CANVAS_NODE = 'canvas-node',
+}
