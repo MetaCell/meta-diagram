@@ -1,4 +1,4 @@
-import React, { cloneElement } from 'react';
+import React, { cloneElement, useState } from 'react';
 import { Box } from '@mui/system';
 import { makeStyles } from '@mui/styles';
 import vars from './assets/styles/variables';
@@ -10,160 +10,193 @@ import {
   ListItemIcon,
   Tooltip,
 } from '@mui/material';
-import Node from './assets/svg/node.svg';
-import {
-  FileIcon,
-  HandIcon,
-  MoveToolIcon,
-  ShapeArrowToolIcon,
-} from './assets/icons';
 import { subBarStyle } from '../theme';
 
 const { dividerColor } = vars;
 
 const useStyles = makeStyles(() => ({
   node: {
+    marginBottom: '0.5rem',
     '& .MuiDivider-root': {
       borderColor: dividerColor,
-      width: 'calc(100% - 1.5rem)',
+      width: '100%',
       margin: '0 auto',
       border: 'none',
       borderTop: '0.0625rem solid',
     },
   },
 }));
-
-type sidebarItemProps = {
-  icon: React.ReactNode;
-  name: string;
-  selection: string;
-};
-
-type subSidebarItemProps = {
+export interface INode {
   id: string;
   icon: React.ReactElement;
   name: string;
-  selected?: boolean;
-  updateSelected?: (name: string) => void;
-};
+  type: string;
+  draggable: boolean;
+  // do something before the default behaviour is triggered.
+  preCallback?: (event: any, node: any) => void;
 
-export interface ISidebarNode {
-  id: string;
-  icon: React.ReactElement;
-  name: string;
+  // do something AFTER the default behaviour is triggered.
+  postCallback?: (event: any, node: any) => void;
+
+  // overrides default behaviour if triggered.
+  defaultCallback?: (event: any, node: any, model: {}) => void;
+  // style object adds or override default styling.
+  css?: React.CSSProperties;
+  children?: INode[];
 }
+export interface ISidebarNodeProps extends INode {
+  divider?: boolean;
+}
+
+type SidebarItemProps = {
+  node: INode | ISidebarNodeProps;
+  selected?: boolean;
+  updateSelected?: (id: string) => void;
+};
 
 export interface ISidebarProps {
   selectedBarNode?: string;
-  sidebarNodes?: ISidebarNode[];
+  sidebarNodes?: ISidebarNodeProps[];
   updateSelectedBar?: (id: string) => void;
 }
 
-const Sidebar = ({
-  selectedBarNode,
-  sidebarNodes,
-  updateSelectedBar,
-}: ISidebarProps) => {
+// image based icon function
+// const svgImg = (img: string) =>
+//   `data:image/svg+xml;base64,${new Buffer(img).toString('base64')}`;
+
+const SidebarItem = ({ node, selected, updateSelected }: SidebarItemProps) => {
   const classes = useStyles();
-  const [selected, setSelected] = React.useState('1');
-  const svgImg = (img: string) =>
-    `data:image/svg+xml;base64,${new Buffer(img).toString('base64')}`;
-  const SidebarItem = (props: sidebarItemProps) => {
-    const { icon, selection } = props;
+  const { id, icon, divider, css, draggable } = node as ISidebarNodeProps;
+
+  if (!!divider) {
     return (
-      <ListItemButton
-        selected={selected === selection}
-        onClick={() => {
-          setSelected(selection);
-        }}
-      >
-        <ListItemIcon>{icon}</ListItemIcon>
-      </ListItemButton>
-    );
-  };
+      <Box className={classes.node}>
+        <Divider />
 
-  const SubSidebarItem = (props: subSidebarItemProps) => {
-    const { icon, selected, name, id, updateSelected } = props;
-
-    const iconColor = selected ? '#fff' : 'rgba(26, 26, 26, 0.6)';
-
-    return (
-      <Tooltip id={name} title={name} placement="right" arrow>
         <ListItemButton
           selected={selected}
           onClick={() => {
-            if (!!updateSelected) updateSelected(id);
+            if (!!updateSelected && !draggable) updateSelected(id);
           }}
-          sx={subBarStyle}
+          sx={css}
         >
-          <ListItemIcon>
-            {cloneElement(icon, { color: iconColor })}
-          </ListItemIcon>
+          <ListItemIcon>{icon}</ListItemIcon>
         </ListItemButton>
-      </Tooltip>
+
+        <Divider />
+      </Box>
     );
-  };
+  }
+  return (
+    <ListItemButton
+      selected={selected}
+      onClick={() => {
+        if (!!updateSelected && !draggable) updateSelected(id);
+      }}
+    >
+      <ListItemIcon>{icon}</ListItemIcon>
+    </ListItemButton>
+  );
+};
+
+const SubSidebarItem = ({
+  node,
+  selected,
+  updateSelected,
+}: SidebarItemProps) => {
+  const { icon, name, id, draggable } = node;
+
+  const iconColor = selected ? '#fff' : 'rgba(26, 26, 26, 0.6)';
 
   return (
-    <>
-      <Box className="sidebar">
-        <List disablePadding component="nav">
-          <SidebarItem icon={<MoveToolIcon />} name="cursor" selection="1" />
-          <SidebarItem icon={<HandIcon />} name="move" selection="2" />
-        </List>
+    <Tooltip id={name} title={name} placement="right" arrow>
+      <ListItemButton
+        selected={selected}
+        onClick={() => {
+          if (!!updateSelected && !draggable) updateSelected(id);
+        }}
+        sx={subBarStyle}
+      >
+        <ListItemIcon>{cloneElement(icon, { color: iconColor })}</ListItemIcon>
+      </ListItemButton>
+    </Tooltip>
+  );
+};
 
-        <Box className={classes.node}>
-          <Divider />
+const SubSiderBar = ({
+  nodes,
+  show = false,
+}: {
+  show?: boolean;
+  nodes?: INode[];
+}) => {
+  const [selected, setSelected] = useState<string | undefined>();
 
-          {sidebarNodes !== undefined ? (
-            <ListItemButton
-              selected={selected === '3'}
-              onClick={() => setSelected('3')}
-              sx={{
-                height: 128,
-                borderRadius: '0 0.5rem 0.5rem 0 !important',
-                width: '2.75rem',
-                margin: '0.25rem 0 !important',
-              }}
-            >
-              <ListItemIcon>
-                {<img src={svgImg(Node)} alt="Node" />}
-              </ListItemIcon>
-            </ListItemButton>
-          ) : (
-            <img src={svgImg(Node)} alt="Node" />
-          )}
-
-          <Divider />
-        </Box>
-
-        <List disablePadding component="nav">
-          <SidebarItem
-            icon={<ShapeArrowToolIcon />}
-            name="draw"
-            selection="4"
-          />
-          <SidebarItem icon={<FileIcon />} name="fullscreen" selection="5" />
-        </List>
-      </Box>
-      {selected === '3' && sidebarNodes && (
+  if (!!nodes && !!show) {
+    return (
+      <>
         <Box className="sub-sidebar">
-          <Collapse orientation="horizontal" in={selected === '3'}>
+          <Collapse orientation="horizontal" in={show}>
             <List disablePadding component="nav">
-              {sidebarNodes.map(({ id, name, icon }) => (
-                <SubSidebarItem
-                  key={id}
-                  id={id}
-                  name={name}
-                  icon={icon}
-                  selected={id === selectedBarNode}
-                  updateSelected={id => {
-                    if (!!updateSelectedBar) updateSelectedBar(id);
-                  }}
-                />
+              {nodes.map(node => (
+                <>
+                  <SubSidebarItem
+                    key={node.id}
+                    {...{ node }}
+                    selected={selected === node.id}
+                    updateSelected={id => setSelected(id)}
+                  />
+                  {/* // TODO: fix nested sub-sidebar reference:
+                  https://github.com/MetaCell/meta-diagram/issues/41 */}
+                  {/* {node.children?.length && (
+                    <SubSiderBar
+                      key={`sub-sidebar-${node.id}`}
+                      nodes={node.children}
+                      show={selected === node.id}
+                    />
+                  )} */}
+                </>
               ))}
             </List>
           </Collapse>
+        </Box>
+      </>
+    );
+  }
+
+  return null;
+};
+
+const Sidebar = ({ sidebarNodes }: ISidebarProps) => {
+  const [selected, setSelected] = React.useState<string | null>(null);
+
+  return (
+    <>
+      {Array.isArray(sidebarNodes) && (
+        <Box className="sidebar">
+          <List component="nav" disablePadding>
+            {sidebarNodes.map(node => {
+              const isSelected = selected === node.id;
+
+              return (
+                <>
+                  <SidebarItem
+                    key={node.id}
+                    {...{ node }}
+                    selected={isSelected}
+                    updateSelected={id => setSelected(id)}
+                  />
+                  {Array.isArray(node.children) && (
+                    <SubSiderBar
+                      key={`sub-sidebar-${node.id}`}
+                      nodes={node.children}
+                      show={isSelected}
+                    />
+                  )}
+                </>
+              );
+            })}
+          </List>
         </Box>
       )}
     </>
