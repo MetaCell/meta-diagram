@@ -15,10 +15,10 @@ import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/material';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
-// import {useEffect} from "react";
 import theme from './theme';
 import { EventTypes } from './constants';
 import { CanvasWidget } from './components/CanvasWidget';
+import { MetaLinkModel } from './react-diagrams/MetaLinkModel';
 
 const useStyles = makeStyles(_ => ({
   container: {
@@ -33,8 +33,8 @@ const useStyles = makeStyles(_ => ({
 }));
 
 interface MetaDiagramProps {
-  metaNodes: MetaNode[];
-  metaLinks: MetaLink[];
+  metaNodes: MetaNodeModel[];
+  metaLinks: MetaLinkModel[];
   componentsMap: ComponentsMap;
   sidebarProps?: ISidebarProps;
   wrapperClassName?: string;
