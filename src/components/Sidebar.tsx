@@ -1,4 +1,4 @@
-import React, { cloneElement, useState } from 'react';
+import React, { cloneElement, useState, Fragment } from 'react';
 import { Box } from '@mui/system';
 import { makeStyles } from '@mui/styles';
 import vars from './assets/styles/variables';
@@ -203,7 +203,7 @@ const SubSiderBar = ({
           <Collapse orientation="horizontal" in={show}>
             <List disablePadding component="nav">
               {nodes.map(node => (
-                <>
+                <Fragment key={node.id}>
                   <SubSidebarItem
                     key={node.id}
                     {...{ node }}
@@ -219,7 +219,7 @@ const SubSiderBar = ({
                       show={selected === node.id}
                     />
                   )} */}
-                </>
+                </Fragment>
               ))}
             </List>
           </Collapse>
@@ -243,7 +243,7 @@ const Sidebar = ({ sidebarNodes }: ISidebarProps) => {
               const isSelected = selected === node.id;
 
               return (
-                <>
+                <Fragment key={node.id}>
                   <SidebarItem
                     key={node.id}
                     {...{ node }}
@@ -257,7 +257,7 @@ const Sidebar = ({ sidebarNodes }: ISidebarProps) => {
                       show={isSelected}
                     />
                   )}
-                </>
+                </Fragment>
               );
             })}
           </List>
