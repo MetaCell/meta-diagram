@@ -19,6 +19,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
 import {Point} from "@projectstorm/geometry";
 import FolderIcon from '@mui/icons-material/Folder';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import { blue, red } from '@mui/material/colors';
 
 const useStyles = makeStyles(_ => ({
@@ -55,22 +56,33 @@ export function onNodeDrop(monitor, node, engine) {
   }
 }
 
-const leftSideBarNodes = [
-    {
+const blueNode = {
         id: 'blueNode',
         name: 'Blue Node',
         icon: <FolderIcon sx={{ color: blue[500] }}  />,
         type: 'node-blue',
         draggable: true,
         onNodeDrop
-    },
-    {
+    };
+const redNode = {
         id: 'redNode',
         name: 'red Node',
         icon: <FolderIcon sx={{ color: red[500] }} />,
         type: 'node-red',
         draggable: true,
         onNodeDrop
+    };
+
+const leftSideBarNodes = [
+    blueNode,
+    redNode,
+    {
+        id: 'nestedSidebarNode',
+        name: 'Nested Sidebar Node',
+        icon: <ArrowCircleRightIcon/>,
+        type: undefined,
+        draggable: false,
+        children: [blueNode, redNode]
     },
 ];
 
