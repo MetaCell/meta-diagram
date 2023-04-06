@@ -98,7 +98,7 @@ const App = () => {
     null,
     [new MetaPort('in', 'in', PortTypes.INPUT_PORT, undefined, undefined), new MetaPort('out', 'out', PortTypes.OUTPUT_PORT, undefined, undefined)],
     [],
-    new Map(Object.entries({ color: 'rgb(0,255,0)' }))
+    new Map()
   );
 
   const parent = new MetaNode(
@@ -110,7 +110,7 @@ const App = () => {
     grandparent,
     [new MetaPort('in', 'in', PortTypes.INPUT_PORT, undefined, undefined), new MetaPort('out', 'out', PortTypes.OUTPUT_PORT, undefined, undefined)],
     [],
-    new Map(Object.entries({ color: 'rgb(255,0,0)' }))
+    new Map()
   );
 
   const node1 = new MetaNode(
@@ -122,7 +122,7 @@ const App = () => {
     parent,
     [new MetaPort('in', 'in', PortTypes.INPUT_PORT, undefined, undefined), new MetaPort('out', 'out', PortTypes.OUTPUT_PORT, undefined, undefined)],
     [],
-    new Map(Object.entries({ color: 'rgb(0,192,255)' }))
+     new Map()
   );
 
   const node2 = new MetaNode(
@@ -134,19 +134,7 @@ const App = () => {
     parent,
     [new MetaPort('in', 'in', PortTypes.INPUT_PORT, undefined, undefined), new MetaPort('out', 'out', PortTypes.OUTPUT_PORT, undefined, undefined)],
     [],
-    new Map(Object.entries({ color: 'rgb(255,255,0)' }))
-  );
-
-  const link3 = new MetaLink(
-    '3',
-    'link3',
-    'default',
-    '1',
-    'out',
-    '2',
-    'in',
-    undefined,
-    new Map(Object.entries({ color: 'rgb(255,192,0)' }))
+     new Map()
   );
 
   const componentsMap = new ComponentsMap(
