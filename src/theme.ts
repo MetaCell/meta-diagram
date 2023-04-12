@@ -380,6 +380,7 @@ const applicationTheme = (params: ThemeVars) => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                transform: 'translate(0, 0)',
                 '&:not(:last-child)': {
                   marginBottom: '0',
                 },
@@ -448,6 +449,7 @@ const applicationTheme = (params: ThemeVars) => {
 };
 
 export const subBarStyle = {
+  transform: 'translate(0,0)',
   '&:hover': {
     backgroundColor: vars.chipTextColor,
   },
