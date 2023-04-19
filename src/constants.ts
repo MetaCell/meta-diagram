@@ -25,3 +25,8 @@ export enum EventTypes {
 export enum CanvasDropTypes {
   CANVAS_NODE = 'canvas-node',
 }
+
+export enum DefaultSidebarNodeTypes {
+  PANNING = 'panning',
+  SELECT = 'select',
+}

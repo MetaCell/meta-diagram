@@ -16,7 +16,7 @@ import { Box } from '@mui/material';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 import theme from './theme';
-import { EventTypes } from './constants';
+import { DefaultSidebarNodeTypes, EventTypes } from './constants';
 import { CanvasWidget } from './components/CanvasWidget';
 import { MetaLinkModel } from './react-diagrams/MetaLinkModel';
 import { DefaultState } from './DefaultState';
@@ -111,7 +111,10 @@ const MetaDiagram = ({
 
   // update state selection state
   const updateSelection = (id: string) => {
-    if (id.toLowerCase().startsWith('select') && !Boolean(state.isSelection)) {
+    if (
+      id.toLowerCase().startsWith(DefaultSidebarNodeTypes.SELECT) &&
+      !Boolean(state.isSelection)
+    ) {
       state.isSelection = true;
     } else if (
       id.toLowerCase().startsWith('select') &&

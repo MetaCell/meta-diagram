@@ -16,7 +16,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { subBarStyle } from '../theme';
-import { CanvasDropTypes } from '../constants';
+import { CanvasDropTypes, DefaultSidebarNodeTypes } from '../constants';
 import { DropTargetMonitor, useDrag } from 'react-dnd';
 import { CanvasEngine } from '@projectstorm/react-canvas-core';
 import { DefaultDiagramState } from '@projectstorm/react-diagrams';
@@ -106,16 +106,16 @@ const handleItemClick = ({
   enableDrag,
   disableDrag,
 }: IHandleClick) => {
-  console.log('fired');
-
   const { id, draggable, preCallback, postCallback, defaultCallback } = node;
   // if item is un-draggable click event fires only
   if (!draggable) {
     if (!!updateSelected) updateSelected(id);
 
     // execute drag actions
-    if (id.startsWith('panning') && enableDrag) enableDrag();
-    if (!id.startsWith('panning') && disableDrag) disableDrag();
+    if (id.startsWith(DefaultSidebarNodeTypes.PANNING) && enableDrag)
+      enableDrag();
+    if (!id.startsWith(DefaultSidebarNodeTypes.PANNING) && disableDrag)
+      disableDrag();
 
     // execute pre & post-callback when no overriding default-callback
     if (!!preCallback && !defaultCallback) preCallback(event, node);
