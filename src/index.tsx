@@ -19,6 +19,7 @@ import theme from './theme';
 import { EventTypes } from './constants';
 import { CanvasWidget } from './components/CanvasWidget';
 import { MetaLinkModel } from './react-diagrams/MetaLinkModel';
+import { DefaultState } from './DefaultState';
 
 const useStyles = makeStyles(_ => ({
   container: {
@@ -58,6 +59,9 @@ const MetaDiagram = ({
   const classes = useStyles();
   // set up the diagram engine
   const engine = createEngine();
+
+  // default state
+  const state = new DefaultState();
 
   if (metaCallback === undefined) {
     metaCallback = (node: any) => {
@@ -101,6 +105,25 @@ const MetaDiagram = ({
     }
   };
 
+  const clearSelection = () => {
+    engine.getModel().clearSelection();
+  };
+
+  // update state selection state
+  const updateSelection = (id: string) => {
+    if (id.toLowerCase().startsWith('select') && !Boolean(state.isSelection)) {
+      state.isSelection = true;
+    } else if (
+      id.toLowerCase().startsWith('select') &&
+      Boolean(state.isSelection)
+    ) {
+      return;
+    } else if (state.isSelection) {
+      clearSelection();
+      state.isSelection = false;
+    }
+  };
+
   // add listeners to the model and children
   models.forEach((item: any) => {
     item.registerListener({
@@ -124,6 +147,9 @@ const MetaDiagram = ({
   //   metaGraph.updateNodesContainerBoundingBoxes(model.getNodes(), metaGraph)
   // }, [])
 
+  // Use this custom "DefaultState" instead of the actual default state we get with the engine
+  engine.getStateMachine().pushState(state);
+
   const containerClassName = wrapperClassName
     ? wrapperClassName
     : classes.container;
@@ -133,7 +159,11 @@ const MetaDiagram = ({
       <DndProvider backend={HTML5Backend}>
         <CssBaseline />
         <Box className={containerClassName}>
-          <Sidebar {...sidebarProps} />
+          <Sidebar
+            {...sidebarProps}
+            engine={engine}
+            updateSelectedBar={updateSelection}
+          />
           <CanvasWidget
             engine={engine}
             className={metaTheme?.canvasClassName}
