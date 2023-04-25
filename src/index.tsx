@@ -47,103 +47,110 @@ interface MetaDiagramProps {
   metaCallback?: Function;
 }
 
-const MetaDiagram = forwardRef(({
-  metaNodes,
-  metaLinks,
-  componentsMap,
-  wrapperClassName,
-  metaTheme,
-  sidebarProps,
-  metaCallback,
-}: MetaDiagramProps, ref) => {
-  const classes = useStyles();
-  // set up the diagram engine
-  const engine = createEngine();
+const MetaDiagram = forwardRef(
+  (
+    {
+      metaNodes,
+      metaLinks,
+      componentsMap,
+      wrapperClassName,
+      metaTheme,
+      sidebarProps,
+      metaCallback,
+    }: MetaDiagramProps,
+    ref
+  ) => {
+    const classes = useStyles();
+    // set up the diagram engine
+    const engine = createEngine();
 
-  if (metaCallback === undefined) {
-    metaCallback = (node: any) => {
-      console.log(node);
+    if (metaCallback === undefined) {
+      metaCallback = (node: any) => {
+        console.log(node);
+      };
+    }
+
+    engine
+      .getNodeFactories()
+      // @ts-ignore
+      .registerFactory(new MetaNodeFactory(componentsMap.nodes));
+
+    engine
+      .getLinkFactories()
+      // @ts-ignore
+      .registerFactory(new MetaLinkFactory(componentsMap.links));
+
+    // set up the diagram model
+    const model = new DiagramModel();
+    const nodes = metaNodes;
+    const links = metaLinks;
+
+    // @ts-ignore
+    let models = model.addAll(...nodes, ...links);
+
+    let preCallback = (event: any) => {
+      event.metaEvent = EventTypes.PRE_UPDATE;
+      // @ts-ignore
+      let repaint = metaCallback(event);
+      if (repaint) {
+        engine.repaintCanvas();
+      }
     };
-  }
 
-  engine
-    .getNodeFactories()
-    // @ts-ignore
-    .registerFactory(new MetaNodeFactory(componentsMap.nodes));
+    let postCallback = (event: any) => {
+      event.metaEvent = EventTypes.POST_UPDATE;
+      // @ts-ignore
+      let repaint = metaCallback(event);
+      if (repaint) {
+        engine.repaintCanvas();
+      }
+    };
 
-  engine
-    .getLinkFactories()
-    // @ts-ignore
-    .registerFactory(new MetaLinkFactory(componentsMap.links));
+    // add listeners to the model and children
+    models.forEach((item: any) => {
+      item.registerListener({
+        nodeUpdated: postCallback,
+        eventDidFire: postCallback,
+        eventWillFire: preCallback,
+      });
+    });
 
-  // set up the diagram model
-  const model = new DiagramModel();
-  const nodes = metaNodes;
-  const links = metaLinks;
-
-  // @ts-ignore
-  let models = model.addAll(...nodes, ...links);
-
-  let preCallback = (event: any) => {
-    event.metaEvent = EventTypes.PRE_UPDATE;
-    // @ts-ignore
-    let repaint = metaCallback(event);
-    if (repaint) {
-      engine.repaintCanvas();
-    }
-  };
-
-  let postCallback = (event: any) => {
-    event.metaEvent = EventTypes.POST_UPDATE;
-    // @ts-ignore
-    let repaint = metaCallback(event);
-    if (repaint) {
-      engine.repaintCanvas();
-    }
-  };
-
-  // add listeners to the model and children
-  models.forEach((item: any) => {
-    item.registerListener({
+    model.registerListener({
       nodeUpdated: postCallback,
       eventDidFire: postCallback,
       eventWillFire: preCallback,
     });
-  });
 
-  model.registerListener({
-    nodeUpdated: postCallback,
-    eventDidFire: postCallback,
-    eventWillFire: preCallback,
-  });
+    // load model into engine
+    engine.setModel(model);
 
-  // load model into engine
-  engine.setModel(model);
+    // useEffect(() => {
+    //   // @ts-ignore
+    //   metaGraph.updateNodesContainerBoundingBoxes(model.getNodes(), metaGraph)
+    // }, [])
 
-  // useEffect(() => {
-  //   // @ts-ignore
-  //   metaGraph.updateNodesContainerBoundingBoxes(model.getNodes(), metaGraph)
-  // }, [])
+    const containerClassName = wrapperClassName
+      ? wrapperClassName
+      : classes.container;
 
-  const containerClassName = wrapperClassName
-    ? wrapperClassName
-    : classes.container;
-
-  return (
-    <ThemeProvider theme={createTheme(theme(metaTheme?.customThemeVariables))}>
-      <DndProvider backend={HTML5Backend}>
-        <CssBaseline />
+    return (
+      <ThemeProvider
+        theme={createTheme(theme(metaTheme?.customThemeVariables))}
+      >
+        <DndProvider backend={HTML5Backend}>
+          <CssBaseline />
           <Box className={containerClassName} ref={ref}>
-          <Sidebar {...sidebarProps} />
-          <CanvasWidget
-            engine={engine}
-            className={metaTheme?.canvasClassName}
-          />
-        </Box>
-      </DndProvider>
-    </ThemeProvider>
-  );
-});
+            <Sidebar {...sidebarProps} />
+            <CanvasWidget
+              engine={engine}
+              className={metaTheme?.canvasClassName}
+            />
+          </Box>
+        </DndProvider>
+      </ThemeProvider>
+    );
+  }
+);
 
 export default MetaDiagram;
 export { MetaNode, MetaLink, MetaPort, MetaNodeModel, ComponentsMap };
