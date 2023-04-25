@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { forwardRef } from 'react';
 import Sidebar, { ISidebarProps } from './components/Sidebar';
 import { MetaNode } from './models/MetaNode';
 import { MetaLink } from './models/MetaLink';
@@ -46,7 +47,7 @@ interface MetaDiagramProps {
   metaCallback?: Function;
 }
 
-const MetaDiagram = ({
+const MetaDiagram = forwardRef(({
   metaNodes,
   metaLinks,
   componentsMap,
@@ -54,7 +55,7 @@ const MetaDiagram = ({
   metaTheme,
   sidebarProps,
   metaCallback,
-}: MetaDiagramProps) => {
+}: MetaDiagramProps, ref) => {
   const classes = useStyles();
   // set up the diagram engine
   const engine = createEngine();
@@ -132,7 +133,7 @@ const MetaDiagram = ({
     <ThemeProvider theme={createTheme(theme(metaTheme?.customThemeVariables))}>
       <DndProvider backend={HTML5Backend}>
         <CssBaseline />
-        <Box className={containerClassName}>
+          <Box className={containerClassName} ref={ref}>
           <Sidebar {...sidebarProps} />
           <CanvasWidget
             engine={engine}
@@ -142,7 +143,7 @@ const MetaDiagram = ({
       </DndProvider>
     </ThemeProvider>
   );
-};
+});
 
 export default MetaDiagram;
 export { MetaNode, MetaLink, MetaPort, MetaNodeModel, ComponentsMap };
