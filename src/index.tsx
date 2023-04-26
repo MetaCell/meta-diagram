@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { forwardRef } from 'react';
+import { forwardRef, useEffect } from 'react';
 import Sidebar, { ISidebarProps } from './components/Sidebar';
 import { MetaNode } from './models/MetaNode';
 import { MetaLink } from './models/MetaLink';
@@ -45,6 +45,7 @@ interface MetaDiagramProps {
     canvasClassName: string;
   };
   metaCallback?: Function;
+  onMount?: Function;
 }
 
 const MetaDiagram = forwardRef(
@@ -57,6 +58,7 @@ const MetaDiagram = forwardRef(
       metaTheme,
       sidebarProps,
       metaCallback,
+      onMount,
     }: MetaDiagramProps,
     ref
   ) => {
@@ -123,6 +125,15 @@ const MetaDiagram = forwardRef(
 
     // load model into engine
     engine.setModel(model);
+
+    useEffect(() => {
+      if (onMount === undefined) {
+        onMount = (engine: any) => {
+          console.log(engine);
+        };
+      }
+      onMount(engine);
+    }, []);
 
     // useEffect(() => {
     //   // @ts-ignore
