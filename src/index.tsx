@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { forwardRef, useEffect } from 'react';
+import { forwardRef, useEffect, useImperativeHandle } from 'react';
 import Sidebar, { ISidebarProps } from './components/Sidebar';
 import { MetaNode } from './models/MetaNode';
 import { MetaLink } from './models/MetaLink';
@@ -63,6 +63,7 @@ const MetaDiagram = forwardRef(
     ref
   ) => {
     const classes = useStyles();
+
     // set up the diagram engine
     const engine = createEngine();
 
@@ -84,11 +85,27 @@ const MetaDiagram = forwardRef(
 
     // set up the diagram model
     const model = new DiagramModel();
-    const nodes = metaNodes;
-    const links = metaLinks;
+
+    // remove any previous listeners
+    metaNodes.forEach((node: any) => {
+      const listenerIds = Object.keys(node.listeners);
+      listenerIds.forEach(id => {
+        const listener = node.listeners[id];
+        Object.keys(listener).forEach(event => {
+          if (
+            event === 'nodeUpdated' ||
+            event === 'eventDidFire' ||
+            event === 'eventWillFire'
+          ) {
+            node.deregisterListener(listener[event]);
+          }
+        });
+      });
+      node.listeners = {};
+    });
 
     // @ts-ignore
-    let models = model.addAll(...nodes, ...links);
+    let models = model.addAll(...metaNodes, ...metaLinks);
 
     let preCallback = (event: any) => {
       event.metaEvent = EventTypes.PRE_UPDATE;
@@ -108,14 +125,21 @@ const MetaDiagram = forwardRef(
       }
     };
 
-    // add listeners to the model and children
-    models.forEach((item: any) => {
-      item.registerListener({
+    // add listeners to the nodes
+
+    const registerNodeListeners = (node: any) => {
+      node.registerListener({
         nodeUpdated: postCallback,
         eventDidFire: postCallback,
         eventWillFire: preCallback,
       });
+    };
+
+    models.forEach((item: any) => {
+      registerNodeListeners(item);
     });
+
+    // add listeners to the model
 
     model.registerListener({
       nodeUpdated: postCallback,
@@ -135,10 +159,18 @@ const MetaDiagram = forwardRef(
       onMount(engine);
     }, []);
 
-    // useEffect(() => {
-    //   // @ts-ignore
-    //   metaGraph.updateNodesContainerBoundingBoxes(model.getNodes(), metaGraph)
-    // }, [])
+    // expose api
+    const addNode = (node: any) => {
+      node.registerListener({
+        nodeUpdated: postCallback,
+        eventDidFire: postCallback,
+        eventWillFire: preCallback,
+      });
+      engine.getModel().addNode(node);
+    };
+    useImperativeHandle(ref, () => ({
+      addNode,
+    }));
 
     const containerClassName = wrapperClassName
       ? wrapperClassName
