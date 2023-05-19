@@ -20,6 +20,7 @@ import { CanvasDropTypes, DefaultSidebarNodeTypes } from '../constants';
 import { DropTargetMonitor, useDrag } from 'react-dnd';
 import { CanvasEngine } from '@projectstorm/react-canvas-core';
 import { DefaultDiagramState } from '@projectstorm/react-diagrams';
+import { updateCanvasMouseCursor } from '../utils';
 
 const { dividerColor } = vars;
 
@@ -151,6 +152,8 @@ const SidebarItem = ({
   const classes = useStyles();
   const { id, icon, divider, css, draggable } = node as ISidebarNodeProps;
 
+  const iconColor = selected ? '#fff' : '#1A1A1A'; //'rgba(26, 26, 26, 0.6)';
+
   if (!!divider) {
     return (
       <Box className={classes.node} key={id}>
@@ -190,14 +193,18 @@ const SidebarItem = ({
         });
       }}
       ref={dragPreview}
-      sx={{
-        transform: 'translate(0,0)',
-        '&.Mui-selected:hover': {
-          backgroundColor: draggable ? 'none' : 'unset',
-        },
-      }}
+      // TODO: extend item style variant
+      // sx={{
+      //   transform: 'translate(0,0)',
+      //   '&.Mui-selected:hover': {
+      //     backgroundColor: draggable ? 'none' : 'unset',
+      //   },
+      // }}
+      sx={subBarStyle}
     >
-      <ListItemIcon ref={draggable ? dragRef : null}>{icon}</ListItemIcon>
+      <ListItemIcon ref={draggable ? dragRef : null}>
+        {cloneElement(icon, { color: iconColor })}
+      </ListItemIcon>
     </ListItemButton>
   );
 };
@@ -296,12 +303,14 @@ const Sidebar = ({
   const enableDrag = () => {
     if (!state.dragCanvas.config.allowDrag) {
       state.dragCanvas.config.allowDrag = true;
+      updateCanvasMouseCursor('move');
     }
   };
 
   const disableDrag = () => {
     if (state.dragCanvas.config.allowDrag) {
       state.dragCanvas.config.allowDrag = false;
+      updateCanvasMouseCursor('default');
     }
   };
 
@@ -312,6 +321,7 @@ const Sidebar = ({
 
   useEffect(() => {
     disableDrag();
+    updateCanvasMouseCursor('default');
   }, []);
 
   return (
