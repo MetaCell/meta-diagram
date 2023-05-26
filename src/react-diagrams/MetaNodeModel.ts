@@ -52,16 +52,16 @@ export class MetaNodeModel extends NodeModel {
     }
   }
 
+  flagUpdate(updateType: CallbackTypes, extraCondition?: CallbackTypes) {
+    this.fireEvent(
+        { node: this, function: updateType, extraCondition: extraCondition },
+        updateType
+    );
+  }
+
   getOption(label: string): any {
     // @ts-ignore
     return this.getOptions()[label];
-  }
-
-  flagUpdate(updateType: CallbackTypes, extraCondition?: CallbackTypes) {
-    this.fireEvent(
-      { node: this, function: updateType, extraCondition: extraCondition },
-      updateType
-    );
   }
 
   getId(): string[] {
@@ -74,13 +74,6 @@ export class MetaNodeModel extends NodeModel {
 
   getLocalPosition(): Point {
     return this.getOption('localPosition');
-  }
-
-  // TODO: Change to consider mouse position; Currently considering top left corner
-  isInsideParent(parent: MetaNodeModel | undefined): boolean {
-    return parent
-      ? parent.getBoundingBox().containsPoint(this.getPosition())
-      : true;
   }
 
   private calculateLocalPosition(parent: MetaNodeModel | undefined): Point {
