@@ -54,8 +54,8 @@ export class MetaNodeModel extends NodeModel {
 
   flagUpdate(updateType: CallbackTypes, extraCondition?: CallbackTypes) {
     this.fireEvent(
-        { node: this, function: updateType, extraCondition: extraCondition },
-        updateType
+      { node: this, function: updateType, extraCondition: extraCondition },
+      updateType
     );
   }
 
