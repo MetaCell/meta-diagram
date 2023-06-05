@@ -20,7 +20,7 @@ import theme from './theme';
 import { DefaultSidebarNodeTypes, EventTypes } from './constants';
 import { CanvasWidget } from './components/CanvasWidget';
 import { MetaLinkModel } from './react-diagrams/MetaLinkModel';
-import { DefaultState } from './DefaultState';
+import { DefaultState } from './react-diagrams/state/DefaultState';
 
 const useStyles = makeStyles(_ => ({
   container: {
@@ -238,4 +238,4 @@ export { PortWidget };
 export { MetaLinkModel } from './react-diagrams/MetaLinkModel';
 export { PortTypes } from './constants';
 export { CallbackTypes } from './constants';
-export { EventTypes } from './constants';
+export { EventTypes, DefaultSidebarNodeTypes } from './constants';

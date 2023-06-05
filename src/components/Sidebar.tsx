@@ -23,8 +23,8 @@ import {
 } from '../constants';
 import { DropTargetMonitor, useDrag } from 'react-dnd';
 import { CanvasEngine } from '@projectstorm/react-canvas-core';
-import { DefaultDiagramState } from '@projectstorm/react-diagrams';
 import { updateCanvasMouseCursor } from '../utils';
+import {DefaultState} from "../react-diagrams/state/DefaultState";
 
 const { dividerColor } = vars;
 
@@ -70,11 +70,12 @@ export interface ISidebarNodeProps extends INode {
   divider?: boolean;
 }
 
-interface IPanningActions {
+interface IDefaultActions {
   enableDrag?: () => void;
   disableDrag?: () => void;
+  setCreateLinkState?: (v: boolean) => void;
 }
-interface SidebarItemProps extends IPanningActions {
+interface SidebarItemProps extends IDefaultActions {
   node: INode | ISidebarNodeProps;
   selected?: boolean;
   updateSelected?: (id: string) => void;
@@ -92,7 +93,7 @@ export interface ISidebarProps {
   engine: CanvasEngine;
 }
 
-interface IHandleClick extends IPanningActions {
+interface IHandleClick extends IDefaultActions {
   event: unknown;
   node: INode | ISidebarNodeProps;
   updateSelected?: (id: string) => void;
@@ -110,6 +111,7 @@ const handleItemClick = ({
   updateSelected,
   enableDrag,
   disableDrag,
+  setCreateLinkState
 }: IHandleClick) => {
   const { id, draggable, preCallback, postCallback, defaultCallback } = node;
   // if item is un-draggable click event fires only
@@ -119,6 +121,10 @@ const handleItemClick = ({
     // execute drag actions
     if (id === DefaultSidebarNodeTypes.PANNING && enableDrag) enableDrag();
     if (id !== DefaultSidebarNodeTypes.PANNING && disableDrag) disableDrag();
+    if (id === DefaultSidebarNodeTypes.CREATE_LINK && setCreateLinkState){
+      //todo: replace true with selected != id
+      setCreateLinkState(true);
+    }
 
     // execute pre & post-callback when no overriding default-callback
     if (!!preCallback && !defaultCallback) preCallback(event, node);
@@ -139,6 +145,7 @@ const SidebarItem = ({
   enableDrag,
   disableDrag,
   updateSelected,
+  setCreateLinkState
 }: SidebarItemProps) => {
   const [{}, dragRef, dragPreview] = useDrag(
     () => ({
@@ -170,6 +177,7 @@ const SidebarItem = ({
               updateSelected,
               enableDrag,
               disableDrag,
+              setCreateLinkState
             });
           }}
           sx={css}
@@ -300,7 +308,7 @@ const Sidebar = ({
 
   const state = engine
     .getStateMachine()
-    .getCurrentState() as DefaultDiagramState;
+    .getCurrentState() as DefaultState;
 
   const enableDrag = () => {
     if (!state.dragCanvas.config.allowDrag) {
@@ -314,6 +322,13 @@ const Sidebar = ({
       state.dragCanvas.config.allowDrag = false;
       updateCanvasMouseCursor(CursorTypes.DEFAULT);
     }
+  };
+
+  const setCreateLinkState = (value: boolean) => {
+      state.createLink.config.allowCreate = value;
+      if(value){
+        updateCanvasMouseCursor(CursorTypes.CROSSHAIR);
+      }
   };
 
   const updateSelected = (id: string) => {
@@ -343,6 +358,7 @@ const Sidebar = ({
                     updateSelected={updateSelected}
                     enableDrag={enableDrag}
                     disableDrag={disableDrag}
+                    setCreateLinkState={setCreateLinkState}
                   />
                   {Array.isArray(node.children) && (
                     <SubSiderBar
