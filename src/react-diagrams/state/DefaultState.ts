@@ -12,18 +12,22 @@ import {
   DiagramEngine,
   DragDiagramItemsState,
 } from '@projectstorm/react-diagrams-core';
+import {CreateLinkState} from "./CreateLinkState";
 
 export class DefaultState extends State<DiagramEngine> {
   dragCanvas: DragCanvasState;
   dragItems: DragDiagramItemsState;
+  createLink: CreateLinkState;
   isSelection: boolean;
 
   constructor() {
     super({ name: 'starting-state' });
     this.childStates = [new SelectingState()];
     this.dragCanvas = new DragCanvasState();
-    this.isSelection = true;
     this.dragItems = new DragDiagramItemsState();
+    this.createLink = new CreateLinkState();
+    this.isSelection = true;
+
 
     // determine what was clicked on
     this.registerAction(
@@ -52,6 +56,17 @@ export class DefaultState extends State<DiagramEngine> {
           }
         },
       })
+    );
+
+    this.registerAction(
+        new Action({
+          type: InputType.MOUSE_UP,
+          fire: (event: ActionEvent<MouseEvent | any>) => {
+            const element = this.engine.getActionEventBus().getModelForEvent(event);
+
+            if (element instanceof PortModel) this.transitionWithEvent(this.createLink, event);
+          }
+        })
     );
   }
 }
