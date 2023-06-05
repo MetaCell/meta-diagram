@@ -1,53 +1,45 @@
-import React, {useEffect, Fragment} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {Box, List} from '@mui/material';
 
 import SidebarItem from './SidebarItem';
 import SubSiderBar from './SubSiderBar';
-import {ISidebarProps} from "../../types/sidebar";
+import {ISidebarProps, StateMap} from "../../types/sidebar";
 import {DefaultState} from "../../react-diagrams/state/DefaultState";
-import {updateCanvasMouseCursor} from "../../utils";
-import {CursorTypes} from "../../constants";
+import {DefaultSidebarNodeTypes} from "../../constants";
+import {PanningState} from "./states/PanningState";
+import {CreateLinkState} from "./states/CreateLinkState";
+
 
 const Sidebar = ({
                      engine,
                      sidebarNodes,
-                     updateSelectedBar,
+                     updateSelection,
                  }: ISidebarProps) => {
-    const [selected, setSelected] = React.useState<string | null>(null);
+    const [currentState, setCurrentState] = useState<string | null>(null);
 
-    const state = engine
+
+    const reactDiagramsState = engine
         .getStateMachine()
         .getCurrentState() as DefaultState;
 
-    const enableDrag = () => {
-        if (!state.dragCanvas.config.allowDrag) {
-            state.dragCanvas.config.allowDrag = true;
-            updateCanvasMouseCursor(CursorTypes.MOVE);
+    const stateMap : StateMap = {
+        [DefaultSidebarNodeTypes.PANNING]: new PanningState(reactDiagramsState),
+        [DefaultSidebarNodeTypes.CREATE_LINK]: new CreateLinkState(reactDiagramsState),
+    }
+
+    const handleSelection = (selectedID: DefaultSidebarNodeTypes) => {
+        if (currentState) {
+            stateMap[currentState as DefaultSidebarNodeTypes]?.onExit();
         }
+
+        setCurrentState(selectedID);
+        stateMap[selectedID]?.onEnter();
+        updateSelection(selectedID);
     };
 
-    const disableDrag = () => {
-        if (state.dragCanvas.config.allowDrag) {
-            state.dragCanvas.config.allowDrag = false;
-            updateCanvasMouseCursor(CursorTypes.DEFAULT);
-        }
-    };
-
-    const setCreateLinkState = (value: boolean) => {
-        state.createLink.config.allowCreate = value;
-        if (value) {
-            updateCanvasMouseCursor(CursorTypes.CROSSHAIR);
-        }
-    };
-
-    const updateSelected = (id: string) => {
-        setSelected(id);
-        if (updateSelectedBar) updateSelectedBar(id);
-    };
 
     useEffect(() => {
-        disableDrag();
-        updateCanvasMouseCursor(CursorTypes.DEFAULT);
+        handleSelection(DefaultSidebarNodeTypes.PANNING)
     }, []);
 
     return (
@@ -56,7 +48,7 @@ const Sidebar = ({
                 <Box className="sidebar">
                     <List component="nav" disablePadding>
                         {sidebarNodes.map(node => {
-                            const isSelected = selected === node.id;
+                            const isSelected = currentState === node.id;
 
                             return (
                                 <Fragment key={node.id}>
@@ -64,10 +56,7 @@ const Sidebar = ({
                                         key={node.id}
                                         {...{node}}
                                         selected={isSelected}
-                                        updateSelected={updateSelected}
-                                        enableDrag={enableDrag}
-                                        disableDrag={disableDrag}
-                                        setCreateLinkState={setCreateLinkState}
+                                        handleSelection={handleSelection}
                                     />
                                     {Array.isArray(node.children) && (
                                         <SubSiderBar

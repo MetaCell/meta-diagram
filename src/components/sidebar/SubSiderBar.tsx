@@ -19,17 +19,9 @@ export const SubSiderBar = ({ nodes, show = false }: ISubSidebar) => {
                                         key={node.id}
                                         {...{ node }}
                                         selected={selected === node.id}
-                                        updateSelected={(id: React.SetStateAction<string | undefined>) => setSelected(id)}
+                                        handleSelection={(id: React.SetStateAction<string | undefined>) => setSelected(id)}
                                     />
-                                    {/* // TODO: fix nested sub-sidebar reference:
-                  https://github.com/MetaCell/meta-diagram/issues/41 */}
-                                    {/* {node.children?.length && (
-                    <SubSiderBar
-                      key={`sub-sidebar-${node.id}`}
-                      nodes={node.children}
-                      show={selected === node.id}
-                    />
-                  )} */}
+                                    {/* // TODO: fix nested sub-sidebar reference:https://github.com/MetaCell/meta-diagram/issues/41 */}
                                 </Fragment>
                             ))}
                         </List>

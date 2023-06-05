@@ -1,6 +1,12 @@
 import React from "react";
 import {DropTargetMonitor} from "react-dnd";
 import {CanvasEngine} from "@projectstorm/react-canvas-core";
+import {DefaultSidebarNodeTypes} from "../constants";
+import {State} from "../components/sidebar/states/State";
+
+export type StateMap = {
+    [key in DefaultSidebarNodeTypes]?: State;
+};
 
 export interface INode {
     id: string;
@@ -24,35 +30,30 @@ export interface ISidebarNodeProps extends INode {
     divider?: boolean;
 }
 
-interface IDefaultActions {
-    enableDrag?: () => void;
-    disableDrag?: () => void;
-    setCreateLinkState?: (v: boolean) => void;
+interface IHandleSelection {
+    handleSelection: (id: DefaultSidebarNodeTypes) => void;
 }
 
-export interface SidebarItemProps extends IDefaultActions {
+export interface SidebarItemProps extends IHandleSelection {
     node: INode | ISidebarNodeProps;
     selected?: boolean;
-    updateSelected?: (id: string) => void;
 }
 
-export interface ISubSidebarItemProps {
+export interface ISubSidebarItemProps extends IHandleSelection{
     node: INode | ISidebarNodeProps;
     selected?: boolean;
-    updateSelected?: (id: string) => void;
 }
 
 export interface ISidebarProps {
     selectedBarNode?: string;
     sidebarNodes?: ISidebarNodeProps[];
-    updateSelectedBar?: (id: string) => void;
+    updateSelection: (id: string) => void;
     engine: CanvasEngine;
 }
 
-export interface IHandleClick extends IDefaultActions {
+export interface IHandleClick extends IHandleSelection {
     event: unknown;
     node: INode | ISidebarNodeProps;
-    updateSelected?: (id: string) => void;
 }
 
 export interface ISubSidebar {

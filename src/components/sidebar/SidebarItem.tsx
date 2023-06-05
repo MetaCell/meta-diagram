@@ -1,17 +1,15 @@
-import React from 'react';
-import {cloneElement} from 'react';
-import {ListItemButton, ListItemIcon, Box, Divider} from '@mui/material';
-import {useDrag} from 'react-dnd';
+import React, { cloneElement } from 'react';
+import { ListItemButton, ListItemIcon, Box, Divider } from '@mui/material';
+import { useDrag } from 'react-dnd';
+import { makeStyles } from "@mui/styles";
 
-import {ISidebarNodeProps, SidebarItemProps} from "../../types/sidebar";
-import {CanvasDropTypes} from "../../constants";
-import {subBarStyle} from "../../theme";
+import { ISidebarNodeProps, SidebarItemProps } from "../../types/sidebar";
+import { CanvasDropTypes } from "../../constants";
+import { subBarStyle } from "../../theme";
 import handleItemClick from "./utils";
-import {makeStyles} from "@mui/styles";
 import vars from "../assets/styles/variables";
 
-const {dividerColor} = vars;
-
+const { dividerColor } = vars;
 
 const useStyles = makeStyles(() => ({
     node: {
@@ -29,78 +27,52 @@ const useStyles = makeStyles(() => ({
 export const SidebarItem = ({
                                 node,
                                 selected,
-                                enableDrag,
-                                disableDrag,
-                                updateSelected,
-                                setCreateLinkState
+                                handleSelection
                             }: SidebarItemProps) => {
-    const [{}, dragRef, dragPreview] = useDrag(
-        () => ({
-            type: CanvasDropTypes.CANVAS_NODE,
-            item: node,
-            collect: monitor => ({
-                isDragging: monitor.isDragging(),
-                opacity: monitor.isDragging() ? 0.9 : 1,
-            }),
+    const [{}, dragRef, dragPreview] = useDrag(() => ({
+        type: CanvasDropTypes.CANVAS_NODE,
+        item: node,
+        collect: monitor => ({
+            isDragging: monitor.isDragging(),
+            opacity: monitor.isDragging() ? 0.9 : 1,
         }),
-        [node]
-    );
-    const classes = useStyles();
-    const {id, icon, divider, css, draggable} = node as ISidebarNodeProps;
+    }), [node]);
 
-    const iconColor = selected ? '#fff' : '#1A1A1A'; //'rgba(26, 26, 26, 0.6)';
+    const classes = useStyles();
+    const { id, icon, divider, css, draggable } = node as ISidebarNodeProps;
+    const iconColor = selected ? '#fff' : '#1A1A1A';
+
+    // Define common click handler
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        handleItemClick({
+            event,
+            node,
+            handleSelection
+        });
+    };
 
     if (!!divider) {
         return (
             <Box className={classes.node} key={id}>
                 <Divider/>
-
-                <ListItemButton
-                    selected={selected}
-                    onClick={event => {
-                        handleItemClick({
-                            event,
-                            node,
-                            updateSelected,
-                            enableDrag,
-                            disableDrag,
-                            setCreateLinkState
-                        });
-                    }}
-                    sx={css}
-                >
+                <ListItemButton selected={selected} onClick={handleClick} sx={css}>
                     <ListItemIcon>{icon}</ListItemIcon>
                 </ListItemButton>
-
                 <Divider/>
             </Box>
         );
     }
+
     return (
         <ListItemButton
             selected={selected}
             key={id}
-            onClick={event => {
-                handleItemClick({
-                    event,
-                    node,
-                    updateSelected,
-                    enableDrag,
-                    disableDrag,
-                });
-            }}
+            onClick={handleClick}
             ref={dragPreview}
-            // TODO: extend item style variant
-            // sx={{
-            //   transform: 'translate(0,0)',
-            //   '&.Mui-selected:hover': {
-            //     backgroundColor: draggable ? 'none' : 'unset',
-            //   },
-            // }}
             sx={subBarStyle}
         >
             <ListItemIcon ref={draggable ? dragRef : null}>
-                {cloneElement(icon, {color: iconColor})}
+                {cloneElement(icon, { color: iconColor })}
             </ListItemIcon>
         </ListItemButton>
     );

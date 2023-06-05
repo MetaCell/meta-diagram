@@ -220,7 +220,7 @@ const MetaDiagram = forwardRef(
             <Sidebar
               {...sidebarProps}
               engine={engine}
-              updateSelectedBar={updateSelection}
+              updateSelection={updateSelection}
             />{' '}
             <CanvasWidget
               engine={engine}

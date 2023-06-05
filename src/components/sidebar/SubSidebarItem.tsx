@@ -12,7 +12,7 @@ import handleItemClick from "./utils";
 export const SubSidebarItem = ({
                                    node,
                                    selected,
-                                   updateSelected,
+                                   handleSelection,
                                }: ISubSidebarItemProps) => {
     const [{}, dragRef, dragPreview] = useDrag(
         () => ({
@@ -37,7 +37,7 @@ export const SubSidebarItem = ({
                     handleItemClick({
                         event,
                         node,
-                        updateSelected,
+                        handleSelection
                     });
                 }}
                 ref={dragPreview}

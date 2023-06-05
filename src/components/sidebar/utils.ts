@@ -5,23 +5,12 @@ import {DefaultSidebarNodeTypes} from "../../constants";
 export const handleItemClick = ({
                                     event,
                                     node,
-                                    updateSelected,
-                                    enableDrag,
-                                    disableDrag,
-                                    setCreateLinkState
+                                    handleSelection
                                 }: IHandleClick) => {
     const { id, draggable, preCallback, postCallback, defaultCallback } = node;
     // if item is un-draggable click event fires only
     if (!draggable) {
-        if (!!updateSelected) updateSelected(id);
-
-        // execute drag actions
-        if (id === DefaultSidebarNodeTypes.PANNING && enableDrag) enableDrag();
-        if (id !== DefaultSidebarNodeTypes.PANNING && disableDrag) disableDrag();
-        if (id === DefaultSidebarNodeTypes.CREATE_LINK && setCreateLinkState){
-            //todo: replace true with selected != id
-            setCreateLinkState(true);
-        }
+        handleSelection(id as DefaultSidebarNodeTypes);
 
         // execute pre & post-callback when no overriding default-callback
         if (!!preCallback && !defaultCallback) preCallback(event, node);
