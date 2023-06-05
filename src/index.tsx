@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { forwardRef, useEffect, useImperativeHandle, useMemo } from 'react';
-import Sidebar, { ISidebarProps } from './components/Sidebar';
 import { MetaNode } from './models/MetaNode';
 import { MetaLink } from './models/MetaLink';
 import { MetaPort } from './models/MetaPort';
@@ -21,6 +20,8 @@ import { DefaultSidebarNodeTypes, EventTypes } from './constants';
 import { CanvasWidget } from './components/CanvasWidget';
 import { MetaLinkModel } from './react-diagrams/MetaLinkModel';
 import { DefaultState } from './react-diagrams/state/DefaultState';
+import {ISidebarProps} from "./types/sidebar";
+import Sidebar from "./components/sidebar/Sidebar";
 
 const useStyles = makeStyles(_ => ({
   container: {
