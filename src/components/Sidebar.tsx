@@ -16,7 +16,11 @@ import {
   Tooltip,
 } from '@mui/material';
 import { subBarStyle } from '../theme';
-import { CanvasDropTypes, DefaultSidebarNodeTypes } from '../constants';
+import {
+  CanvasDropTypes,
+  CursorTypes,
+  DefaultSidebarNodeTypes,
+} from '../constants';
 import { DropTargetMonitor, useDrag } from 'react-dnd';
 import { CanvasEngine } from '@projectstorm/react-canvas-core';
 import { DefaultDiagramState } from '@projectstorm/react-diagrams';
@@ -113,10 +117,8 @@ const handleItemClick = ({
     if (!!updateSelected) updateSelected(id);
 
     // execute drag actions
-    if (id.startsWith(DefaultSidebarNodeTypes.PANNING) && enableDrag)
-      enableDrag();
-    if (!id.startsWith(DefaultSidebarNodeTypes.PANNING) && disableDrag)
-      disableDrag();
+    if (id === DefaultSidebarNodeTypes.PANNING && enableDrag) enableDrag();
+    if (id !== DefaultSidebarNodeTypes.PANNING && disableDrag) disableDrag();
 
     // execute pre & post-callback when no overriding default-callback
     if (!!preCallback && !defaultCallback) preCallback(event, node);
@@ -303,14 +305,14 @@ const Sidebar = ({
   const enableDrag = () => {
     if (!state.dragCanvas.config.allowDrag) {
       state.dragCanvas.config.allowDrag = true;
-      updateCanvasMouseCursor('move');
+      updateCanvasMouseCursor(CursorTypes.MOVE);
     }
   };
 
   const disableDrag = () => {
     if (state.dragCanvas.config.allowDrag) {
       state.dragCanvas.config.allowDrag = false;
-      updateCanvasMouseCursor('default');
+      updateCanvasMouseCursor(CursorTypes.DEFAULT);
     }
   };
 
@@ -321,7 +323,7 @@ const Sidebar = ({
 
   useEffect(() => {
     disableDrag();
-    updateCanvasMouseCursor('default');
+    updateCanvasMouseCursor(CursorTypes.DEFAULT);
   }, []);
 
   return (

@@ -162,15 +162,13 @@ const MetaDiagram = forwardRef(
 
     // update state selection state
     const updateSelection = (id: string) => {
-      if (
-        id.toLowerCase().startsWith(DefaultSidebarNodeTypes.SELECT) &&
-        !Boolean(state.isSelection)
-      ) {
+      const startsWithSelect = id
+        .toLowerCase()
+        .startsWith(DefaultSidebarNodeTypes.SELECT);
+
+      if (startsWithSelect && !Boolean(state.isSelection)) {
         state.isSelection = true;
-      } else if (
-        id.toLowerCase().startsWith('select') &&
-        Boolean(state.isSelection)
-      ) {
+      } else if (startsWithSelect && Boolean(state.isSelection)) {
         return;
       } else if (state.isSelection) {
         clearSelection();

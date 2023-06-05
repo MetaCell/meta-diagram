@@ -42,6 +42,7 @@ export class DefaultState extends State<DiagramEngine> {
           if (!element) {
             this.transitionWithEvent(this.dragCanvas, event);
           }
+          // TODO: implement port model instantiation action
           // initiate dragging a new link
           else if (element instanceof PortModel) {
             return;
