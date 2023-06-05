@@ -1,6 +1,6 @@
 import {Action, ActionEvent, InputType, State} from '@projectstorm/react-canvas-core';
 import {PortModel, LinkModel, DiagramEngine} from '@projectstorm/react-diagrams-core';
-import {MouseEvent, KeyboardEvent} from 'react';
+import {MouseEvent} from 'react';
 
 export interface CreateLinkStateOptions {
     /**
@@ -28,6 +28,9 @@ export class CreateLinkState extends State<DiagramEngine> {
             new Action({
                 type: InputType.MOUSE_UP,
                 fire: (actionEvent: ActionEvent<MouseEvent | any>) => {
+                    if (!this.config.allowCreate) {
+                        return;
+                    }
                     const element = this.engine.getActionEventBus().getModelForEvent(actionEvent);
                     const {
                         event: {clientX, clientY}
@@ -55,6 +58,16 @@ export class CreateLinkState extends State<DiagramEngine> {
                     } else if (this.link && element === this.link.getLastPoint()) {
                         this.link.point(clientX - ox, clientY - oy, -1);
                     }
+                    else if (this.sourcePort) {
+                        // the second click was not in a PortModel, so we cancel the link creation
+                        if (this.link) {
+                            this.link.remove();
+                        }
+                        this.clearState();
+                        this.eject();
+                        this.engine.repaintCanvas();
+                    }
+
 
                     this.engine.repaintCanvas();
                 }
@@ -73,21 +86,6 @@ export class CreateLinkState extends State<DiagramEngine> {
             })
         );
 
-        this.registerAction(
-            new Action({
-                type: InputType.KEY_UP,
-                fire: (actionEvent: ActionEvent<KeyboardEvent> | any) => {
-                    // on esc press remove any started link and pop back to default state
-                    if (actionEvent.event.keyCode === 27) {
-                        if (!this.link) return;
-                        this.link.remove();
-                        this.clearState();
-                        this.eject();
-                        this.engine.repaintCanvas();
-                    }
-                }
-            })
-        );
     }
 
     clearState() {

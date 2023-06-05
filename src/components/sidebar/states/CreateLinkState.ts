@@ -10,7 +10,7 @@ export class CreateLinkState extends State {
     }
 
     onEnter() {
-        this.state.createLink.config.allowCreate = false;
+        this.state.createLink.config.allowCreate = true;
         updateCanvasMouseCursor(CursorTypes.CROSSHAIR);
     }
 }
