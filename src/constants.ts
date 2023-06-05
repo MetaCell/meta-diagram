@@ -26,7 +26,21 @@ export enum CanvasDropTypes {
   CANVAS_NODE = 'canvas-node',
 }
 
+export enum CanvasClassTypes {
+  CANVAS_WIDGET = '.canvas-widget',
+  CANVAS_CUSTOM_WIDGET = '.canvas-CustomLinkWidget',
+  PRIMARY_NODE = '.primary-node',
+  REACT_DRAGGABLE = '.react-draggable',
+  NODES = '.nodes',
+}
+
 export enum DefaultSidebarNodeTypes {
   PANNING = 'panning',
   SELECT = 'select',
+}
+
+export enum CursorTypes {
+  MOVE = 'move',
+  DEFAULT = 'default',
+  TEXT = 'text',
 }
