@@ -20,7 +20,7 @@ import theme from './theme';
 import { DefaultSidebarNodeTypes, EventTypes } from './constants';
 import { CanvasWidget } from './components/CanvasWidget';
 import { MetaLinkModel } from './react-diagrams/MetaLinkModel';
-import { DefaultState } from './DefaultState';
+import { DefaultState } from './react-diagrams/state/DefaultState';
 
 const useStyles = makeStyles(_ => ({
   container: {
@@ -50,186 +50,186 @@ interface MetaDiagramProps {
 }
 
 const MetaDiagram = forwardRef(
-  (
-    {
-      metaNodes,
-      metaLinks,
-      componentsMap,
-      wrapperClassName,
-      metaTheme,
-      sidebarProps,
-      metaCallback,
-      onMount,
-    }: MetaDiagramProps,
-    ref
-  ) => {
-    const classes = useStyles();
+    (
+        {
+          metaNodes,
+          metaLinks,
+          componentsMap,
+          wrapperClassName,
+          metaTheme,
+          sidebarProps,
+          metaCallback,
+          onMount,
+        }: MetaDiagramProps,
+        ref
+    ) => {
+      const classes = useStyles();
 
-    // initialize custom diagram state
-    const state = new DefaultState();
+      // initialize custom diagram state
+      const state = new DefaultState();
 
-    // Sets up the diagram engine
-    // By using useMemo, we ensure that the createEngine() function is only called when the component mounts,
-    // and the same engine instance is reused on subsequent re-renders.
-    const engine = useMemo(() => createEngine(), []);
+      // Sets up the diagram engine
+      // By using useMemo, we ensure that the createEngine() function is only called when the component mounts,
+      // and the same engine instance is reused on subsequent re-renders.
+      const engine = useMemo(() => createEngine(), []);
 
-    if (metaCallback === undefined) {
-      metaCallback = (node: any) => {
-        console.log(node);
-      };
-    }
-
-    // register factories
-    engine
-      .getNodeFactories()
-      // @ts-ignore
-      .registerFactory(new MetaNodeFactory(componentsMap.nodes));
-
-    engine
-      .getLinkFactories()
-      // @ts-ignore
-      .registerFactory(new MetaLinkFactory(componentsMap.links));
-
-    // set up the diagram model
-    const model = new DiagramModel();
-
-    // remove any previous listeners from nodes
-    metaNodes.forEach((node: any) => {
-      const listenerIds = Object.keys(node.listeners);
-      listenerIds.forEach(id => {
-        const listener = node.listeners[id];
-        Object.keys(listener).forEach(event => {
-          if (
-            event === 'nodeUpdated' ||
-            event === 'eventDidFire' ||
-            event === 'eventWillFire'
-          ) {
-            node.deregisterListener(listener[event]);
-          }
-        });
-      });
-      node.listeners = {};
-    });
-
-    // add all entities to the model
-    let models = model.addAll(...metaNodes, ...metaLinks);
-
-    // define callbacks
-
-    let preCallback = (event: any) => {
-      event.metaEvent = EventTypes.PRE_UPDATE;
-      // @ts-ignore
-      let repaint = metaCallback(event);
-      if (repaint) {
-        engine.repaintCanvas();
-      }
-    };
-
-    let postCallback = (event: any) => {
-      event.metaEvent = EventTypes.POST_UPDATE;
-      // @ts-ignore
-      let repaint = metaCallback(event);
-      if (repaint) {
-        engine.repaintCanvas();
-      }
-    };
-
-    // add listeners to the nodes
-
-    const registerNodeListeners = (node: any) => {
-      node.registerListener({
-        nodeUpdated: postCallback,
-        eventDidFire: postCallback,
-        eventWillFire: preCallback,
-      });
-    };
-
-    models.forEach((item: any) => {
-      registerNodeListeners(item);
-    });
-
-    // add listeners to the model
-
-    model.registerListener({
-      nodeUpdated: postCallback,
-      eventDidFire: postCallback,
-      eventWillFire: preCallback,
-    });
-
-    const clearSelection = () => {
-      engine.getModel().clearSelection();
-    };
-
-    // update state selection state
-    const updateSelection = (id: string) => {
-      const startsWithSelect = id
-        .toLowerCase()
-        .startsWith(DefaultSidebarNodeTypes.SELECT);
-
-      if (startsWithSelect && !Boolean(state.isSelection)) {
-        state.isSelection = true;
-      } else if (startsWithSelect && Boolean(state.isSelection)) {
-        return;
-      } else if (state.isSelection) {
-        clearSelection();
-        state.isSelection = false;
-      }
-    };
-
-    // load model into engine
-    engine.setModel(model);
-
-    // Use this custom "DefaultState" instead of the actual default state we get with the engine
-    engine.getStateMachine().pushState(state);
-
-    useEffect(() => {
-      if (onMount === undefined) {
-        onMount = (engine: any) => {
-          console.log(engine);
+      if (metaCallback === undefined) {
+        metaCallback = (node: any) => {
+          console.log(node);
         };
       }
-      onMount(engine);
-    }, []);
 
-    // expose api
-    const addNode = (node: any) => {
-      node.registerListener({
+      // register factories
+      engine
+          .getNodeFactories()
+          // @ts-ignore
+          .registerFactory(new MetaNodeFactory(componentsMap.nodes));
+
+      engine
+          .getLinkFactories()
+          // @ts-ignore
+          .registerFactory(new MetaLinkFactory(componentsMap.links));
+
+      // set up the diagram model
+      const model = new DiagramModel();
+
+      // remove any previous listeners from nodes
+      metaNodes.forEach((node: any) => {
+        const listenerIds = Object.keys(node.listeners);
+        listenerIds.forEach(id => {
+          const listener = node.listeners[id];
+          Object.keys(listener).forEach(event => {
+            if (
+                event === 'nodeUpdated' ||
+                event === 'eventDidFire' ||
+                event === 'eventWillFire'
+            ) {
+              node.deregisterListener(listener[event]);
+            }
+          });
+        });
+        node.listeners = {};
+      });
+
+      // add all entities to the model
+      let models = model.addAll(...metaNodes, ...metaLinks);
+
+      // define callbacks
+
+      let preCallback = (event: any) => {
+        event.metaEvent = EventTypes.PRE_UPDATE;
+        // @ts-ignore
+        let repaint = metaCallback(event);
+        if (repaint) {
+          engine.repaintCanvas();
+        }
+      };
+
+      let postCallback = (event: any) => {
+        event.metaEvent = EventTypes.POST_UPDATE;
+        // @ts-ignore
+        let repaint = metaCallback(event);
+        if (repaint) {
+          engine.repaintCanvas();
+        }
+      };
+
+      // add listeners to the nodes
+
+      const registerNodeListeners = (node: any) => {
+        node.registerListener({
+          nodeUpdated: postCallback,
+          eventDidFire: postCallback,
+          eventWillFire: preCallback,
+        });
+      };
+
+      models.forEach((item: any) => {
+        registerNodeListeners(item);
+      });
+
+      // add listeners to the model
+
+      model.registerListener({
         nodeUpdated: postCallback,
         eventDidFire: postCallback,
         eventWillFire: preCallback,
       });
-      engine.getModel().addNode(node);
-    };
-    useImperativeHandle(ref, () => ({
-      addNode,
-    }));
 
-    // render
-    const containerClassName = wrapperClassName
-      ? wrapperClassName
-      : classes.container;
+      const clearSelection = () => {
+        engine.getModel().clearSelection();
+      };
 
-    return (
-      <ThemeProvider
-        theme={createTheme(theme(metaTheme?.customThemeVariables))}
-      >
-        <DndProvider backend={HTML5Backend}>
-          <CssBaseline />
-          <Box className={containerClassName} ref={ref}>
-            <Sidebar
-              {...sidebarProps}
-              engine={engine}
-              updateSelectedBar={updateSelection}
-            />{' '}
-            <CanvasWidget
-              engine={engine}
-              className={metaTheme?.canvasClassName}
-            />
-          </Box>
-        </DndProvider>
-      </ThemeProvider>
-    );
-  }
+      // update state selection state
+      const updateSelection = (id: string) => {
+        const startsWithSelect = id
+            .toLowerCase()
+            .startsWith(DefaultSidebarNodeTypes.SELECT);
+
+        if (startsWithSelect && !Boolean(state.isSelection)) {
+          state.isSelection = true;
+        } else if (startsWithSelect && Boolean(state.isSelection)) {
+          return;
+        } else if (state.isSelection) {
+          clearSelection();
+          state.isSelection = false;
+        }
+      };
+
+      // load model into engine
+      engine.setModel(model);
+
+      // Use this custom "DefaultState" instead of the actual default state we get with the engine
+      engine.getStateMachine().pushState(state);
+
+      useEffect(() => {
+        if (onMount === undefined) {
+          onMount = (engine: any) => {
+            console.log(engine);
+          };
+        }
+        onMount(engine);
+      }, []);
+
+      // expose api
+      const addNode = (node: any) => {
+        node.registerListener({
+          nodeUpdated: postCallback,
+          eventDidFire: postCallback,
+          eventWillFire: preCallback,
+        });
+        engine.getModel().addNode(node);
+      };
+      useImperativeHandle(ref, () => ({
+        addNode,
+      }));
+
+      // render
+      const containerClassName = wrapperClassName
+          ? wrapperClassName
+          : classes.container;
+
+      return (
+          <ThemeProvider
+              theme={createTheme(theme(metaTheme?.customThemeVariables))}
+          >
+            <DndProvider backend={HTML5Backend}>
+              <CssBaseline />
+              <Box className={containerClassName} ref={ref}>
+                <Sidebar
+                    {...sidebarProps}
+                    engine={engine}
+                    updateSelectedBar={updateSelection}
+                />{' '}
+                <CanvasWidget
+                    engine={engine}
+                    className={metaTheme?.canvasClassName}
+                />
+              </Box>
+            </DndProvider>
+          </ThemeProvider>
+      );
+    }
 );
 
 export default MetaDiagram;
@@ -238,4 +238,4 @@ export { PortWidget };
 export { MetaLinkModel } from './react-diagrams/MetaLinkModel';
 export { PortTypes } from './constants';
 export { CallbackTypes } from './constants';
-export { EventTypes } from './constants';
+export { EventTypes, DefaultSidebarNodeTypes } from './constants';
