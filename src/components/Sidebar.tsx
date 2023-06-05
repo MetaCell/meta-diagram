@@ -1,4 +1,9 @@
-import React, { cloneElement, useState, Fragment } from 'react';
+import React, {
+  cloneElement,
+  useState,
+  Fragment,
+  useEffect, //MouseEvent
+} from 'react';
 import { Box } from '@mui/system';
 import { makeStyles } from '@mui/styles';
 import vars from './assets/styles/variables';
@@ -11,9 +16,15 @@ import {
   Tooltip,
 } from '@mui/material';
 import { subBarStyle } from '../theme';
-import { CanvasDropTypes } from '../constants';
+import {
+  CanvasDropTypes,
+  CursorTypes,
+  DefaultSidebarNodeTypes,
+} from '../constants';
 import { DropTargetMonitor, useDrag } from 'react-dnd';
 import { CanvasEngine } from '@projectstorm/react-canvas-core';
+import { DefaultDiagramState } from '@projectstorm/react-diagrams';
+import { updateCanvasMouseCursor } from '../utils';
 
 const { dividerColor } = vars;
 
@@ -59,28 +70,55 @@ export interface ISidebarNodeProps extends INode {
   divider?: boolean;
 }
 
-type SidebarItemProps = {
+interface IPanningActions {
+  enableDrag?: () => void;
+  disableDrag?: () => void;
+}
+interface SidebarItemProps extends IPanningActions {
   node: INode | ISidebarNodeProps;
   selected?: boolean;
   updateSelected?: (id: string) => void;
-};
+}
 
+export interface ISubSidebarItemProps {
+  node: INode | ISidebarNodeProps;
+  selected?: boolean;
+  updateSelected?: (id: string) => void;
+}
 export interface ISidebarProps {
   selectedBarNode?: string;
   sidebarNodes?: ISidebarNodeProps[];
   updateSelectedBar?: (id: string) => void;
+  engine: CanvasEngine;
+}
+
+interface IHandleClick extends IPanningActions {
+  event: unknown;
+  node: INode | ISidebarNodeProps;
+  updateSelected?: (id: string) => void;
+}
+
+interface ISubSidebar {
+  show?: boolean;
+  nodes?: INode[];
 }
 
 // handle item click callback
-const handleItemClick = (
-  event: unknown,
-  node: INode | ISidebarNodeProps,
-  updateSelected?: (id: string) => void
-) => {
+const handleItemClick = ({
+  event,
+  node,
+  updateSelected,
+  enableDrag,
+  disableDrag,
+}: IHandleClick) => {
   const { id, draggable, preCallback, postCallback, defaultCallback } = node;
   // if item is un-draggable click event fires only
   if (!draggable) {
     if (!!updateSelected) updateSelected(id);
+
+    // execute drag actions
+    if (id === DefaultSidebarNodeTypes.PANNING && enableDrag) enableDrag();
+    if (id !== DefaultSidebarNodeTypes.PANNING && disableDrag) disableDrag();
 
     // execute pre & post-callback when no overriding default-callback
     if (!!preCallback && !defaultCallback) preCallback(event, node);
@@ -95,7 +133,13 @@ const handleItemClick = (
 // const svgImg = (img: string) =>
 //   `data:image/svg+xml;base64,${new Buffer(img).toString('base64')}`;
 
-const SidebarItem = ({ node, selected, updateSelected }: SidebarItemProps) => {
+const SidebarItem = ({
+  node,
+  selected,
+  enableDrag,
+  disableDrag,
+  updateSelected,
+}: SidebarItemProps) => {
   const [{}, dragRef, dragPreview] = useDrag(
     () => ({
       type: CanvasDropTypes.CANVAS_NODE,
@@ -110,6 +154,8 @@ const SidebarItem = ({ node, selected, updateSelected }: SidebarItemProps) => {
   const classes = useStyles();
   const { id, icon, divider, css, draggable } = node as ISidebarNodeProps;
 
+  const iconColor = selected ? '#fff' : '#1A1A1A'; //'rgba(26, 26, 26, 0.6)';
+
   if (!!divider) {
     return (
       <Box className={classes.node} key={id}>
@@ -118,7 +164,13 @@ const SidebarItem = ({ node, selected, updateSelected }: SidebarItemProps) => {
         <ListItemButton
           selected={selected}
           onClick={event => {
-            handleItemClick(event, node, updateSelected);
+            handleItemClick({
+              event,
+              node,
+              updateSelected,
+              enableDrag,
+              disableDrag,
+            });
           }}
           sx={css}
         >
@@ -134,17 +186,27 @@ const SidebarItem = ({ node, selected, updateSelected }: SidebarItemProps) => {
       selected={selected}
       key={id}
       onClick={event => {
-        handleItemClick(event, node, updateSelected);
+        handleItemClick({
+          event,
+          node,
+          updateSelected,
+          enableDrag,
+          disableDrag,
+        });
       }}
       ref={dragPreview}
-      sx={{
-        transform: 'translate(0,0)',
-        '&.Mui-selected:hover': {
-          backgroundColor: draggable ? 'none' : 'unset',
-        },
-      }}
+      // TODO: extend item style variant
+      // sx={{
+      //   transform: 'translate(0,0)',
+      //   '&.Mui-selected:hover': {
+      //     backgroundColor: draggable ? 'none' : 'unset',
+      //   },
+      // }}
+      sx={subBarStyle}
     >
-      <ListItemIcon ref={draggable ? dragRef : null}>{icon}</ListItemIcon>
+      <ListItemIcon ref={draggable ? dragRef : null}>
+        {cloneElement(icon, { color: iconColor })}
+      </ListItemIcon>
     </ListItemButton>
   );
 };
@@ -153,7 +215,7 @@ const SubSidebarItem = ({
   node,
   selected,
   updateSelected,
-}: SidebarItemProps) => {
+}: ISubSidebarItemProps) => {
   const [{}, dragRef, dragPreview] = useDrag(
     () => ({
       type: CanvasDropTypes.CANVAS_NODE,
@@ -174,7 +236,11 @@ const SubSidebarItem = ({
       <ListItemButton
         selected={selected}
         onClick={event => {
-          handleItemClick(event, node, updateSelected);
+          handleItemClick({
+            event,
+            node,
+            updateSelected,
+          });
         }}
         ref={dragPreview}
         sx={subBarStyle}
@@ -187,13 +253,7 @@ const SubSidebarItem = ({
   );
 };
 
-const SubSiderBar = ({
-  nodes,
-  show = false,
-}: {
-  show?: boolean;
-  nodes?: INode[];
-}) => {
+const SubSiderBar = ({ nodes, show = false }: ISubSidebar) => {
   const [selected, setSelected] = useState<string | undefined>();
 
   if (!!nodes && !!show) {
@@ -231,8 +291,40 @@ const SubSiderBar = ({
   return null;
 };
 
-const Sidebar = ({ sidebarNodes }: ISidebarProps) => {
+const Sidebar = ({
+  engine,
+  sidebarNodes,
+  updateSelectedBar,
+}: ISidebarProps) => {
   const [selected, setSelected] = React.useState<string | null>(null);
+
+  const state = engine
+    .getStateMachine()
+    .getCurrentState() as DefaultDiagramState;
+
+  const enableDrag = () => {
+    if (!state.dragCanvas.config.allowDrag) {
+      state.dragCanvas.config.allowDrag = true;
+      updateCanvasMouseCursor(CursorTypes.MOVE);
+    }
+  };
+
+  const disableDrag = () => {
+    if (state.dragCanvas.config.allowDrag) {
+      state.dragCanvas.config.allowDrag = false;
+      updateCanvasMouseCursor(CursorTypes.DEFAULT);
+    }
+  };
+
+  const updateSelected = (id: string) => {
+    setSelected(id);
+    if (updateSelectedBar) updateSelectedBar(id);
+  };
+
+  useEffect(() => {
+    disableDrag();
+    updateCanvasMouseCursor(CursorTypes.DEFAULT);
+  }, []);
 
   return (
     <>
@@ -248,7 +340,9 @@ const Sidebar = ({ sidebarNodes }: ISidebarProps) => {
                     key={node.id}
                     {...{ node }}
                     selected={isSelected}
-                    updateSelected={id => setSelected(id)}
+                    updateSelected={updateSelected}
+                    enableDrag={enableDrag}
+                    disableDrag={disableDrag}
                   />
                   {Array.isArray(node.children) && (
                     <SubSiderBar

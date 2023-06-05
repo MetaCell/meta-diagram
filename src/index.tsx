@@ -17,9 +17,10 @@ import { Box } from '@mui/material';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 import theme from './theme';
-import { EventTypes } from './constants';
+import { DefaultSidebarNodeTypes, EventTypes } from './constants';
 import { CanvasWidget } from './components/CanvasWidget';
 import { MetaLinkModel } from './react-diagrams/MetaLinkModel';
+import { DefaultState } from './DefaultState';
 
 const useStyles = makeStyles(_ => ({
   container: {
@@ -63,6 +64,9 @@ const MetaDiagram = forwardRef(
     ref
   ) => {
     const classes = useStyles();
+
+    // initialize custom diagram state
+    const state = new DefaultState();
 
     // Sets up the diagram engine
     // By using useMemo, we ensure that the createEngine() function is only called when the component mounts,
@@ -152,8 +156,31 @@ const MetaDiagram = forwardRef(
       eventWillFire: preCallback,
     });
 
+    const clearSelection = () => {
+      engine.getModel().clearSelection();
+    };
+
+    // update state selection state
+    const updateSelection = (id: string) => {
+      const startsWithSelect = id
+        .toLowerCase()
+        .startsWith(DefaultSidebarNodeTypes.SELECT);
+
+      if (startsWithSelect && !Boolean(state.isSelection)) {
+        state.isSelection = true;
+      } else if (startsWithSelect && Boolean(state.isSelection)) {
+        return;
+      } else if (state.isSelection) {
+        clearSelection();
+        state.isSelection = false;
+      }
+    };
+
     // load model into engine
     engine.setModel(model);
+
+    // Use this custom "DefaultState" instead of the actual default state we get with the engine
+    engine.getStateMachine().pushState(state);
 
     useEffect(() => {
       if (onMount === undefined) {
@@ -189,7 +216,11 @@ const MetaDiagram = forwardRef(
         <DndProvider backend={HTML5Backend}>
           <CssBaseline />
           <Box className={containerClassName} ref={ref}>
-            <Sidebar {...sidebarProps} />
+            <Sidebar
+              {...sidebarProps}
+              engine={engine}
+              updateSelectedBar={updateSelection}
+            />{' '}
             <CanvasWidget
               engine={engine}
               className={metaTheme?.canvasClassName}
