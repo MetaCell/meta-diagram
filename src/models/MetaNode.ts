@@ -4,7 +4,6 @@ import { Point } from '@projectstorm/geometry';
 
 export class MetaNode {
   private readonly parent: MetaNode | undefined;
-  private readonly position: Point;
   private readonly options: Map<string, any>;
   private children: Array<MetaNode> | undefined;
   private childrenMap: Map<string, MetaNode>;
@@ -21,7 +20,6 @@ export class MetaNode {
     options: Map<string, any>
   ) {
     this.parent = parent;
-    this.position = position;
     this.children = children || [];
     this.childrenMap = new Map();
     this.options = new Map(options);
@@ -85,7 +83,6 @@ export class MetaNode {
   toModel(): MetaNodeModel {
     const optionsMap = new Map(this.options);
     optionsMap.set('graphPath', this.getGraphPath());
-    optionsMap.set('localPosition', this.position);
     optionsMap.set('depth', this.getDepth());
     return new MetaNodeModel(Object.fromEntries(optionsMap));
   }

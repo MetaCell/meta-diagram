@@ -15,6 +15,8 @@ export enum CallbackTypes {
   POSITION_CHANGED = 'positionChanged',
   SELECTION_CHANGED = 'selectionChanged',
   CHILD_POSITION_CHANGED = 'childPositionChanged',
+  OFFSET_UPDATED = 'offsetUpdated',
+  ZOOM_UPDATED = 'zoomUpdated',
 }
 
 export enum EventTypes {
