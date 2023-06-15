@@ -52,200 +52,202 @@ interface MetaDiagramProps {
 }
 
 const MetaDiagram = forwardRef(
-    (
-        {
-          metaNodes,
-          metaLinks,
-          componentsMap,
-          wrapperClassName,
-          metaTheme,
-          sidebarProps,
-          metaCallback,
-          onMount,
-          globalProps,
-        }: MetaDiagramProps,
-        ref
-    ) => {
-      const classes = useStyles();
+  (
+    {
+      metaNodes,
+      metaLinks,
+      componentsMap,
+      wrapperClassName,
+      metaTheme,
+      sidebarProps,
+      metaCallback,
+      onMount,
+      globalProps,
+    }: MetaDiagramProps,
+    ref
+  ) => {
+    const classes = useStyles();
 
-      // initialize custom diagram state
-      const state = new DefaultState();
+    // initialize custom diagram state
+    const state = new DefaultState();
 
-      // Sets up the diagram engine
-      // By using useMemo, we ensure that the createEngine() function is only called when the component mounts,
-      // and the same engine instance is reused on subsequent re-renders.
-      const engine = useMemo(() => createEngine(), []);
+    // Sets up the diagram engine
+    // By using useMemo, we ensure that the createEngine() function is only called when the component mounts,
+    // and the same engine instance is reused on subsequent re-renders.
+    const engine = useMemo(() => createEngine(), []);
 
-      if (metaCallback === undefined) {
-        metaCallback = (node: any) => {
-          console.log(node);
-        };
+    if (metaCallback === undefined) {
+      metaCallback = (node: any) => {
+        console.log(node);
+      };
+    }
+
+    // register factories
+    engine
+      .getNodeFactories()
+      // @ts-ignore
+      .registerFactory(new MetaNodeFactory(componentsMap.nodes));
+
+    engine
+      .getLinkFactories()
+      // @ts-ignore
+      .registerFactory(new MetaLinkFactory(componentsMap.links));
+
+    // set up the diagram model
+    const model = new DiagramModel();
+
+    // remove any previous listeners from nodes
+    metaNodes.forEach((node: any) => {
+      const listenerIds = Object.keys(node.listeners);
+      listenerIds.forEach(id => {
+        const listener = node.listeners[id];
+        Object.keys(listener).forEach(event => {
+          if (
+            event === 'nodeUpdated' ||
+            event === 'eventDidFire' ||
+            event === 'eventWillFire'
+          ) {
+            node.deregisterListener(listener[event]);
+          }
+        });
+      });
+      node.listeners = {};
+    });
+
+    // add all entities to the model
+    let models = model.addAll(...metaNodes, ...metaLinks);
+
+    // define callbacks
+
+    let preCallback = (event: any) => {
+      event.metaEvent = EventTypes.PRE_UPDATE;
+      // @ts-ignore
+      let repaint = metaCallback(event);
+      if (repaint) {
+        engine.repaintCanvas();
       }
+    };
 
-      // register factories
-      engine
-          .getNodeFactories()
-          // @ts-ignore
-          .registerFactory(new MetaNodeFactory(componentsMap.nodes));
+    let postCallback = (event: any) => {
+      event.metaEvent = EventTypes.POST_UPDATE;
+      // @ts-ignore
+      let repaint = metaCallback(event);
+      if (repaint) {
+        engine.repaintCanvas();
+      }
+    };
 
-      engine
-          .getLinkFactories()
-          // @ts-ignore
-          .registerFactory(new MetaLinkFactory(componentsMap.links));
+    // add listeners to the nodes
 
-      // set up the diagram model
-      const model = new DiagramModel();
-
-      // remove any previous listeners from nodes
-      metaNodes.forEach((node: any) => {
-        const listenerIds = Object.keys(node.listeners);
-        listenerIds.forEach(id => {
-          const listener = node.listeners[id];
-          Object.keys(listener).forEach(event => {
-            if (
-                event === 'nodeUpdated' ||
-                event === 'eventDidFire' ||
-                event === 'eventWillFire'
-            ) {
-              node.deregisterListener(listener[event]);
-            }
-          });
-        });
-        node.listeners = {};
-      });
-
-      // add all entities to the model
-      let models = model.addAll(...metaNodes, ...metaLinks);
-
-      // define callbacks
-
-      let preCallback = (event: any) => {
-        event.metaEvent = EventTypes.PRE_UPDATE;
-        // @ts-ignore
-        let repaint = metaCallback(event);
-        if (repaint) {
-          engine.repaintCanvas();
-        }
-      };
-
-      let postCallback = (event: any) => {
-        event.metaEvent = EventTypes.POST_UPDATE;
-        // @ts-ignore
-        let repaint = metaCallback(event);
-        if (repaint) {
-          engine.repaintCanvas();
-        }
-      };
-
-      // add listeners to the nodes
-
-      const registerNodeListeners = (node: any) => {
-        node.registerListener({
-          nodeUpdated: postCallback,
-          eventDidFire: postCallback,
-          eventWillFire: preCallback,
-        });
-      };
-
-      models.forEach((item: any) => {
-        registerNodeListeners(item);
-      });
-
-      // add listeners to the model
-
-      model.registerListener({
+    const registerNodeListeners = (node: any) => {
+      node.registerListener({
         nodeUpdated: postCallback,
         eventDidFire: postCallback,
         eventWillFire: preCallback,
       });
+    };
 
-      const clearSelection = () => {
-        engine.getModel().clearSelection();
-      };
+    models.forEach((item: any) => {
+      registerNodeListeners(item);
+    });
 
-      // update state selection state
-      const updateSelection = (id: string) => {
-        const startsWithSelect = id
-            .toLowerCase()
-            .startsWith(DefaultSidebarNodeTypes.SELECT);
+    // add listeners to the model
 
-        if (startsWithSelect && !Boolean(state.isSelection)) {
-          state.isSelection = true;
-        } else if (startsWithSelect && Boolean(state.isSelection)) {
-          return;
-        } else if (state.isSelection) {
-          clearSelection();
-          state.isSelection = false;
-        }
-      };
+    model.registerListener({
+      nodeUpdated: postCallback,
+      eventDidFire: postCallback,
+      eventWillFire: preCallback,
+    });
 
-      // load model into engine
-      engine.setModel(model);
+    const clearSelection = () => {
+      engine.getModel().clearSelection();
+    };
 
-      // Use this custom "DefaultState" instead of the actual default state we get with the engine
-      engine.getStateMachine().pushState(state);
+    // update state selection state
+    const updateSelection = (id: string) => {
+      const startsWithSelect = id
+        .toLowerCase()
+        .startsWith(DefaultSidebarNodeTypes.SELECT);
 
-      // check globalProps for any actions to perform
-      if (globalProps !== undefined) {
-        if (globalProps?.disableDeleteDefaultKey) {
-          const actions = engine.getActionEventBus().getActionsForType(InputType.KEY_DOWN);
-          actions.forEach((action: any) => {
-            // needs to find a better approach for this but for now this will do
-            if (action.constructor.name === 'DeleteItemsAction') {
-              engine.getActionEventBus().deregisterAction(action);
-            }
-          });
-        }
+      if (startsWithSelect && !Boolean(state.isSelection)) {
+        state.isSelection = true;
+      } else if (startsWithSelect && Boolean(state.isSelection)) {
+        return;
+      } else if (state.isSelection) {
+        clearSelection();
+        state.isSelection = false;
       }
+    };
 
-      useEffect(() => {
-        if (onMount === undefined) {
-          onMount = (engine: any) => {
-            console.log(engine);
-          };
-        }
-        onMount(engine);
-      }, []);
+    // load model into engine
+    engine.setModel(model);
 
-      // expose api
-      const addNode = (node: any) => {
-        node.registerListener({
-          nodeUpdated: postCallback,
-          eventDidFire: postCallback,
-          eventWillFire: preCallback,
+    // Use this custom "DefaultState" instead of the actual default state we get with the engine
+    engine.getStateMachine().pushState(state);
+
+    // check globalProps for any actions to perform
+    if (globalProps !== undefined) {
+      if (globalProps?.disableDeleteDefaultKey) {
+        const actions = engine
+          .getActionEventBus()
+          .getActionsForType(InputType.KEY_DOWN);
+        actions.forEach((action: any) => {
+          // needs to find a better approach for this but for now this will do
+          if (action.constructor.name === 'DeleteItemsAction') {
+            engine.getActionEventBus().deregisterAction(action);
+          }
         });
-        engine.getModel().addNode(node);
-      };
-      useImperativeHandle(ref, () => ({
-        addNode,
-      }));
-
-      // render
-      const containerClassName = wrapperClassName
-          ? wrapperClassName
-          : classes.container;
-
-      return (
-          <ThemeProvider
-              theme={createTheme(theme(metaTheme?.customThemeVariables))}
-          >
-            <DndProvider backend={HTML5Backend}>
-              <CssBaseline />
-              <Box className={containerClassName} ref={ref}>
-                <Sidebar
-                    {...sidebarProps}
-                    engine={engine}
-                    updateSelectedBar={updateSelection}
-                />{' '}
-                <CanvasWidget
-                    engine={engine}
-                    className={metaTheme?.canvasClassName}
-                />
-              </Box>
-            </DndProvider>
-          </ThemeProvider>
-      );
+      }
     }
+
+    useEffect(() => {
+      if (onMount === undefined) {
+        onMount = (engine: any) => {
+          console.log(engine);
+        };
+      }
+      onMount(engine);
+    }, []);
+
+    // expose api
+    const addNode = (node: any) => {
+      node.registerListener({
+        nodeUpdated: postCallback,
+        eventDidFire: postCallback,
+        eventWillFire: preCallback,
+      });
+      engine.getModel().addNode(node);
+    };
+    useImperativeHandle(ref, () => ({
+      addNode,
+    }));
+
+    // render
+    const containerClassName = wrapperClassName
+      ? wrapperClassName
+      : classes.container;
+
+    return (
+      <ThemeProvider
+        theme={createTheme(theme(metaTheme?.customThemeVariables))}
+      >
+        <DndProvider backend={HTML5Backend}>
+          <CssBaseline />
+          <Box className={containerClassName} ref={ref}>
+            <Sidebar
+              {...sidebarProps}
+              engine={engine}
+              updateSelectedBar={updateSelection}
+            />{' '}
+            <CanvasWidget
+              engine={engine}
+              className={metaTheme?.canvasClassName}
+            />
+          </Box>
+        </DndProvider>
+      </ThemeProvider>
+    );
+  }
 );
 
 export default MetaDiagram;
