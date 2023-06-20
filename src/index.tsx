@@ -20,8 +20,9 @@ import { DefaultSidebarNodeTypes, EventTypes } from './constants';
 import { CanvasWidget } from './components/CanvasWidget';
 import { MetaLinkModel } from './react-diagrams/MetaLinkModel';
 import { DefaultState } from './react-diagrams/state/DefaultState';
-import {ISidebarProps} from "./types/sidebar";
-import Sidebar from "./components/sidebar/Sidebar";
+import { ISidebarProps } from './types/sidebar';
+import Sidebar from './components/sidebar/Sidebar';
+import { InputType } from '@projectstorm/react-canvas-core';
 
 const useStyles = makeStyles(_ => ({
   container: {
@@ -48,6 +49,7 @@ interface MetaDiagramProps {
   };
   metaCallback?: Function;
   onMount?: Function;
+  globalProps?: any;
 }
 
 const MetaDiagram = forwardRef(
@@ -61,6 +63,7 @@ const MetaDiagram = forwardRef(
       sidebarProps,
       metaCallback,
       onMount,
+      globalProps,
     }: MetaDiagramProps,
     ref
   ) => {
@@ -182,6 +185,21 @@ const MetaDiagram = forwardRef(
 
     // Use this custom "DefaultState" instead of the actual default state we get with the engine
     engine.getStateMachine().pushState(state);
+
+    // check globalProps for any actions to perform
+    if (globalProps !== undefined) {
+      if (globalProps?.disableDeleteDefaultKey) {
+        const actions = engine
+          .getActionEventBus()
+          .getActionsForType(InputType.KEY_DOWN);
+        actions.forEach((action: any) => {
+          // needs to find a better approach for this but for now this will do
+          if (action.constructor.name === 'DeleteItemsAction') {
+            engine.getActionEventBus().deregisterAction(action);
+          }
+        });
+      }
+    }
 
     useEffect(() => {
       if (onMount === undefined) {
