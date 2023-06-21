@@ -74,12 +74,20 @@ const applicationTheme = (params: ThemeVars) => {
           .sub-sidebar {
             z-index: 4;
             width: 2.375rem;
+            max-height: 16rem;
             background: ${subBarBg};
             position: fixed;
             border-radius: 0 0.5rem 0.5rem 0;
             left: 3rem;
             top: 50%;
             transform: translateY(-50%);
+            overflow-y: scroll;
+            -ms-overflow-style: none; 
+            scrollbar-width: none;  
+          }
+
+          .sub-sidebar::-webkit-scrollbar {
+            display: none;
           }
 
           .sub-sidebar:before {
