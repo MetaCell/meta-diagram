@@ -1,17 +1,18 @@
-import {DefaultState} from "../../../react-diagrams/state/DefaultState";
+import { CreateLinkState } from '../../../react-diagrams/state/CreateLinkState';
+import { DefaultState } from '../../../react-diagrams/state/DefaultState';
 
 export class State {
-    protected state: DefaultState;
+  protected state: DefaultState | CreateLinkState;
 
-    constructor(reactDiagramsState: DefaultState) {
-        this.state = reactDiagramsState;
-    }
+  constructor(reactDiagramsState: DefaultState | CreateLinkState) {
+    this.state = reactDiagramsState;
+  }
 
-    onExit() {
-        // Default: do nothing
-    }
+  onExit() {
+    // Default: do nothing
+  }
 
-    onEnter() {
-        // Default: do nothing
-    }
+  onEnter() {
+    // Default: do nothing
+  }
 }
