@@ -1,8 +1,8 @@
 import React from "react";
-import {DropTargetMonitor} from "react-dnd";
-import {CanvasEngine} from "@projectstorm/react-canvas-core";
-import {DefaultSidebarNodeTypes} from "../constants";
-import {State} from "../components/sidebar/states/State";
+import { DropTargetMonitor } from "react-dnd";
+import { CanvasEngine } from "@projectstorm/react-canvas-core";
+import { DefaultSidebarNodeTypes } from "../constants";
+import { State } from "../components/sidebar/states/State";
 
 export type StateMap = {
     [key in DefaultSidebarNodeTypes]?: State;
@@ -39,7 +39,7 @@ export interface SidebarItemProps extends IHandleSelection {
     selected?: boolean;
 }
 
-export interface ISubSidebarItemProps extends IHandleSelection{
+export interface ISubSidebarItemProps extends IHandleSelection {
     node: INode | ISidebarNodeProps;
     selected?: boolean;
 }
@@ -60,4 +60,3 @@ export interface ISubSidebar {
     show?: boolean;
     nodes?: INode[];
 }
-

@@ -1,12 +1,12 @@
-import {IHandleClick} from "../../types/sidebar";
-import {DefaultSidebarNodeTypes} from "../../constants";
+import { IHandleClick } from "../../types/sidebar";
+import { DefaultSidebarNodeTypes } from "../../constants";
 
 
 export const handleItemClick = ({
-                                    event,
-                                    node,
-                                    handleSelection
-                                }: IHandleClick) => {
+    event,
+    node,
+    handleSelection
+}: IHandleClick) => {
     const { id, draggable, preCallback, postCallback, defaultCallback } = node;
     // if item is un-draggable click event fires only
     if (!draggable) {
