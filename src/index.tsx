@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { forwardRef, useEffect, useImperativeHandle, useMemo } from 'react';
-import Sidebar, { ISidebarProps } from './components/Sidebar';
 import { MetaNode } from './models/MetaNode';
 import { MetaLink } from './models/MetaLink';
 import { MetaPort } from './models/MetaPort';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ComponentsMap } from './models/ComponentsMap';
-import { PortWidget } from '@projectstorm/react-diagrams';
+import { LinkModel, PortWidget } from '@projectstorm/react-diagrams';
 import { MetaNodeModel } from './react-diagrams/MetaNodeModel';
 import { MetaNodeFactory } from './react-diagrams/MetaNodeFactory';
 import { MetaLinkFactory } from './react-diagrams/MetaLinkFactory';
@@ -21,6 +20,8 @@ import { DefaultSidebarNodeTypes, EventTypes } from './constants';
 import { CanvasWidget } from './components/CanvasWidget';
 import { MetaLinkModel } from './react-diagrams/MetaLinkModel';
 import { DefaultState } from './react-diagrams/state/DefaultState';
+import { ISidebarProps } from './types/sidebar';
+import Sidebar from './components/sidebar/Sidebar';
 import { InputType } from '@projectstorm/react-canvas-core';
 
 const useStyles = makeStyles(_ => ({
@@ -67,9 +68,10 @@ const MetaDiagram = forwardRef(
     ref
   ) => {
     const classes = useStyles();
+    const linkRef = React.useRef<any>();
 
     // initialize custom diagram state
-    const state = new DefaultState();
+    const state = new DefaultState(globalProps?.createLink);
 
     // Sets up the diagram engine
     // By using useMemo, we ensure that the createEngine() function is only called when the component mounts,
@@ -137,7 +139,15 @@ const MetaDiagram = forwardRef(
       }
     };
 
-    // add listeners to the nodes
+    let removeNotValidLink = () => {
+      const link: LinkModel = linkRef.current.link;
+      const sourcePort = link.getSourcePort();
+      const targetPort = link.getTargetPort();
+      if (sourcePort && !targetPort) {
+        model.removeLink(link);
+      }
+      linkRef.current = null;
+    };
 
     let registerNodeListeners = (node: any) => {
       node.registerListener({
@@ -152,11 +162,13 @@ const MetaDiagram = forwardRef(
     });
 
     // add listeners to the model
-
     model.registerListener({
       nodeUpdated: postCallback,
       eventDidFire: postCallback,
       eventWillFire: preCallback,
+      linksUpdated: (event: any) => {
+        linkRef.current = event;
+      },
     });
 
     const clearSelection = () => {
@@ -168,6 +180,10 @@ const MetaDiagram = forwardRef(
       const startsWithSelect = id
         .toLowerCase()
         .startsWith(DefaultSidebarNodeTypes.SELECT);
+
+      if (id !== DefaultSidebarNodeTypes.CREATE_LINK && !!linkRef.current) {
+        removeNotValidLink();
+      }
 
       if (startsWithSelect && !Boolean(state.isSelection)) {
         state.isSelection = true;
@@ -243,7 +259,7 @@ const MetaDiagram = forwardRef(
             <Sidebar
               {...sidebarProps}
               engine={engine}
-              updateSelectedBar={updateSelection}
+              updateSelection={updateSelection}
             />{' '}
             <CanvasWidget
               engine={engine}

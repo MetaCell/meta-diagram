@@ -8,7 +8,7 @@ import React, { useCallback } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { CanvasDropTypes } from '../constants';
 import vars from './assets/styles/variables';
-import { INode, ISidebarNodeProps } from './Sidebar';
+import { INode, ISidebarNodeProps } from '../types/sidebar';
 
 const useStyles = makeStyles(_ => ({
   container: {

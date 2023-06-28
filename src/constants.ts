@@ -39,10 +39,12 @@ export enum CanvasClassTypes {
 export enum DefaultSidebarNodeTypes {
   PANNING = 'panning',
   SELECT = 'select',
+  CREATE_LINK = 'create_link',
 }
 
 export enum CursorTypes {
   MOVE = 'move',
   DEFAULT = 'default',
   TEXT = 'text',
+  CROSSHAIR = 'crosshair',
 }
