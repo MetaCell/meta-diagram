@@ -221,7 +221,7 @@ const MetaDiagram = forwardRef(
 
     const repaintCanvas = () => {
       engine.repaintCanvas();
-    }
+    };
 
     useImperativeHandle(ref, () => ({
       addNode,
