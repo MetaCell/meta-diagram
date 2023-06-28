@@ -73,11 +73,11 @@ const applicationTheme = (params: ThemeVars) => {
 
           .sub-sidebar {
             z-index: 4;
-            width: 2.375rem;
+            width: 2.5rem;
             background: ${subBarBg};
             position: fixed;
             border-radius: 0 0.5rem 0.5rem 0;
-            left: 3rem;
+            left: calc(3rem - 1px);
             top: 50%;
             transform: translateY(-50%);
           }
@@ -117,6 +117,12 @@ const applicationTheme = (params: ThemeVars) => {
             padding: 0.25rem;
           }
 
+          .sub-sidebar .wrapper {
+            max-height: 16rem;
+            overflow-y: scroll;
+            overflow-x: hidden
+          }
+
           .canvas-widget {
             height: 100%;
             width: 100%;
@@ -145,7 +151,7 @@ const applicationTheme = (params: ThemeVars) => {
             width: 1.25rem;
             height: 1.25rem;
             margin: 0 auto 0.25rem;
-            background: url(data:image/svg+xml;base64,${new Buffer(
+            background: url(data:image/svg+xml;base64,${Buffer.from(
               nodeGreen
             ).toString('base64')});
           }
