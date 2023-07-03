@@ -66,8 +66,12 @@ export class DefaultState extends State<DiagramEngine> {
             .getActionEventBus()
             .getModelForEvent(event);
 
-          if (element instanceof PortModel || element instanceof MetaNodeModel)
+          if (
+            element instanceof PortModel ||
+            element instanceof MetaNodeModel
+          ) {
             this.transitionWithEvent(this.createLink, event);
+          }
         },
       })
     );

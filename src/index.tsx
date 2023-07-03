@@ -71,7 +71,8 @@ const MetaDiagram = forwardRef(
     const linkRef = React.useRef<any>();
 
     // initialize custom diagram state
-    const state = new DefaultState(globalProps?.createLink);
+    let state = new DefaultState(globalProps?.createLink);
+    state.isSelection = false;
 
     // Sets up the diagram engine
     // By using useMemo, we ensure that the createEngine() function is only called when the component mounts,
@@ -144,9 +145,10 @@ const MetaDiagram = forwardRef(
       const sourcePort = link.getSourcePort();
       const targetPort = link.getTargetPort();
       if (sourcePort && !targetPort) {
-        model.removeLink(link);
+        engine.getModel().removeLink(link);
       }
       linkRef.current = null;
+      engine.getStateMachine().popState();
     };
 
     let registerNodeListeners = (node: any) => {
@@ -181,17 +183,25 @@ const MetaDiagram = forwardRef(
         .toLowerCase()
         .startsWith(DefaultSidebarNodeTypes.SELECT);
 
+      if (startsWithSelect && Boolean(state.isSelection)) {
+        return;
+      }
+
       if (id !== DefaultSidebarNodeTypes.CREATE_LINK && !!linkRef.current) {
         removeNotValidLink();
       }
 
       if (startsWithSelect && !Boolean(state.isSelection)) {
         state.isSelection = true;
-      } else if (startsWithSelect && Boolean(state.isSelection)) {
-        return;
-      } else if (state.isSelection) {
+      } else if (
+        state.isSelection ||
+        (!startsWithSelect && Boolean(state.isSelection))
+      ) {
         clearSelection();
         state.isSelection = false;
+      }
+      if (engine) {
+        repaintCanvas();
       }
     };
 

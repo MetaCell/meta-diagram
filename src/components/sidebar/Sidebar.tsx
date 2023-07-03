@@ -10,7 +10,9 @@ import { PanningState } from './states/PanningState';
 import { CreateLinkState } from './states/CreateLinkState';
 
 const Sidebar = ({ engine, sidebarNodes, updateSelection }: ISidebarProps) => {
-  const [currentState, setCurrentState] = useState<string | null>(null);
+  const [currentState, setCurrentState] = useState<string | null>(
+    () => DefaultSidebarNodeTypes.CREATE_LINK
+  );
 
   const reactDiagramsState = engine
     .getStateMachine()
