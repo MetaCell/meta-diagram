@@ -1,4 +1,4 @@
-import { MouseEvent } from 'react';
+import { MouseEvent, TouchEvent } from 'react';
 import {
   SelectingState,
   State,
@@ -27,7 +27,7 @@ export class DefaultState extends State<DiagramEngine> {
     this.dragCanvas = new DragCanvasState();
     this.dragItems = new DragDiagramItemsState();
     this.createLink = customCreateLink ?? new CreateLinkState();
-    this.isSelection = true;
+    this.isSelection = false;
 
     // determine what was clicked on
     this.registerAction(
@@ -68,10 +68,27 @@ export class DefaultState extends State<DiagramEngine> {
 
           if (
             element instanceof PortModel ||
-            element instanceof MetaNodeModel
+            (element instanceof MetaNodeModel && !this.isSelection)
           ) {
             this.transitionWithEvent(this.createLink, event);
           }
+        },
+      })
+    );
+
+    // touch drags the canvas
+    this.registerAction(
+      new Action({
+        type: InputType.TOUCH_START,
+        fire: (event: ActionEvent<TouchEvent | any>) => {
+          const element = this.engine
+            .getActionEventBus()
+            .getModelForEvent(event);
+          // the canvas was clicked on, transition to the dragging canvas state
+          if (!!this.dragCanvas.config.allowDrag && !element) {
+            this.transitionWithEvent(this.dragCanvas, event);
+          }
+          // this.transitionWithEvent(this.dragCanvas, event);
         },
       })
     );
