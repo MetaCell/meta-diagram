@@ -11,7 +11,7 @@ export const SubSiderBar = ({ nodes, show = false }: ISubSidebar) => {
     return (
       <>
         <Box className="sub-sidebar">
-          <Collapse orientation="horizontal" in={show}>
+          <Collapse orientation="horizontal" in={show} className="wrapper">
             <List disablePadding component="nav">
               {nodes.map(node => (
                 <Fragment key={node.id}>
