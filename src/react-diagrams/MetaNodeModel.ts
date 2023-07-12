@@ -3,6 +3,13 @@ import { PortTypes, ReactDiagramMetaTypes, CallbackTypes } from '../constants';
 import { DefaultPortModel, NodeModel } from '@projectstorm/react-diagrams';
 import { Point } from '@projectstorm/geometry';
 import { subPoints } from '../utils';
+import { MetaLinkModel } from './MetaLinkModel';
+
+export class MetaPortModel extends DefaultPortModel {
+  createLinkModel(): MetaLinkModel {
+    return new MetaLinkModel();
+  }
+}
 
 export class MetaNodeModel extends NodeModel {
   constructor(options = {}) {
@@ -21,7 +28,7 @@ export class MetaNodeModel extends NodeModel {
       switch (port.getType()) {
         case PortTypes.INPUT_PORT:
           this.addPort(
-            new DefaultPortModel({
+            new MetaPortModel({
               in: true,
               name: port.getName(),
             })
@@ -29,7 +36,7 @@ export class MetaNodeModel extends NodeModel {
           break;
         case PortTypes.OUTPUT_PORT:
           this.addPort(
-            new DefaultPortModel({
+            new MetaPortModel({
               in: false,
               name: port.getName(),
             })
