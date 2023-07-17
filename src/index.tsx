@@ -6,7 +6,7 @@ import { MetaPort } from './models/MetaPort';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ComponentsMap } from './models/ComponentsMap';
 import { LinkModel, PortWidget } from '@projectstorm/react-diagrams';
-import { MetaNodeModel } from './react-diagrams/MetaNodeModel';
+import { MetaNodeModel, MetaPortModel } from './react-diagrams/MetaNodeModel';
 import { MetaNodeFactory } from './react-diagrams/MetaNodeFactory';
 import { MetaLinkFactory } from './react-diagrams/MetaLinkFactory';
 import createEngine, { DiagramModel } from '@projectstorm/react-diagrams';
@@ -73,12 +73,13 @@ const MetaDiagram = forwardRef(
 
     // initialize custom diagram state
     let state = new DefaultState(globalProps?.createLink);
+
     state.isSelection = false;
 
     // Sets up the diagram engine
     // By using useMemo, we ensure that the createEngine() function is only called when the component mounts,
     // and the same engine instance is reused on subsequent re-renders.
-    const engine = useMemo(() => createEngine(), []);
+    const engine = useMemo(() => createEngine(), [metaNodes, metaLinks]);
 
     if (metaCallback === undefined) {
       metaCallback = (node: any) => {
@@ -95,7 +96,18 @@ const MetaDiagram = forwardRef(
     engine
       .getLinkFactories()
       // @ts-ignore
-      .registerFactory(new MetaLinkFactory(componentsMap.links));
+      .registerFactory(
+        !!globalProps.CustomLinkFactory
+          ? new globalProps.CustomLinkFactory(componentsMap.links)
+          : new MetaLinkFactory(componentsMap.links)
+      );
+
+    if (!!globalProps.CustomPortFactory) {
+      engine
+        .getPortFactories()
+        // @ts-ignore
+        .registerFactory(new globalProps.CustomPortFactory());
+    }
 
     // set up the diagram model
     const model = new DiagramModel();
@@ -194,10 +206,7 @@ const MetaDiagram = forwardRef(
 
       if (startsWithSelect && !Boolean(state.isSelection)) {
         state.isSelection = true;
-      } else if (
-        state.isSelection ||
-        (!startsWithSelect && Boolean(state.isSelection))
-      ) {
+      } else if (Boolean(state.isSelection) || !startsWithSelect) {
         clearSelection();
         state.isSelection = false;
       }
@@ -284,9 +293,21 @@ const MetaDiagram = forwardRef(
 );
 
 export default MetaDiagram;
-export { MetaNode, MetaLink, MetaPort, MetaNodeModel, ComponentsMap };
+export {
+  MetaNode,
+  MetaLink,
+  MetaPort,
+  MetaNodeModel,
+  ComponentsMap,
+  MetaPortModel,
+};
 export { PortWidget };
 export { MetaLinkModel } from './react-diagrams/MetaLinkModel';
+export { MetaLinkFactory } from './react-diagrams/MetaLinkFactory';
 export { PortTypes } from './constants';
 export { CallbackTypes } from './constants';
-export { EventTypes, DefaultSidebarNodeTypes } from './constants';
+export {
+  EventTypes,
+  DefaultSidebarNodeTypes,
+  ReactDiagramMetaTypes,
+} from './constants';

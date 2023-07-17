@@ -5,9 +5,9 @@ import React from 'react';
 import { DefaultLinkFactory } from '@projectstorm/react-diagrams';
 
 export class MetaLinkFactory extends DefaultLinkFactory {
-  componentsMap: Map<string, JSX.Element>;
+  componentsMap: Map<string, React.ComponentType>;
 
-  constructor(componentsMap: Map<string, JSX.Element>) {
+  constructor(componentsMap: Map<string, React.ComponentType>) {
     super(ReactDiagramMetaTypes.META_LINK);
     this.componentsMap = componentsMap;
   }
