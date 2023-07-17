@@ -13,7 +13,7 @@ export const SubSidebarItem = ({
   selected,
   handleSelection,
 }: ISubSidebarItemProps) => {
-  const [{}, dragRef, dragPreview] = useDrag(
+  const [, dragRef, dragPreview] = useDrag(
     () => ({
       type: CanvasDropTypes.CANVAS_NODE,
       item: node,

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { Box, List } from '@mui/material';
 
 import SidebarItem from './SidebarItem';
@@ -25,19 +25,22 @@ const Sidebar = ({ engine, sidebarNodes, updateSelection }: ISidebarProps) => {
     ),
   };
 
-  const handleSelection = (selectedID: DefaultSidebarNodeTypes) => {
-    if (currentState) {
-      stateMap[currentState as DefaultSidebarNodeTypes]?.onExit();
-    }
+  const handleSelection = useCallback(
+    (selectedID: DefaultSidebarNodeTypes) => {
+      if (currentState) {
+        stateMap[currentState as DefaultSidebarNodeTypes]?.onExit();
+      }
 
-    setCurrentState(selectedID);
-    stateMap[selectedID]?.onEnter();
-    updateSelection(selectedID);
-  };
+      setCurrentState(selectedID);
+      stateMap[selectedID]?.onEnter();
+      updateSelection(selectedID);
+    },
+    [currentState, stateMap, updateSelection]
+  );
 
   useEffect(() => {
     handleSelection(DefaultSidebarNodeTypes.PANNING);
-  }, []);
+  }, [handleSelection]);
 
   return (
     <>

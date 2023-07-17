@@ -40,11 +40,11 @@ export const CanvasWidget = ({
 
       if (!!node.onNodeDrop) node?.onNodeDrop(monitor, node, engine);
     },
-    []
+    [engine]
   );
 
   // can drop custom hook
-  const [{}, dropRef] = useDrop({
+  const [, dropRef] = useDrop({
     accept: CanvasDropTypes.CANVAS_NODE,
     // canDrop: () => true,
     drop: onDrop,
