@@ -29,7 +29,7 @@ export const SidebarItem = ({
   selected,
   handleSelection,
 }: SidebarItemProps) => {
-  const [{}, dragRef, dragPreview] = useDrag(
+  const [, dragRef, dragPreview] = useDrag(
     () => ({
       type: CanvasDropTypes.CANVAS_NODE,
       item: node,
