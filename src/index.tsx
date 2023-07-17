@@ -79,7 +79,7 @@ const MetaDiagram = forwardRef(
     // Sets up the diagram engine
     // By using useMemo, we ensure that the createEngine() function is only called when the component mounts,
     // and the same engine instance is reused on subsequent re-renders.
-    const engine = useMemo(() => createEngine(), []);
+    const engine = useMemo(() => createEngine(), [metaNodes, metaLinks]);
 
     if (metaCallback === undefined) {
       metaCallback = (node: any) => {
