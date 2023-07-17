@@ -69,6 +69,7 @@ const MetaDiagram = forwardRef(
   ) => {
     const classes = useStyles();
     const linkRef = React.useRef<any>();
+    const onMountRef = React.useRef<Function | undefined>(onMount);
 
     // initialize custom diagram state
     let state = new DefaultState(globalProps?.createLink);
@@ -77,7 +78,7 @@ const MetaDiagram = forwardRef(
     // Sets up the diagram engine
     // By using useMemo, we ensure that the createEngine() function is only called when the component mounts,
     // and the same engine instance is reused on subsequent re-renders.
-    const engine = useMemo(() => createEngine(), [metaNodes, metaLinks]);
+    const engine = useMemo(() => createEngine(), []);
 
     if (metaCallback === undefined) {
       metaCallback = (node: any) => {
@@ -227,13 +228,13 @@ const MetaDiagram = forwardRef(
     }
 
     useEffect(() => {
-      if (onMount === undefined) {
-        onMount = (engine: any) => {
+      if (onMountRef.current === undefined) {
+        onMountRef.current = (engine: any) => {
           console.log(engine);
         };
       }
-      onMount(engine);
-    }, []);
+      onMountRef.current(engine);
+    }, [engine]);
 
     // expose api
     const addNode = (node: any) => {

@@ -64,7 +64,7 @@ export class CreateLinkState extends State<DiagramEngine> {
           } else if (
             element instanceof PortModel &&
             this.sourcePort &&
-            element != this.sourcePort
+            element !== this.sourcePort
           ) {
             if (this.sourcePort.canLinkToPort(element)) {
               if (!this.link) return;
