@@ -64,6 +64,15 @@ export class MetaNodeModel extends NodeModel {
     return this.getOptions()[label];
   }
 
+  setLoggable(loggable: string, value: any, triggerUpdate?: boolean | undefined) {
+    // TODO: we need to move this away from meta-diagram but I don't really have time to think about this atm
+    // @ts-ignore
+    this.options['Loggables'][loggable] = value;
+    if (triggerUpdate) {
+      this.flagUpdate(CallbackTypes.OPTIONS_UPDATED);
+    }
+  }
+
   getId(): string[] {
     return [...this.getOption('id')];
   }
@@ -100,7 +109,11 @@ export class MetaNodeModel extends NodeModel {
     });
     return {
       ...super.serialize(),
-      ...additionalParams,
+      'name': this.getOption('name'),
+      'graphPath': this.getOption('graphPath'),
+      'class_inputs': {
+        ...additionalParams,
+      }
     };
   }
 }

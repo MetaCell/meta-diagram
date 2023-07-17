@@ -34,4 +34,12 @@ export class MetaPort {
   getType(): string {
     return this.type;
   }
+
+  serialise(): any {
+    return {
+      'id': this.getId(),
+      'name': this.getName(),
+      'type': this.getType(),
+    };
+  }
 }
