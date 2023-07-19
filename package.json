@@ -28,12 +28,6 @@
       "pre-commit": "tsdx lint"
     }
   },
-  "prettier": {
-    "printWidth": 80,
-    "semi": true,
-    "singleQuote": true,
-    "trailingComma": "es5"
-  },
   "name": "@metacell/meta-diagram",
   "author": "MetaCell",
   "module": "dist/meta-diagram.esm.js",
