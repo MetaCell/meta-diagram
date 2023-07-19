@@ -30,7 +30,7 @@ export class MetaLink implements ILink {
     this.options.set('id', id);
     this.options.set('name', name);
     this.options.set('shape', shape);
-    this.options.set('varian', variant);
+    this.options.set('variant', variant);
   }
 
   getSourceId(): string {
