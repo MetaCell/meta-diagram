@@ -115,7 +115,7 @@ export class DefaultState extends State<DiagramEngine> {
     this.childStates = [];
   }
 
-  // dragState methods
+  // drag state methods
   public setDragState() {
     this.dragCanvas = new DragCanvasState();
   }
