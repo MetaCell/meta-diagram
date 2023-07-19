@@ -1,25 +1,25 @@
-import { makeStyles } from '@mui/styles';
-import { Box } from '@mui/system';
+import { makeStyles } from "@mui/styles";
+import { Box } from "@mui/system";
 import {
   CanvasWidget as Canvas,
-  CanvasEngine,
-} from '@projectstorm/react-canvas-core';
-import React, { useCallback } from 'react';
-import { DropTargetMonitor, useDrop } from 'react-dnd';
-import { CanvasDropTypes } from '../constants';
-import vars from './assets/styles/variables';
-import { INode, ISidebarNodeProps } from '../types/sidebar';
+  CanvasEngine
+} from "@projectstorm/react-canvas-core";
+import React, { useCallback } from "react";
+import { DropTargetMonitor, useDrop } from "react-dnd";
+import { CanvasDropTypes } from "../constants";
+import vars from "./assets/styles/variables";
+import { INode, ISidebarNodeProps } from "../types/sidebar";
 
 const useStyles = makeStyles(_ => ({
   container: {
-    height: '100%',
-    width: '100%',
+    height: "100%",
+    width: "100%"
   },
   canvasContainer: {
-    height: '100%',
-    width: '100%',
-    background: '#fffff',
-  },
+    height: "100%",
+    width: "100%",
+    background: "#fffff"
+  }
 }));
 
 const { canvasBg } = vars;
@@ -53,8 +53,8 @@ export const CanvasWidget = ({
     // drop: onDrop,
     collect: monitor => ({
       isOver: !!monitor.isOver(),
-      canDrop: !!monitor.canDrop(),
-    }),
+      canDrop: !!monitor.canDrop()
+    })
   });
 
   let backgroundColor = canvasBg;

@@ -1,5 +1,5 @@
-import { ILink } from './ILink';
-import { MetaLinkModel } from '../react-diagrams/MetaLinkModel';
+import { ILink } from "./ILink";
+import { MetaLinkModel } from "../react-diagrams/MetaLinkModel";
 
 export class MetaLink implements ILink {
   sourceId: string;
@@ -27,10 +27,10 @@ export class MetaLink implements ILink {
     this.targetId = targetId;
     this.targetPortId = targetPortId;
     this.options = options;
-    this.options.set('id', id);
-    this.options.set('name', name);
-    this.options.set('shape', shape);
-    this.options.set('variant', variant);
+    this.options.set("id", id);
+    this.options.set("name", name);
+    this.options.set("shape", shape);
+    this.options.set("variant", variant);
   }
 
   getSourceId(): string {
@@ -50,15 +50,15 @@ export class MetaLink implements ILink {
   }
 
   getId(): string {
-    return this.options.get('id');
+    return this.options.get("id");
   }
 
   getName(): string {
-    return this.options.get('name');
+    return this.options.get("name");
   }
 
   getShape(): string {
-    return this.options.get('shape');
+    return this.options.get("shape");
   }
 
   toModel(): MetaLinkModel {

@@ -1,11 +1,11 @@
-import { DefaultLinkModel } from '@projectstorm/react-diagrams';
-import { ReactDiagramMetaTypes, CallbackTypes } from '../constants';
+import { DefaultLinkModel } from "@projectstorm/react-diagrams";
+import { ReactDiagramMetaTypes, CallbackTypes } from "../constants";
 
 export class MetaLinkModel extends DefaultLinkModel {
   constructor(options = {}) {
     super({
       ...options,
-      type: ReactDiagramMetaTypes.META_LINK,
+      type: ReactDiagramMetaTypes.META_LINK
     });
   }
 
@@ -36,7 +36,7 @@ export class MetaLinkModel extends DefaultLinkModel {
     });
     return {
       ...super.serialize(),
-      ...additionalParams,
+      ...additionalParams
     };
   }
 }

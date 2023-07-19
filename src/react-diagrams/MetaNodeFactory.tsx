@@ -1,8 +1,8 @@
-import { AbstractReactFactory } from '@projectstorm/react-canvas-core';
-import { MetaNodeModel } from './MetaNodeModel';
-import { UnknownTypeWidget } from '../components/UnknownTypeWidget';
-import React from 'react';
-import { ReactDiagramMetaTypes } from '../constants';
+import { AbstractReactFactory } from "@projectstorm/react-canvas-core";
+import { MetaNodeModel } from "./MetaNodeModel";
+import { UnknownTypeWidget } from "../components/UnknownTypeWidget";
+import React from "react";
+import { ReactDiagramMetaTypes } from "../constants";
 
 export class MetaNodeFactory extends AbstractReactFactory {
   componentsMap: Map<string, React.ComponentType>;

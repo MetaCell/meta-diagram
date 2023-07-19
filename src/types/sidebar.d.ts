@@ -1,8 +1,8 @@
-import React from 'react';
-import { DropTargetMonitor } from 'react-dnd';
-import { CanvasEngine } from '@projectstorm/react-canvas-core';
-import { DefaultSidebarNodeTypes } from '../constants';
-import { State } from '../components/sidebar/states/State';
+import React from "react";
+import { DropTargetMonitor } from "react-dnd";
+import { CanvasEngine } from "@projectstorm/react-canvas-core";
+import { DefaultSidebarNodeTypes } from "../constants";
+import { State } from "../components/sidebar/states/State";
 
 export type StateMap = {
   [key in DefaultSidebarNodeTypes]?: State;
