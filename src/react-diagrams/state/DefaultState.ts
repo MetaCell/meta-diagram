@@ -99,7 +99,6 @@ export class DefaultState extends State<DiagramEngine> {
           ) {
             this.transitionWithEvent(this.dragCanvas!, event);
           }
-          // this.transitionWithEvent(this.dragCanvas, event);
         },
       })
     );
