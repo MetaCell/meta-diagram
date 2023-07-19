@@ -1,39 +1,39 @@
-import * as React from "react";
-import { forwardRef, useEffect, useImperativeHandle, useMemo } from "react";
-import { MetaNode } from "./models/MetaNode";
-import { MetaLink } from "./models/MetaLink";
-import { MetaPort } from "./models/MetaPort";
-import CssBaseline from "@mui/material/CssBaseline";
-import { ComponentsMap } from "./models/ComponentsMap";
-import { LinkModel, PortWidget } from "@projectstorm/react-diagrams";
-import { MetaNodeModel, MetaPortModel } from "./react-diagrams/MetaNodeModel";
-import { MetaNodeFactory } from "./react-diagrams/MetaNodeFactory";
-import { MetaLinkFactory } from "./react-diagrams/MetaLinkFactory";
-import createEngine, { DiagramModel } from "@projectstorm/react-diagrams";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { makeStyles } from "@mui/styles";
-import { Box } from "@mui/material";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { DndProvider } from "react-dnd";
-import theme from "./theme";
-import { DefaultSidebarNodeTypes, EventTypes } from "./constants";
-import { CanvasWidget } from "./components/CanvasWidget";
-import { MetaLinkModel } from "./react-diagrams/MetaLinkModel";
-import { DefaultState } from "./react-diagrams/state/DefaultState";
-import { ISidebarProps } from "./types/sidebar";
-import Sidebar from "./components/sidebar/Sidebar";
-import { InputType } from "@projectstorm/react-canvas-core";
+import * as React from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useMemo } from 'react';
+import { MetaNode } from './models/MetaNode';
+import { MetaLink } from './models/MetaLink';
+import { MetaPort } from './models/MetaPort';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ComponentsMap } from './models/ComponentsMap';
+import { LinkModel, PortWidget } from '@projectstorm/react-diagrams';
+import { MetaNodeModel, MetaPortModel } from './react-diagrams/MetaNodeModel';
+import { MetaNodeFactory } from './react-diagrams/MetaNodeFactory';
+import { MetaLinkFactory } from './react-diagrams/MetaLinkFactory';
+import createEngine, { DiagramModel } from '@projectstorm/react-diagrams';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
+import { Box } from '@mui/material';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
+import theme from './theme';
+import { DefaultSidebarNodeTypes, EventTypes } from './constants';
+import { CanvasWidget } from './components/CanvasWidget';
+import { MetaLinkModel } from './react-diagrams/MetaLinkModel';
+import { DefaultState } from './react-diagrams/state/DefaultState';
+import { ISidebarProps } from './types/sidebar';
+import Sidebar from './components/sidebar/Sidebar';
+import { InputType } from '@projectstorm/react-canvas-core';
 
 const useStyles = makeStyles(_ => ({
   container: {
-    height: "100%",
-    width: "100%"
+    height: '100%',
+    width: '100%',
   },
   canvasContainer: {
-    height: "100%",
-    width: "100%",
-    background: "#fffff"
-  }
+    height: '100%',
+    width: '100%',
+    background: '#fffff',
+  },
 }));
 
 interface MetaDiagramProps {
@@ -63,7 +63,7 @@ const MetaDiagram = forwardRef(
       sidebarProps,
       metaCallback,
       onMount,
-      globalProps
+      globalProps,
     }: MetaDiagramProps,
     ref
   ) => {
@@ -119,9 +119,9 @@ const MetaDiagram = forwardRef(
         const listener = node.listeners[id];
         Object.keys(listener).forEach(event => {
           if (
-            event === "nodeUpdated" ||
-            event === "eventDidFire" ||
-            event === "eventWillFire"
+            event === 'nodeUpdated' ||
+            event === 'eventDidFire' ||
+            event === 'eventWillFire'
           ) {
             node.deregisterListener(listener[event]);
           }
@@ -167,7 +167,7 @@ const MetaDiagram = forwardRef(
       node.registerListener({
         nodeUpdated: postCallback,
         eventDidFire: postCallback,
-        eventWillFire: preCallback
+        eventWillFire: preCallback,
       });
     };
 
@@ -182,7 +182,7 @@ const MetaDiagram = forwardRef(
       eventWillFire: preCallback,
       linksUpdated: (event: any) => {
         linkRef.current = event;
-      }
+      },
     });
 
     const clearSelection = () => {
@@ -222,7 +222,7 @@ const MetaDiagram = forwardRef(
           .getActionsForType(InputType.KEY_DOWN);
         actions.forEach((action: any) => {
           // needs to find a better approach for this but for now this will do
-          if (action.constructor.name === "DeleteItemsAction") {
+          if (action.constructor.name === 'DeleteItemsAction') {
             engine.getActionEventBus().deregisterAction(action);
           }
         });
@@ -243,7 +243,7 @@ const MetaDiagram = forwardRef(
       node.registerListener({
         nodeUpdated: postCallback,
         eventDidFire: postCallback,
-        eventWillFire: preCallback
+        eventWillFire: preCallback,
       });
       engine.getModel().addNode(node);
     };
@@ -254,7 +254,7 @@ const MetaDiagram = forwardRef(
 
     useImperativeHandle(ref, () => ({
       addNode,
-      repaintCanvas
+      repaintCanvas,
     }));
 
     // render
@@ -273,7 +273,7 @@ const MetaDiagram = forwardRef(
               {...sidebarProps}
               engine={engine}
               updateSelection={updateSelection}
-            />{" "}
+            />{' '}
             <CanvasWidget
               engine={engine}
               className={metaTheme?.canvasClassName}
@@ -292,15 +292,15 @@ export {
   MetaPort,
   MetaNodeModel,
   ComponentsMap,
-  MetaPortModel
+  MetaPortModel,
 };
 export { PortWidget };
-export { MetaLinkModel } from "./react-diagrams/MetaLinkModel";
-export { MetaLinkFactory } from "./react-diagrams/MetaLinkFactory";
-export { PortTypes } from "./constants";
-export { CallbackTypes } from "./constants";
+export { MetaLinkModel } from './react-diagrams/MetaLinkModel';
+export { MetaLinkFactory } from './react-diagrams/MetaLinkFactory';
+export { PortTypes } from './constants';
+export { CallbackTypes } from './constants';
 export {
   EventTypes,
   DefaultSidebarNodeTypes,
-  ReactDiagramMetaTypes
-} from "./constants";
+  ReactDiagramMetaTypes,
+} from './constants';

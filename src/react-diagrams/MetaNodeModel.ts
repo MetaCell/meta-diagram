@@ -1,9 +1,9 @@
-import { MetaPort } from "../models/MetaPort";
-import { PortTypes, ReactDiagramMetaTypes, CallbackTypes } from "../constants";
-import { DefaultPortModel, NodeModel } from "@projectstorm/react-diagrams";
-import { Point } from "@projectstorm/geometry";
-import { subPoints } from "../utils";
-import { MetaLinkModel } from "./MetaLinkModel";
+import { MetaPort } from '../models/MetaPort';
+import { PortTypes, ReactDiagramMetaTypes, CallbackTypes } from '../constants';
+import { DefaultPortModel, NodeModel } from '@projectstorm/react-diagrams';
+import { Point } from '@projectstorm/geometry';
+import { subPoints } from '../utils';
+import { MetaLinkModel } from './MetaLinkModel';
 
 export class MetaPortModel extends DefaultPortModel {
   createLinkModel(): MetaLinkModel {
@@ -15,7 +15,7 @@ export class MetaNodeModel extends NodeModel {
   constructor(options = {}) {
     super({
       ...options,
-      type: ReactDiagramMetaTypes.META_NODE
+      type: ReactDiagramMetaTypes.META_NODE,
     });
     // @ts-ignore
     if (options.width && options.height) {
@@ -30,7 +30,7 @@ export class MetaNodeModel extends NodeModel {
           this.addPort(
             new MetaPortModel({
               in: true,
-              name: port.getName()
+              name: port.getName(),
             })
           );
           break;
@@ -38,15 +38,15 @@ export class MetaNodeModel extends NodeModel {
           this.addPort(
             new MetaPortModel({
               in: false,
-              name: port.getName()
+              name: port.getName(),
             })
           );
           break;
         case PortTypes.PARAMETER_PORT:
-          console.log("parameter type found!");
+          console.log('parameter type found!');
           break;
         default:
-          console.error("Port type");
+          console.error('Port type');
       }
     });
   }
@@ -78,22 +78,22 @@ export class MetaNodeModel extends NodeModel {
   ) {
     // TODO: we need to move this away from meta-diagram but I don't really have time to think about this atm
     // @ts-ignore
-    this.options["Loggables"][loggable] = value;
+    this.options['Loggables'][loggable] = value;
     if (triggerUpdate) {
       this.flagUpdate(CallbackTypes.OPTIONS_UPDATED);
     }
   }
 
   getId(): string[] {
-    return [...this.getOption("id")];
+    return [...this.getOption('id')];
   }
 
   getGraphPath(): string[] {
-    return [...this.getOption("graphPath")];
+    return [...this.getOption('graphPath')];
   }
 
   getLocalPosition(): Point {
-    return this.getOption("localPosition");
+    return this.getOption('localPosition');
   }
 
   private calculateLocalPosition(parent: MetaNodeModel | undefined): Point {
@@ -105,7 +105,7 @@ export class MetaNodeModel extends NodeModel {
   }
 
   updateLocalPosition(parent: MetaNodeModel | undefined): void {
-    this.setOption("localPosition", this.calculateLocalPosition(parent));
+    this.setOption('localPosition', this.calculateLocalPosition(parent));
   }
 
   updateSize(width: number, height: number) {
@@ -120,11 +120,11 @@ export class MetaNodeModel extends NodeModel {
     });
     return {
       ...super.serialize(),
-      name: this.getOption("name"),
-      graphPath: this.getOption("graphPath"),
+      name: this.getOption('name'),
+      graphPath: this.getOption('graphPath'),
       class_inputs: {
-        ...additionalParams
-      }
+        ...additionalParams,
+      },
     };
   }
 }

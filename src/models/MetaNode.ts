@@ -1,6 +1,6 @@
-import { MetaPort } from "./MetaPort";
-import { MetaNodeModel } from "../react-diagrams/MetaNodeModel";
-import { Point } from "@projectstorm/geometry";
+import { MetaPort } from './MetaPort';
+import { MetaNodeModel } from '../react-diagrams/MetaNodeModel';
+import { Point } from '@projectstorm/geometry';
 
 export class MetaNode {
   private readonly parent: MetaNode | undefined;
@@ -23,12 +23,12 @@ export class MetaNode {
     this.children = children || [];
     this.childrenMap = new Map();
     this.options = new Map(options);
-    this.options.set("id", id);
-    this.options.set("name", name);
-    this.options.set("shape", shape);
-    this.options.set("ports", ports);
-    this.options.set("variant", variant);
-    this.options.set("position", position);
+    this.options.set('id', id);
+    this.options.set('name', name);
+    this.options.set('shape', shape);
+    this.options.set('ports', ports);
+    this.options.set('variant', variant);
+    this.options.set('position', position);
 
     this.children?.forEach((child: MetaNode) => {
       this.childrenMap.set(child.getId(), child);
@@ -56,15 +56,15 @@ export class MetaNode {
   }
 
   getId(): string {
-    return this.options.get("id");
+    return this.options.get('id');
   }
 
   getName(): string {
-    return this.options.get("name");
+    return this.options.get('name');
   }
 
   getShape(): string {
-    return this.options.get("shape");
+    return this.options.get('shape');
   }
 
   private getGraphPath(): string[] {
@@ -82,8 +82,8 @@ export class MetaNode {
 
   toModel(): MetaNodeModel {
     const optionsMap = new Map(this.options);
-    optionsMap.set("graphPath", this.getGraphPath());
-    optionsMap.set("depth", this.getDepth());
+    optionsMap.set('graphPath', this.getGraphPath());
+    optionsMap.set('depth', this.getDepth());
     return new MetaNodeModel(Object.fromEntries(optionsMap));
   }
 }

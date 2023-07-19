@@ -1,8 +1,8 @@
-import { MetaLinkModel } from "./MetaLinkModel";
-import { UnknownTypeWidget } from "../components/UnknownTypeWidget";
-import { ReactDiagramMetaTypes } from "../constants";
-import React from "react";
-import { DefaultLinkFactory } from "@projectstorm/react-diagrams";
+import { MetaLinkModel } from './MetaLinkModel';
+import { UnknownTypeWidget } from '../components/UnknownTypeWidget';
+import { ReactDiagramMetaTypes } from '../constants';
+import React from 'react';
+import { DefaultLinkFactory } from '@projectstorm/react-diagrams';
 
 export class MetaLinkFactory extends DefaultLinkFactory {
   componentsMap: Map<string, React.ComponentType>;

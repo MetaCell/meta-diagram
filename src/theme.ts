@@ -1,7 +1,7 @@
-import vars from "./components/assets/styles/variables";
-import nodeGreen from "./components/assets/svg/node/green.svg";
-import topSubArrow from "./components/assets/svg/sub-top-arrow.svg";
-import bottomSubArrow from "./components/assets/svg/sub-bottom-arrow.svg";
+import vars from './components/assets/styles/variables';
+import nodeGreen from './components/assets/svg/node/green.svg';
+import topSubArrow from './components/assets/svg/sub-top-arrow.svg';
+import bottomSubArrow from './components/assets/svg/sub-bottom-arrow.svg';
 
 type ThemeVars = {
   [key: string]: any;
@@ -34,7 +34,7 @@ const applicationTheme = (params: ThemeVars) => {
     nodeTextColor,
     nodeWrapperBg,
     nodeLabelColor,
-    nodeBlockBg
+    nodeBlockBg,
   } = params;
   return {
     components: {
@@ -153,7 +153,7 @@ const applicationTheme = (params: ThemeVars) => {
             margin: 0 auto 0.25rem;
             background: url(data:image/svg+xml;base64,${Buffer.from(
               nodeGreen
-            ).toString("base64")});
+            ).toString('base64')});
           }
 
           .primary-node .primary-node_header p {
@@ -369,110 +369,110 @@ const applicationTheme = (params: ThemeVars) => {
             margin: 0.25rem auto;
             background: ${nodeGreenBorderColor};
           }
-        `
+        `,
       },
       MuiList: {
         styleOverrides: {
           root: {
-            "&.customSwitch": {
-              padding: "0.125rem",
+            '&.customSwitch': {
+              padding: '0.125rem',
               background: chipTextColor,
-              borderRadius: "0.5rem",
-              display: "flex",
-              "& .MuiListItemButton-root": {
-                padding: "0.25rem 0.75rem",
-                borderRadius: "0.4375rem",
-                width: "10.59375rem",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                transform: "translate(0, 0)",
-                "&:not(:last-child)": {
-                  marginBottom: "0"
+              borderRadius: '0.5rem',
+              display: 'flex',
+              '& .MuiListItemButton-root': {
+                padding: '0.25rem 0.75rem',
+                borderRadius: '0.4375rem',
+                width: '10.59375rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transform: 'translate(0, 0)',
+                '&:not(:last-child)': {
+                  marginBottom: '0',
                 },
-                "&.Mui-disabled": {
-                  opacity: 1
+                '&.Mui-disabled': {
+                  opacity: 1,
                 },
-                "&.Mui-selected": {
+                '&.Mui-selected': {
                   background: textWhite,
                   boxShadow: listBoxShadow,
                   border: `0.03125rem solid ${listBorderColor}`,
-                  "& .MuiTypography-root": {
-                    color: listSelectedTextColor
-                  }
-                }
+                  '& .MuiTypography-root': {
+                    color: listSelectedTextColor,
+                  },
+                },
               },
-              "& .MuiChip-root": {
-                marginLeft: "0.25rem"
+              '& .MuiChip-root': {
+                marginLeft: '0.25rem',
               },
-              "& .MuiTypography-root": {
+              '& .MuiTypography-root': {
                 fontWeight: 500,
-                fontSize: "0.8125rem",
-                lineHeight: "1.25rem",
-                letterSpacing: "-0.005rem",
+                fontSize: '0.8125rem',
+                lineHeight: '1.25rem',
+                letterSpacing: '-0.005rem',
                 color: chipBgColor,
-                margin: 0
-              }
-            }
-          }
-        }
+                margin: 0,
+              },
+            },
+          },
+        },
       },
       MuiListItemIcon: {
         styleOverrides: {
           root: {
-            minWidth: "inherit"
-          }
-        }
+            minWidth: 'inherit',
+          },
+        },
       },
       MuiListItemButton: {
         styleOverrides: {
           root: {
             padding: 0,
-            width: "2rem",
-            height: "2rem",
-            borderRadius: "0.5rem",
-            justifyContent: "center",
-            "&:hover": {
-              backgroundColor: chipTextColor
-            },
-            "&:not(:last-child)": {
-              marginBottom: "0.5rem"
-            },
-            "&.Mui-selected": {
+            width: '2rem',
+            height: '2rem',
+            borderRadius: '0.5rem',
+            justifyContent: 'center',
+            '&:hover': {
               backgroundColor: chipTextColor,
-              "&:hover": {
-                backgroundColor: chipBgColor
-              }
             },
-            "&.Mui-disabled": {
-              opacity: 0.8
-            }
-          }
-        }
-      }
-    }
+            '&:not(:last-child)': {
+              marginBottom: '0.5rem',
+            },
+            '&.Mui-selected': {
+              backgroundColor: chipTextColor,
+              '&:hover': {
+                backgroundColor: chipBgColor,
+              },
+            },
+            '&.Mui-disabled': {
+              opacity: 0.8,
+            },
+          },
+        },
+      },
+    },
   };
 };
 
 export const subBarStyle = {
-  transform: "translate(0,0)",
-  "&:hover": {
-    backgroundColor: vars.chipTextColor
+  transform: 'translate(0,0)',
+  '&:hover': {
+    backgroundColor: vars.chipTextColor,
   },
-  "&:not(:last-child)": {
-    marginBottom: "0.25rem"
+  '&:not(:last-child)': {
+    marginBottom: '0.25rem',
   },
-  "&.Mui-selected": {
+  '&.Mui-selected': {
     backgroundColor: vars.listItemActiveBg,
     color: vars.textWhite,
-    "&:hover": {
-      backgroundColor: vars.listItemActiveBg
-    }
-  }
+    '&:hover': {
+      backgroundColor: vars.listItemActiveBg,
+    },
+  },
 };
 
 export default (customVariables: ThemeVars) =>
   applicationTheme({
     ...vars,
-    ...customVariables
+    ...customVariables,
   });

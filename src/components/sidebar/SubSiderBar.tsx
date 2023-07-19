@@ -1,8 +1,8 @@
-import React, { useState, Fragment } from "react";
-import { Box, Collapse, List } from "@mui/material";
+import React, { useState, Fragment } from 'react';
+import { Box, Collapse, List } from '@mui/material';
 
-import SubSidebarItem from "./SubSidebarItem";
-import { ISubSidebar } from "../../types/sidebar";
+import SubSidebarItem from './SubSidebarItem';
+import { ISubSidebar } from '../../types/sidebar';
 
 export const SubSiderBar = ({ nodes, show = false }: ISubSidebar) => {
   const [selected, setSelected] = useState<string | undefined>();

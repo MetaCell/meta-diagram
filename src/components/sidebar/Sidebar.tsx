@@ -1,14 +1,14 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { Box, List } from "@mui/material";
+import React, { Fragment, useEffect, useState } from 'react';
+import { Box, List } from '@mui/material';
 
-import SidebarItem from "./SidebarItem";
-import SubSiderBar from "./SubSiderBar";
-import { ISidebarProps, StateMap } from "../../types/sidebar";
-import { DefaultState } from "../../react-diagrams/state/DefaultState";
-import { DefaultSidebarNodeTypes } from "../../constants";
-import { PanningState } from "./states/PanningState";
-import { CreateLinkState } from "./states/CreateLinkState";
-import { SelectionState } from "./states/SelectionState";
+import SidebarItem from './SidebarItem';
+import SubSiderBar from './SubSiderBar';
+import { ISidebarProps, StateMap } from '../../types/sidebar';
+import { DefaultState } from '../../react-diagrams/state/DefaultState';
+import { DefaultSidebarNodeTypes } from '../../constants';
+import { PanningState } from './states/PanningState';
+import { CreateLinkState } from './states/CreateLinkState';
+import { SelectionState } from './states/SelectionState';
 
 const Sidebar = ({ engine, sidebarNodes, updateSelection }: ISidebarProps) => {
   const [currentState, setCurrentState] = useState<string | null>(
@@ -24,7 +24,7 @@ const Sidebar = ({ engine, sidebarNodes, updateSelection }: ISidebarProps) => {
     [DefaultSidebarNodeTypes.PANNING]: new PanningState(reactDiagramsState),
     [DefaultSidebarNodeTypes.CREATE_LINK]: new CreateLinkState(
       reactDiagramsState
-    )
+    ),
   };
 
   const handleSelection = (selectedID: DefaultSidebarNodeTypes) => {

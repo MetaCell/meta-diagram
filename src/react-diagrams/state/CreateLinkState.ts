@@ -2,14 +2,14 @@ import {
   Action,
   ActionEvent,
   InputType,
-  State
-} from "@projectstorm/react-canvas-core";
+  State,
+} from '@projectstorm/react-canvas-core';
 import {
   PortModel,
   LinkModel,
-  DiagramEngine
-} from "@projectstorm/react-diagrams-core";
-import { MouseEvent } from "react";
+  DiagramEngine,
+} from '@projectstorm/react-diagrams-core';
+import { MouseEvent } from 'react';
 
 export interface CreateLinkStateOptions {
   /**
@@ -28,9 +28,9 @@ export class CreateLinkState extends State<DiagramEngine> {
   config: CreateLinkStateOptions;
 
   constructor() {
-    super({ name: "create-new-link" });
+    super({ name: 'create-new-link' });
     this.config = {
-      allowCreate: true
+      allowCreate: true,
     };
 
     // @ts-ignore
@@ -45,7 +45,7 @@ export class CreateLinkState extends State<DiagramEngine> {
             .getActionEventBus()
             .getModelForEvent(actionEvent);
           const {
-            event: { clientX, clientY }
+            event: { clientX, clientY },
           } = actionEvent;
           const ox = this.engine.getModel().getOffsetX();
           const oy = this.engine.getModel().getOffsetY();
@@ -86,7 +86,7 @@ export class CreateLinkState extends State<DiagramEngine> {
           }
 
           this.engine.repaintCanvas();
-        }
+        },
       })
     );
 
@@ -98,7 +98,7 @@ export class CreateLinkState extends State<DiagramEngine> {
           const { event } = actionEvent;
           this.link.getLastPoint().setPosition(event.clientX, event.clientY);
           this.engine.repaintCanvas();
-        }
+        },
       })
     );
   }

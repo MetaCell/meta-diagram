@@ -1,19 +1,19 @@
-import { MouseEvent, TouchEvent } from "react";
+import { MouseEvent, TouchEvent } from 'react';
 import {
   SelectingState,
   State,
   Action,
   InputType,
   ActionEvent,
-  DragCanvasState
-} from "@projectstorm/react-canvas-core";
+  DragCanvasState,
+} from '@projectstorm/react-canvas-core';
 import {
   PortModel,
   DiagramEngine,
-  DragDiagramItemsState
-} from "@projectstorm/react-diagrams-core";
-import { CreateLinkState } from "./CreateLinkState";
-import { MetaNodeModel } from "../MetaNodeModel";
+  DragDiagramItemsState,
+} from '@projectstorm/react-diagrams-core';
+import { CreateLinkState } from './CreateLinkState';
+import { MetaNodeModel } from '../MetaNodeModel';
 
 export class DefaultState extends State<DiagramEngine> {
   dragCanvas: DragCanvasState | null;
@@ -23,7 +23,7 @@ export class DefaultState extends State<DiagramEngine> {
   isSelection: boolean;
 
   constructor(customCreateLink?: CreateLinkState) {
-    super({ name: "starting-state" });
+    super({ name: 'starting-state' });
     this.childStates = [];
     this.dragCanvas = null;
     this.dragItems = new DragDiagramItemsState();
@@ -60,7 +60,7 @@ export class DefaultState extends State<DiagramEngine> {
           else if (this.childStates.length > 0) {
             this.transitionWithEvent(this.dragItems, event);
           }
-        }
+        },
       })
     );
 
@@ -80,7 +80,7 @@ export class DefaultState extends State<DiagramEngine> {
           ) {
             this.transitionWithEvent(this.createLink, event);
           }
-        }
+        },
       })
     );
 
@@ -99,7 +99,7 @@ export class DefaultState extends State<DiagramEngine> {
           ) {
             this.transitionWithEvent(this.dragCanvas!, event);
           }
-        }
+        },
       })
     );
   }

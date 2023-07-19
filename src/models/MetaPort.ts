@@ -1,5 +1,5 @@
-import { PortTypes } from "../constants";
-import { Point } from "@projectstorm/geometry";
+import { PortTypes } from '../constants';
+import { Point } from '@projectstorm/geometry';
 
 export class MetaPort {
   id: string;
@@ -39,7 +39,7 @@ export class MetaPort {
     return {
       id: this.getId(),
       name: this.getName(),
-      type: this.getType()
+      type: this.getType(),
     };
   }
 }

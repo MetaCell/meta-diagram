@@ -1,17 +1,17 @@
-import React from "react";
-import { cloneElement } from "react";
-import { ListItemButton, ListItemIcon, Tooltip } from "@mui/material";
-import { useDrag } from "react-dnd";
+import React from 'react';
+import { cloneElement } from 'react';
+import { ListItemButton, ListItemIcon, Tooltip } from '@mui/material';
+import { useDrag } from 'react-dnd';
 
-import { subBarStyle } from "../../theme";
-import { ISubSidebarItemProps } from "../../types/sidebar";
-import { CanvasDropTypes } from "../../constants";
-import handleItemClick from "./utils";
+import { subBarStyle } from '../../theme';
+import { ISubSidebarItemProps } from '../../types/sidebar';
+import { CanvasDropTypes } from '../../constants';
+import handleItemClick from './utils';
 
 export const SubSidebarItem = ({
   node,
   selected,
-  handleSelection
+  handleSelection,
 }: ISubSidebarItemProps) => {
   const [, dragRef, dragPreview] = useDrag(
     () => ({
@@ -19,14 +19,14 @@ export const SubSidebarItem = ({
       item: node,
       collect: monitor => ({
         isDragging: monitor.isDragging(),
-        opacity: monitor.isDragging() ? 0.9 : 1
-      })
+        opacity: monitor.isDragging() ? 0.9 : 1,
+      }),
     }),
     [node]
   );
   const { icon, name, id, draggable } = node;
 
-  const iconColor = selected ? "#fff" : "rgba(26, 26, 26, 0.6)";
+  const iconColor = selected ? '#fff' : 'rgba(26, 26, 26, 0.6)';
 
   return (
     <Tooltip id={id} title={name} placement="right" arrow>
@@ -36,7 +36,7 @@ export const SubSidebarItem = ({
           handleItemClick({
             event,
             node,
-            handleSelection
+            handleSelection,
           });
         }}
         ref={dragPreview}

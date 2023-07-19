@@ -1,7 +1,7 @@
-import { State } from "./State";
-import { updateCanvasMouseCursor } from "../../../utils";
-import { CursorTypes } from "../../../constants";
-import { DefaultState } from "../../../react-diagrams/state/DefaultState";
+import { State } from './State';
+import { updateCanvasMouseCursor } from '../../../utils';
+import { CursorTypes } from '../../../constants';
+import { DefaultState } from '../../../react-diagrams/state/DefaultState';
 
 export class CreateLinkState extends State {
   onExit() {
