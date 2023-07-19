@@ -16,17 +16,19 @@ import { CreateLinkState } from './CreateLinkState';
 import { MetaNodeModel } from '../MetaNodeModel';
 
 export class DefaultState extends State<DiagramEngine> {
-  dragCanvas: DragCanvasState;
+  dragCanvas: DragCanvasState | null;
   dragItems: DragDiagramItemsState;
-  createLink: CreateLinkState;
+  createLink: CreateLinkState | null;
+  customCreateLink?: CreateLinkState;
   isSelection: boolean;
 
   constructor(customCreateLink?: CreateLinkState) {
     super({ name: 'starting-state' });
-    this.childStates = [new SelectingState()];
-    this.dragCanvas = new DragCanvasState();
+    this.childStates = [];
+    this.dragCanvas = null;
     this.dragItems = new DragDiagramItemsState();
-    this.createLink = customCreateLink ?? new CreateLinkState();
+    this.createLink = null;
+    this.customCreateLink = customCreateLink;
     this.isSelection = false;
 
     // determine what was clicked on
@@ -39,7 +41,10 @@ export class DefaultState extends State<DiagramEngine> {
             .getModelForEvent(event);
 
           // the canvas was clicked on, transition to the dragging canvas state
-          if (!element) {
+          if (
+            this.dragCanvas &&
+            (!element || !!this.dragCanvas.config.allowDrag)
+          ) {
             this.transitionWithEvent(this.dragCanvas, event);
           }
           // initiate dragging a new link
@@ -51,7 +56,8 @@ export class DefaultState extends State<DiagramEngine> {
             return;
           }
           // move the items (and potentially link points)
-          else {
+          // else if (!this.dragCanvas.config.allowDrag) {
+          else if (this.childStates.length > 0) {
             this.transitionWithEvent(this.dragItems, event);
           }
         },
@@ -67,8 +73,10 @@ export class DefaultState extends State<DiagramEngine> {
             .getModelForEvent(event);
 
           if (
-            element instanceof PortModel ||
-            (element instanceof MetaNodeModel && !this.isSelection)
+            (this.createLink && element instanceof PortModel) ||
+            (element instanceof MetaNodeModel &&
+              this.createLink &&
+              !this.isSelection)
           ) {
             this.transitionWithEvent(this.createLink, event);
           }
@@ -85,12 +93,43 @@ export class DefaultState extends State<DiagramEngine> {
             .getActionEventBus()
             .getModelForEvent(event);
           // the canvas was clicked on, transition to the dragging canvas state
-          if (!!this.dragCanvas.config.allowDrag && !element) {
-            this.transitionWithEvent(this.dragCanvas, event);
+          if (
+            (!!this.dragCanvas && !!this.dragCanvas.config.allowDrag) ||
+            !element
+          ) {
+            this.transitionWithEvent(this.dragCanvas!, event);
           }
           // this.transitionWithEvent(this.dragCanvas, event);
         },
       })
     );
+  }
+
+  // Select state methods
+  public setSelectionState() {
+    this.childStates = [new SelectingState()];
+    this.isSelection = true;
+  }
+
+  public unsetSelectionState() {
+    this.isSelection = false;
+    this.childStates = [];
+  }
+
+  // dragState methods
+  public setDragState() {
+    this.dragCanvas = new DragCanvasState();
+  }
+
+  public unsetDragState() {
+    this.dragCanvas = null;
+  }
+  // create link state methods
+  public setCreateLinkState() {
+    this.createLink = this.customCreateLink ?? new CreateLinkState();
+  }
+
+  public unsetCreateLinkState() {
+    this.createLink = null;
   }
 }
