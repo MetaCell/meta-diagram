@@ -68,6 +68,7 @@ const MetaDiagram = forwardRef(
     ref
   ) => {
     const classes = useStyles();
+    console.log("test")
     const linkRef = React.useRef<any>();
     const onMountRef = React.useRef<Function | undefined>(onMount);
 
