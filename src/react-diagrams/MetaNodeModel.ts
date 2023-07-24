@@ -9,6 +9,12 @@ export class MetaPortModel extends DefaultPortModel {
   createLinkModel(): MetaLinkModel {
     return new MetaLinkModel();
   }
+
+  serialise(): any {
+    return {
+      ...super.serialize(),
+    };
+  }
 }
 
 export class MetaNodeModel extends NodeModel {
