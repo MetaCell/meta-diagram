@@ -3,24 +3,18 @@ import { updateCanvasMouseCursor } from '../../../utils';
 import { CursorTypes } from '../../../constants';
 import { DefaultState } from '../../../react-diagrams/state/DefaultState';
 
-export class PanningState extends State {
+export class SelectionState extends State {
   onExit() {
     if (this.state instanceof DefaultState) {
-      if (this.state.dragCanvas) {
-        this.state.dragCanvas.config.allowDrag = false;
-      }
-      this.state.unsetDragState();
+      this.state.unsetSelectionState();
     }
     updateCanvasMouseCursor(CursorTypes.DEFAULT);
   }
 
   onEnter() {
     if (this.state instanceof DefaultState) {
-      this.state.setDragState();
-      if (this.state.dragCanvas) {
-        this.state.dragCanvas.config.allowDrag = true;
-      }
+      this.state.setSelectionState();
     }
-    updateCanvasMouseCursor(CursorTypes.MOVE);
+    updateCanvasMouseCursor(CursorTypes.DEFAULT);
   }
 }

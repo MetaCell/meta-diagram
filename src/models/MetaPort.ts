@@ -37,9 +37,9 @@ export class MetaPort {
 
   serialise(): any {
     return {
-      'id': this.getId(),
-      'name': this.getName(),
-      'type': this.getType(),
+      id: this.getId(),
+      name: this.getName(),
+      type: this.getType(),
     };
   }
 }

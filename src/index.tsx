@@ -161,7 +161,6 @@ const MetaDiagram = forwardRef(
         engine.getModel().removeLink(link);
       }
       linkRef.current = null;
-      engine.getStateMachine().popState();
     };
 
     let registerNodeListeners = (node: any) => {
@@ -192,23 +191,17 @@ const MetaDiagram = forwardRef(
 
     // update state selection state
     const updateSelection = (id: string) => {
-      const startsWithSelect = id
-        .toLowerCase()
-        .startsWith(DefaultSidebarNodeTypes.SELECT);
+      const isSelect = id === DefaultSidebarNodeTypes.SELECT;
 
-      if (startsWithSelect && Boolean(state.isSelection)) {
+      if (isSelect && Boolean(state.isSelection)) {
         return;
       }
 
       if (id !== DefaultSidebarNodeTypes.CREATE_LINK && !!linkRef.current) {
         removeNotValidLink();
       }
-
-      if (startsWithSelect && !Boolean(state.isSelection)) {
-        state.isSelection = true;
-      } else if (Boolean(state.isSelection) || !startsWithSelect) {
+      if (Boolean(state.isSelection) || !isSelect) {
         clearSelection();
-        state.isSelection = false;
       }
       if (engine) {
         repaintCanvas();

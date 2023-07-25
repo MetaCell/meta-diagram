@@ -77,7 +77,11 @@ export class MetaNodeModel extends NodeModel {
     return this.getOptions()[label];
   }
 
-  setLoggable(loggable: string, value: any, triggerUpdate?: boolean | undefined) {
+  setLoggable(
+    loggable: string,
+    value: any,
+    triggerUpdate?: boolean | undefined
+  ) {
     // TODO: we need to move this away from meta-diagram but I don't really have time to think about this atm
     // @ts-ignore
     this.options['Loggables'][loggable] = value;
@@ -122,11 +126,11 @@ export class MetaNodeModel extends NodeModel {
     });
     return {
       ...super.serialize(),
-      'name': this.getOption('name'),
-      'graphPath': this.getOption('graphPath'),
-      'class_inputs': {
+      name: this.getOption('name'),
+      graphPath: this.getOption('graphPath'),
+      class_inputs: {
         ...additionalParams,
-      }
+      },
     };
   }
 }

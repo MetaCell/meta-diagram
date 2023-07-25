@@ -8,6 +8,7 @@ import { DefaultState } from '../../react-diagrams/state/DefaultState';
 import { DefaultSidebarNodeTypes } from '../../constants';
 import { PanningState } from './states/PanningState';
 import { CreateLinkState } from './states/CreateLinkState';
+import { SelectionState } from './states/SelectionState';
 
 const Sidebar = ({ engine, sidebarNodes, updateSelection }: ISidebarProps) => {
   const [currentState, setCurrentState] = useState<string | null>(
@@ -19,6 +20,7 @@ const Sidebar = ({ engine, sidebarNodes, updateSelection }: ISidebarProps) => {
     .getCurrentState() as DefaultState;
 
   const stateMap: StateMap = {
+    [DefaultSidebarNodeTypes.SELECT]: new SelectionState(reactDiagramsState),
     [DefaultSidebarNodeTypes.PANNING]: new PanningState(reactDiagramsState),
     [DefaultSidebarNodeTypes.CREATE_LINK]: new CreateLinkState(
       reactDiagramsState
