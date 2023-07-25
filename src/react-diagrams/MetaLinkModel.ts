@@ -37,6 +37,8 @@ export class MetaLinkModel extends DefaultLinkModel {
     return {
       ...super.serialize(),
       ...additionalParams,
+      sourcePort: this.getSourcePort()?.serialize(),
+      targetPort: this.getTargetPort()?.serialize(),
     };
   }
 }
