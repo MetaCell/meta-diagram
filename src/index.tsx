@@ -20,7 +20,7 @@ import { DefaultSidebarNodeTypes, EventTypes } from './constants';
 import { CanvasWidget } from './components/CanvasWidget';
 import { MetaLinkModel } from './react-diagrams/MetaLinkModel';
 import { DefaultState } from './react-diagrams/state/DefaultState';
-import { ISidebarProps } from './types/sidebar';
+import { ISidebarNodeProps } from './types/sidebar';
 import Sidebar from './components/sidebar/Sidebar';
 import { InputType } from '@projectstorm/react-canvas-core';
 
@@ -40,7 +40,9 @@ interface MetaDiagramProps {
   metaNodes: MetaNodeModel[];
   metaLinks: MetaLinkModel[];
   componentsMap: ComponentsMap;
-  sidebarProps?: ISidebarProps;
+  sidebarNodes?: ISidebarNodeProps[];
+  selectedSidebarNodeId?: string;
+  updateSidebarSelection?: (id: string) => void;
   wrapperClassName?: string;
   canvasClassName?: string;
   metaTheme: {
@@ -60,7 +62,9 @@ const MetaDiagram = forwardRef(
       componentsMap,
       wrapperClassName,
       metaTheme,
-      sidebarProps,
+      sidebarNodes,
+      selectedSidebarNodeId,
+      updateSidebarSelection,
       metaCallback,
       onMount,
       globalProps,
@@ -192,6 +196,7 @@ const MetaDiagram = forwardRef(
     // update state selection state
     const updateSelection = (id: string) => {
       const isSelect = id === DefaultSidebarNodeTypes.SELECT;
+      if (!!updateSidebarSelection) updateSidebarSelection(id);
 
       if (isSelect && Boolean(state.isSelection)) {
         return;
@@ -270,8 +275,9 @@ const MetaDiagram = forwardRef(
           <CssBaseline />
           <Box className={containerClassName} ref={ref}>
             <Sidebar
-              {...sidebarProps}
               engine={engine}
+              selected={selectedSidebarNodeId}
+              sidebarNodes={sidebarNodes}
               updateSelection={updateSelection}
             />{' '}
             <CanvasWidget
