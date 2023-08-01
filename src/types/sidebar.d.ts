@@ -45,7 +45,7 @@ export interface ISubSidebarItemProps extends IHandleSelection {
 }
 
 export interface ISidebarProps {
-  selectedBarNode?: string;
+  selected?: string;
   sidebarNodes?: ISidebarNodeProps[];
   updateSelection: (id: string) => void;
   engine: CanvasEngine;
