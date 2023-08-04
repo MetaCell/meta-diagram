@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment } from 'react';
 import { Box, List } from '@mui/material';
 
 import SidebarItem from './SidebarItem';
@@ -10,9 +10,14 @@ import { PanningState } from './states/PanningState';
 import { CreateLinkState } from './states/CreateLinkState';
 import { SelectionState } from './states/SelectionState';
 
-const Sidebar = ({ engine, sidebarNodes, updateSelection }: ISidebarProps) => {
-  const [currentState, setCurrentState] = useState<string | null>(
-    () => DefaultSidebarNodeTypes.CREATE_LINK
+const Sidebar = ({
+  selected,
+  sidebarNodes,
+  updateSelection,
+  engine,
+}: ISidebarProps) => {
+  const [currentState, setCurrentState] = React.useState<string | null>(
+    () => selected ?? DefaultSidebarNodeTypes.CREATE_LINK
   );
 
   const reactDiagramsState = engine
@@ -37,8 +42,8 @@ const Sidebar = ({ engine, sidebarNodes, updateSelection }: ISidebarProps) => {
     updateSelection(selectedID);
   };
 
-  useEffect(() => {
-    handleSelection(DefaultSidebarNodeTypes.PANNING);
+  React.useEffect(() => {
+    handleSelection(currentState as DefaultSidebarNodeTypes);
   }, []);
 
   return (
