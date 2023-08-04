@@ -73,7 +73,7 @@ const applicationTheme = (params: ThemeVars) => {
 
           .sub-sidebar {
             z-index: 4;
-            width: 2.5rem;
+            width: 2.75rem;
             background: ${subBarBg};
             position: fixed;
             border-radius: 0 0.5rem 0.5rem 0;
@@ -114,13 +114,34 @@ const applicationTheme = (params: ThemeVars) => {
           }
 
           .sub-sidebar .MuiList-root {
-            padding: 0.25rem;
+            padding: 0.375rem;
           }
 
           .sub-sidebar .wrapper {
             max-height: 16rem;
             overflow-y: scroll;
             overflow-x: hidden
+          }
+
+          .sub-sidebar .wrapper::-webkit-scrollbar {
+            background-color: none;
+            width: 0.375rem;
+          }
+        
+          /* background of the scrollbar except button or resizer */
+          .sub-sidebar .wrapper::-webkit-scrollbar-track {
+              background-color: none;
+          }
+          
+          /* scrollbar itself */
+          .sub-sidebar .wrapper::-webkit-scrollbar-thumb {
+              background-color: ${chipTextColor};
+              border-radius: 0.375rem;
+          }
+          
+          /* set button(top and bottom of the scrollbar) */
+          .sub-sidebar .wrapper::-webkit-scrollbar-button {
+              display:none;
           }
 
           .canvas-widget {
