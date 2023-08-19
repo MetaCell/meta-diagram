@@ -5,6 +5,7 @@ export class MetaLinkModel extends DefaultLinkModel {
   constructor(options = {}) {
     super({
       ...options,
+      width: 10,
       type: ReactDiagramMetaTypes.META_LINK,
     });
   }
