@@ -54,8 +54,7 @@ export class DefaultState extends State<DiagramEngine> {
           // initiate dragging a new link
           else if (element instanceof PortModel) {
             return;
-          }
-          else if (element instanceof LinkModel) {
+          } else if (element instanceof LinkModel) {
             this.transitionWithEvent(this.selectLink, event);
           }
           // handle canvas deselect
