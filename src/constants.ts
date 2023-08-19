@@ -17,6 +17,8 @@ export enum CallbackTypes {
   CHILD_POSITION_CHANGED = 'childPositionChanged',
   OFFSET_UPDATED = 'offsetUpdated',
   ZOOM_UPDATED = 'zoomUpdated',
+  NODE_REMOVED = 'entityRemoved',
+  LINK_UPDATED = 'linksUpdated',
 }
 
 export enum EventTypes {

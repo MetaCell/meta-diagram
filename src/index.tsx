@@ -22,7 +22,7 @@ import { MetaLinkModel } from './react-diagrams/MetaLinkModel';
 import { DefaultState } from './react-diagrams/state/DefaultState';
 import { ISidebarNodeProps } from './types/sidebar';
 import Sidebar from './components/sidebar/Sidebar';
-import { InputType } from '@projectstorm/react-canvas-core';
+// import { InputType } from '@projectstorm/react-canvas-core';
 
 const useStyles = makeStyles(_ => ({
   container: {
@@ -220,19 +220,19 @@ const MetaDiagram = forwardRef(
     engine.getStateMachine().pushState(state);
 
     // check globalProps for any actions to perform
-    if (globalProps !== undefined) {
-      if (globalProps?.disableDeleteDefaultKey) {
-        const actions = engine
-          .getActionEventBus()
-          .getActionsForType(InputType.KEY_DOWN);
-        actions.forEach((action: any) => {
-          // needs to find a better approach for this but for now this will do
-          if (action.constructor.name === 'DeleteItemsAction') {
-            engine.getActionEventBus().deregisterAction(action);
-          }
-        });
-      }
-    }
+    // if (globalProps !== undefined) {
+    //   if (globalProps?.disableDeleteDefaultKey) {
+    //     const actions = engine
+    //       .getActionEventBus()
+    //       .getActionsForType(InputType.KEY_DOWN);
+    //     actions.forEach((action: any) => {
+    //       // needs to find a better approach for this but for now this will do
+    //       if (action.constructor.name === 'DeleteItemsAction') {
+    //         engine.getActionEventBus().deregisterAction(action);
+    //       }
+    //     });
+    //   }
+    // }
 
     useEffect(() => {
       if (onMountRef.current === undefined) {

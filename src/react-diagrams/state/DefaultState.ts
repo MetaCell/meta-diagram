@@ -8,11 +8,13 @@ import {
   DragCanvasState,
 } from '@projectstorm/react-canvas-core';
 import {
+  LinkModel,
   PortModel,
   DiagramEngine,
   DragDiagramItemsState,
 } from '@projectstorm/react-diagrams-core';
 import { CreateLinkState } from './CreateLinkState';
+import SelectLinkState from './SelectLinkState';
 import { MetaNodeModel } from '../MetaNodeModel';
 
 export class DefaultState extends State<DiagramEngine> {
@@ -21,6 +23,7 @@ export class DefaultState extends State<DiagramEngine> {
   createLink: CreateLinkState | null;
   customCreateLink?: CreateLinkState;
   isSelection: boolean;
+  selectLink: SelectLinkState;
 
   constructor(customCreateLink?: CreateLinkState) {
     super({ name: 'starting-state' });
@@ -30,6 +33,7 @@ export class DefaultState extends State<DiagramEngine> {
     this.createLink = null;
     this.customCreateLink = customCreateLink;
     this.isSelection = false;
+    this.selectLink = new SelectLinkState();
 
     // determine what was clicked on
     this.registerAction(
@@ -50,6 +54,8 @@ export class DefaultState extends State<DiagramEngine> {
           // initiate dragging a new link
           else if (element instanceof PortModel) {
             return;
+          } else if (element instanceof LinkModel) {
+            this.transitionWithEvent(this.selectLink, event);
           }
           // handle canvas deselect
           else if (element && !this.isSelection) {
