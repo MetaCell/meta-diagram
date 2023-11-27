@@ -174,8 +174,12 @@ const App = () => {
             customThemeVariables: {},
             canvasClassName: classes.canvasBG,
           }}
-          sidebarProps={{
-            sidebarNodes: leftSideBarNodes,
+          sidebarNodes={leftSideBarNodes}
+          globalProps={{
+            disableZoom: true,
+            disableMoveCanvas: true,
+            disableMoveNodes: true,
+            disableDeleteDefaultKey: true,
           }}
         />
       </div>

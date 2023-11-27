@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "=== Install / Update script for PsyNeuLinkViewer and meta-diagram ==="
+echo "=== Install / Update script for example application and meta-diagram ==="
 
 npm -g install yalc
 
