@@ -4,42 +4,42 @@ import topSubArrow from './components/assets/svg/sub-top-arrow.svg';
 import bottomSubArrow from './components/assets/svg/sub-bottom-arrow.svg';
 
 type ThemeVars = {
-  [key: string]: any;
+    [key: string]: any;
 };
 
 const applicationTheme = (params: ThemeVars) => {
-  const {
-    primaryBg,
-    fontFamily,
-    chipTextColor,
-    chipBgColor,
-    textWhite,
-    listSelectedTextColor,
-    listBoxShadow,
-    listBorderColor,
-    sidebarBg,
-    sidebarShadow,
-    sidebarBorder,
-    subBarBg,
-    canvasBg,
-    showPropertiesButtonBg,
-    nodeBorderColor,
-    nodePointerBg,
-    nodeButtonTextColor,
-    nodeButtonLineColor,
-    nodeGreenBackgroundColor,
-    nodeGreenTextColor,
-    nodeGreenBorderColor,
-    nodeGreenBoxShadow,
-    nodeTextColor,
-    nodeWrapperBg,
-    nodeLabelColor,
-    nodeBlockBg,
-  } = params;
-  return {
-    components: {
-      MuiCssBaseline: {
-        styleOverrides: `
+    const {
+        primaryBg,
+        fontFamily,
+        chipTextColor,
+        chipBgColor,
+        textWhite,
+        listSelectedTextColor,
+        listBoxShadow,
+        listBorderColor,
+        sidebarBg,
+        sidebarShadow,
+        sidebarBorder,
+        subBarBg,
+        canvasBg,
+        showPropertiesButtonBg,
+        nodeBorderColor,
+        nodePointerBg,
+        nodeButtonTextColor,
+        nodeButtonLineColor,
+        nodeGreenBackgroundColor,
+        nodeGreenTextColor,
+        nodeGreenBorderColor,
+        nodeGreenBoxShadow,
+        nodeTextColor,
+        nodeWrapperBg,
+        nodeLabelColor,
+        nodeBlockBg,
+    } = params;
+    return {
+        components: {
+            MuiCssBaseline: {
+                styleOverrides: `
           html {
             background: ${primaryBg};
             font-family: ${fontFamily};
@@ -87,8 +87,8 @@ const applicationTheme = (params: ThemeVars) => {
             width: 0.5rem;
             height: 0.5rem;
             background: url(data:image/svg+xml;base64,${btoa(
-              topSubArrow
-            )});           
+                    topSubArrow
+                )});           
             position: absolute;
             background-size: 150%;
             top: -0.5rem;
@@ -100,8 +100,8 @@ const applicationTheme = (params: ThemeVars) => {
             width: 0.5rem;
             height: 0.5rem;
             background: url(data:image/svg+xml;base64,${btoa(
-              bottomSubArrow
-            )});           
+                    bottomSubArrow
+                )});           
             position: absolute;
             background-size: 150%;
             bottom: -0.45rem;
@@ -172,9 +172,9 @@ const applicationTheme = (params: ThemeVars) => {
             width: 1.25rem;
             height: 1.25rem;
             margin: 0 auto 0.25rem;
-            background: url(data:image/svg+xml;base64,${Buffer.from(
-              nodeGreen
-            ).toString('base64')});
+            background: url(data:image/svg+xml;base64,${btoa(
+                    nodeGreen
+                )});
           }
 
           .primary-node .primary-node_header p {
@@ -391,109 +391,109 @@ const applicationTheme = (params: ThemeVars) => {
             background: ${nodeGreenBorderColor};
           }
         `,
-      },
-      MuiList: {
-        styleOverrides: {
-          root: {
-            '&.customSwitch': {
-              padding: '0.125rem',
-              background: chipTextColor,
-              borderRadius: '0.5rem',
-              display: 'flex',
-              '& .MuiListItemButton-root': {
-                padding: '0.25rem 0.75rem',
-                borderRadius: '0.4375rem',
-                width: '10.59375rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transform: 'translate(0, 0)',
-                '&:not(:last-child)': {
-                  marginBottom: '0',
+            },
+            MuiList: {
+                styleOverrides: {
+                    root: {
+                        '&.customSwitch': {
+                            padding: '0.125rem',
+                            background: chipTextColor,
+                            borderRadius: '0.5rem',
+                            display: 'flex',
+                            '& .MuiListItemButton-root': {
+                                padding: '0.25rem 0.75rem',
+                                borderRadius: '0.4375rem',
+                                width: '10.59375rem',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                transform: 'translate(0, 0)',
+                                '&:not(:last-child)': {
+                                    marginBottom: '0',
+                                },
+                                '&.Mui-disabled': {
+                                    opacity: 1,
+                                },
+                                '&.Mui-selected': {
+                                    background: textWhite,
+                                    boxShadow: listBoxShadow,
+                                    border: `0.03125rem solid ${listBorderColor}`,
+                                    '& .MuiTypography-root': {
+                                        color: listSelectedTextColor,
+                                    },
+                                },
+                            },
+                            '& .MuiChip-root': {
+                                marginLeft: '0.25rem',
+                            },
+                            '& .MuiTypography-root': {
+                                fontWeight: 500,
+                                fontSize: '0.8125rem',
+                                lineHeight: '1.25rem',
+                                letterSpacing: '-0.005rem',
+                                color: chipBgColor,
+                                margin: 0,
+                            },
+                        },
+                    },
                 },
-                '&.Mui-disabled': {
-                  opacity: 1,
+            },
+            MuiListItemIcon: {
+                styleOverrides: {
+                    root: {
+                        minWidth: 'inherit',
+                    },
                 },
-                '&.Mui-selected': {
-                  background: textWhite,
-                  boxShadow: listBoxShadow,
-                  border: `0.03125rem solid ${listBorderColor}`,
-                  '& .MuiTypography-root': {
-                    color: listSelectedTextColor,
-                  },
+            },
+            MuiListItemButton: {
+                styleOverrides: {
+                    root: {
+                        padding: 0,
+                        width: '2rem',
+                        height: '2rem',
+                        borderRadius: '0.5rem',
+                        justifyContent: 'center',
+                        '&:hover': {
+                            backgroundColor: chipTextColor,
+                        },
+                        '&:not(:last-child)': {
+                            marginBottom: '0.5rem',
+                        },
+                        '&.Mui-selected': {
+                            backgroundColor: chipTextColor,
+                            '&:hover': {
+                                backgroundColor: chipBgColor,
+                            },
+                        },
+                        '&.Mui-disabled': {
+                            opacity: 0.8,
+                        },
+                    },
                 },
-              },
-              '& .MuiChip-root': {
-                marginLeft: '0.25rem',
-              },
-              '& .MuiTypography-root': {
-                fontWeight: 500,
-                fontSize: '0.8125rem',
-                lineHeight: '1.25rem',
-                letterSpacing: '-0.005rem',
-                color: chipBgColor,
-                margin: 0,
-              },
             },
-          },
         },
-      },
-      MuiListItemIcon: {
-        styleOverrides: {
-          root: {
-            minWidth: 'inherit',
-          },
-        },
-      },
-      MuiListItemButton: {
-        styleOverrides: {
-          root: {
-            padding: 0,
-            width: '2rem',
-            height: '2rem',
-            borderRadius: '0.5rem',
-            justifyContent: 'center',
-            '&:hover': {
-              backgroundColor: chipTextColor,
-            },
-            '&:not(:last-child)': {
-              marginBottom: '0.5rem',
-            },
-            '&.Mui-selected': {
-              backgroundColor: chipTextColor,
-              '&:hover': {
-                backgroundColor: chipBgColor,
-              },
-            },
-            '&.Mui-disabled': {
-              opacity: 0.8,
-            },
-          },
-        },
-      },
-    },
-  };
+    };
 };
 
 export const subBarStyle = {
-  transform: 'translate(0,0)',
-  '&:hover': {
-    backgroundColor: vars.chipTextColor,
-  },
-  '&:not(:last-child)': {
-    marginBottom: '0.25rem',
-  },
-  '&.Mui-selected': {
-    backgroundColor: vars.listItemActiveBg,
-    color: vars.textWhite,
+    transform: 'translate(0,0)',
     '&:hover': {
-      backgroundColor: vars.listItemActiveBg,
+        backgroundColor: vars.chipTextColor,
     },
-  },
+    '&:not(:last-child)': {
+        marginBottom: '0.25rem',
+    },
+    '&.Mui-selected': {
+        backgroundColor: vars.listItemActiveBg,
+        color: vars.textWhite,
+        '&:hover': {
+            backgroundColor: vars.listItemActiveBg,
+        },
+    },
 };
 
 export default (customVariables: ThemeVars) =>
-  applicationTheme({
-    ...vars,
-    ...customVariables,
-  });
+    applicationTheme({
+        ...vars,
+        ...customVariables,
+    });
