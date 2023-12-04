@@ -26,7 +26,7 @@ export class MetaNodeFactory extends AbstractReactFactory {
         <ReactComponentType
           key={`node-factory-${event.model.getOptions().id}`}
           engine={this.engine}
-          model={event.model}
+          node={event.model}
         />
       );
     }

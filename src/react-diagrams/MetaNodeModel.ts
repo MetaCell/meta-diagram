@@ -1,6 +1,6 @@
 import { MetaPort } from '../models/MetaPort';
 import { PortTypes, ReactDiagramMetaTypes, CallbackTypes } from '../constants';
-import { DefaultPortModel, NodeModel } from '@projectstorm/react-diagrams';
+import {DefaultNodeModel, DefaultPortModel} from '@projectstorm/react-diagrams';
 import { Point } from '@projectstorm/geometry';
 import { subPoints } from '../utils';
 import { MetaLinkModel } from './MetaLinkModel';
@@ -17,7 +17,7 @@ export class MetaPortModel extends DefaultPortModel {
   }
 }
 
-export class MetaNodeModel extends NodeModel {
+export class MetaNodeModel extends DefaultNodeModel {
   constructor(options = {}) {
     super({
       ...options,
