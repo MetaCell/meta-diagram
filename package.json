@@ -76,6 +76,7 @@
     "@babel/preset-env": "7.13.8"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.23.5",
     "@projectstorm/react-canvas-core": "^6.7.4",
     "@projectstorm/react-diagrams": "^6.7.4",
     "assets": "^3.0.1",
