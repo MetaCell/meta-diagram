@@ -2,6 +2,7 @@ import vars from './components/assets/styles/variables';
 import nodeGreen from './components/assets/svg/node/green.svg';
 import topSubArrow from './components/assets/svg/sub-top-arrow.svg';
 import bottomSubArrow from './components/assets/svg/sub-bottom-arrow.svg';
+import { base64Encode } from './utils';
 
 type ThemeVars = {
   [key: string]: any;
@@ -86,7 +87,7 @@ const applicationTheme = (params: ThemeVars) => {
             content: "";
             width: 0.5rem;
             height: 0.5rem;
-            background: url(data:image/svg+xml;base64,${btoa(
+            background: url(data:image/svg+xml;base64,${base64Encode(
               topSubArrow
             )});           
             position: absolute;
@@ -99,7 +100,7 @@ const applicationTheme = (params: ThemeVars) => {
             content: "";
             width: 0.5rem;
             height: 0.5rem;
-            background: url(data:image/svg+xml;base64,${btoa(
+            background: url(data:image/svg+xml;base64,${base64Encode(
               bottomSubArrow
             )});           
             position: absolute;
@@ -172,9 +173,9 @@ const applicationTheme = (params: ThemeVars) => {
             width: 1.25rem;
             height: 1.25rem;
             margin: 0 auto 0.25rem;
-            background: url(data:image/svg+xml;base64,${Buffer.from(
+            background: url(data:image/svg+xml;base64,${base64Encode(
               nodeGreen
-            ).toString('base64')});
+            )});
           }
 
           .primary-node .primary-node_header p {
