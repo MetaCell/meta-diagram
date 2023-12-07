@@ -88,8 +88,8 @@ const applicationTheme = (params: ThemeVars) => {
             width: 0.5rem;
             height: 0.5rem;
             background: url(data:image/svg+xml;base64,${base64Encode(
-            topSubArrow
-        )});           
+              topSubArrow
+            )});           
             position: absolute;
             background-size: 150%;
             top: -0.5rem;
@@ -101,8 +101,8 @@ const applicationTheme = (params: ThemeVars) => {
             width: 0.5rem;
             height: 0.5rem;
             background: url(data:image/svg+xml;base64,${base64Encode(
-            bottomSubArrow
-        )});           
+              bottomSubArrow
+            )});           
             position: absolute;
             background-size: 150%;
             bottom: -0.45rem;
@@ -174,8 +174,8 @@ const applicationTheme = (params: ThemeVars) => {
             height: 1.25rem;
             margin: 0 auto 0.25rem;
             background: url(data:image/svg+xml;base64,${base64Encode(
-            nodeGreen
-        )});
+              nodeGreen
+            )});
           }
 
           .primary-node .primary-node_header p {
@@ -494,7 +494,7 @@ export const subBarStyle = {
 };
 
 export default (customVariables: ThemeVars) =>
-    applicationTheme({
-      ...vars,
-      ...customVariables,
-    });
+  applicationTheme({
+    ...vars,
+    ...customVariables,
+  });

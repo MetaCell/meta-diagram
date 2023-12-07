@@ -47,7 +47,6 @@ export function updateCanvasMouseCursor(cursor = CursorTypes.TEXT) {
   });
 }
 
-
 export function base64Encode(input: string) {
   // Check if Buffer is available (Node.js environment)
   if (typeof Buffer !== 'undefined') {
