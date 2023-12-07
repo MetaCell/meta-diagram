@@ -1,0 +1,92 @@
+{
+  "version": "0.1.3",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch --target node",
+    "build": "tsdx build --target node",
+    "build:dev": "yarn run build && yarn run build:package",
+    "build:package": "cp package.json dist",
+    "test": "tsdx test --passWithNoTests",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "publish": "yalc publish --push"
+  },
+  "peerDependencies": {
+    "react": ">=16"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "name": "@metacell/meta-diagram",
+  "author": "MetaCell",
+  "module": "dist/meta-diagram.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/meta-diagram.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/meta-diagram.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "devDependencies": {
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.8.1",
+    "@mui/icons-material": "^5.8.4",
+    "@mui/material": "^5.8.4",
+    "@mui/styles": "^5.8.4",
+    "@mui/system": "^5.8.4",
+    "@size-limit/preset-small-lib": "^7.0.8",
+    "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.2",
+    "dagre": "^0.8.5",
+    "husky": "^8.0.1",
+    "pathfinding": "^0.4.18",
+    "paths-js": "^0.4.11",
+    "react": "^17.0.2",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
+    "react-dom": "^17.0.2",
+    "resize-observer-polyfill": "^1.5.1",
+    "size-limit": "^7.0.8",
+    "svg-react-loader": "^0.4.6",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.4.0",
+    "typescript": "^4.6.4"
+  },
+  "resolutions": {
+    "@babel/preset-env": "7.13.8"
+  },
+  "dependencies": {
+    "@projectstorm/react-canvas-core": "^6.7.4",
+    "@projectstorm/react-diagrams": "^6.7.4",
+    "assets": "^3.0.1",
+    "rollup-plugin-svg": "^2.0.0"
+  },
+  "buildOptions": {
+    "emitEntryPoint": true,
+    "compile": {
+      "exclude": [
+        "node_modules"
+      ]
+    }
+  }
+}
